@@ -6,8 +6,7 @@ MooseEntity >> gtPropertiesFor: aView [
 	(self mooseDescription notNil and: [ self mooseDescription allPrimitiveAttributes notEmpty]) ifFalse: [ ^ aView empty ].
 	^ aView columnedList
 		title: 'Properties';
-		items: [ self mooseDescription allPrimitiveAttributes ];
-		sorted: [:x :y | x name < y name];
+		items: [ self mooseDescription allPrimitiveAttributes sorted: [:x :y | x name < y name]];
 		column: 'Properties' evaluated: [:each | each name ];
-		column: 'Value' evaluated: [:each :anObject | [(anObject mmGetProperty: each) asString] on: Error do: ['error'] ]
+		column: 'Value' evaluated: [:each | [(self mmGetProperty: each) asString] on: Error do: [ :e | e printString ] ]
 ]
