@@ -7,7 +7,8 @@ MooseEntity >> gtNavigationFor: aView [
 		title: 'Navigation';
 		items: [ self gtNavigationItems ];
 		column: 'Name' do: [:aColumn | aColumn item: [:assoc | assoc key ] ];
-		column: 'Value' do: [:aColumn | aColumn item: [:assoc | assoc value gtDisplayString ] ]
+		column: 'Value' do: [:aColumn | aColumn item: [:assoc | assoc value gtDisplayString ] ];
+		send: [:assoc | assoc value]
 ]
 
 { #category : #'*GToolkit4Famix3' }
