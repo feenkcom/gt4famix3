@@ -10,8 +10,8 @@ FAMIXSourceAnchor >> gtCompleteSourceFor: aView [
 			| e text |
 			text := self completeText asRopedText.
 			(text from: self startPos to: self endPos) attributes: { 
-				BlTextUnderlineAttribute new paint: Color blue }.
-			e := BrEditor new text: text; look: BrGlamorousEditorLook new.
+				BlTextUnderlineAttribute new paint: Color lightBlue }.
+			e := BrEditor new text: text; look: BrGlamorousCodeEditorLook new.
 			e scrollToPosition: (self completeText lineNumberCorrespondingToIndex: self startPos).
 			e 
 			 ]
