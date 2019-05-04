@@ -13,7 +13,15 @@ MooseEntity >> gtNavigationFor: aView [
 
 { #category : #'*GToolkit4Famix3' }
 MooseEntity >> gtNavigationItems [
-	^ (self mooseDescription allAttributes reject: [ :attribute | attribute type isPrimitive ]) collect: [ :attribute | attribute name -> (self mmGetProperty: attribute) ]
+	^ (self mooseDescription allAttributes reject: [ :attribute | attribute type isPrimitive]) 
+		collect: [ :attribute | 
+			| value |
+			value := self mmGetProperty: attribute.
+			(value isCollection and: [ value size = 1 ]) ifTrue: [ value := value anyOne ].
+			attribute name -> value ]
+		thenReject: [ :assoc | 
+			assoc value isNil or: [
+				assoc value isCollection and: [ assoc value isEmpty ] ] ]
 ]
 
 { #category : #'*GToolkit4Famix3' }
