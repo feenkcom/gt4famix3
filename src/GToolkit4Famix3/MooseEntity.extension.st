@@ -18,6 +18,7 @@ MooseEntity >> gtNavigationItems [
 			| value |
 			value := self mmGetProperty: attribute.
 			(value isCollection and: [ value size = 1 ]) ifTrue: [ value := value anyOne ].
+			value isCollection ifTrue: [ value := value asMooseGroup ].
 			attribute name -> value ]
 		thenReject: [ :assoc | 
 			assoc value isNil or: [
