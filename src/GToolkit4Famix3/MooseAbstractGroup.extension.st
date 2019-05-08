@@ -12,7 +12,7 @@ MooseAbstractGroup >> gtDisplayOn: aStream [
 MooseAbstractGroup >> gtItemsFor: aView [
 	<gtView>
 	^ aView list
-		priority: 1;
+		priority: 0;
 		items: [self entities sorted: [ :a :b | a gtDisplayString < b gtDisplayString ]];
 "		send:
 				[ :each | 

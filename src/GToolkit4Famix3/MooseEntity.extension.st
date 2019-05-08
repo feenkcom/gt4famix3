@@ -5,6 +5,7 @@ MooseEntity >> gtNavigationFor: aView [
 	<gtView>
 	^ aView columnedList
 		title: 'Navigation';
+		priority: 1;
 		items: [ self gtNavigationItems ];
 		column: 'Name' do: [:aColumn | aColumn item: [:assoc | assoc key ] ];
 		column: 'Value' do: [:aColumn | aColumn item: [:assoc | assoc value gtDisplayString ] ];
