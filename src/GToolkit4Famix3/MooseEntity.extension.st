@@ -1,6 +1,11 @@
 Extension { #name : #MooseEntity }
 
 { #category : #'*GToolkit4Famix3' }
+MooseEntity >> gtASTNode [
+	^ self propertyNamed: #ast ifAbsent: [  ]
+]
+
+{ #category : #'*GToolkit4Famix3' }
 MooseEntity >> gtNavigationFor: aView [
 	<gtView>
 	^ aView columnedList

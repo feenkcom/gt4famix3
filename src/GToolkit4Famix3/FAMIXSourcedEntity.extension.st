@@ -2,13 +2,15 @@ Extension { #name : #FAMIXSourcedEntity }
 
 { #category : #'*GToolkit4Famix3' }
 FAMIXSourcedEntity >> gtASTNode [
-	^ self sourceLanguage
-		ifNotNil: [ :lang | 
-			self sourceAnchor
-				ifNotNil: [ :anchor | 
-					lang
-						gtASTNodeFor: anchor completeText
-						at: (anchor startPos to: anchor endPos) ] ]
+	^ self
+		propertyNamed: #ast
+		ifAbsentPut: [ self sourceLanguage
+				ifNotNil: [ :lang | 
+					self sourceAnchor
+						ifNotNil: [ :anchor | 
+							lang
+								gtASTNodeFor: anchor completeText
+								at: (anchor startPos to: anchor endPos) ] ] ]
 ]
 
 { #category : #'*GToolkit4Famix3' }
