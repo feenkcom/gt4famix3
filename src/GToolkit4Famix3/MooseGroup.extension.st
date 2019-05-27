@@ -11,6 +11,11 @@ MooseGroup >> gtDisplayOn: stream [
 ]
 
 { #category : #'*GToolkit4Famix3' }
+MooseGroup >> gtIcon [
+	^ MooseIcons mooseMetamodelGroup
+]
+
+{ #category : #'*GToolkit4Famix3' }
 MooseGroup >> spotterItemsFor: aStep [
 	<spotterOrder: 10>
 	^ aStep listProcessor

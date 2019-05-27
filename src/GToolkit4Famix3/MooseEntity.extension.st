@@ -6,14 +6,24 @@ MooseEntity >> gtASTNode [
 ]
 
 { #category : #'*GToolkit4Famix3' }
+MooseEntity >> gtIcon [
+	^ MooseIcons mooseMetamodelEntity
+]
+
+{ #category : #'*GToolkit4Famix3' }
 MooseEntity >> gtNavigationFor: aView [
 	<gtView>
 	^ aView columnedList
 		title: 'Navigation';
 		priority: 1;
 		items: [ self gtNavigationItems ];
-		column: 'Name' do: [:aColumn | aColumn item: [:assoc | assoc key ] ];
-		column: 'Value' do: [:aColumn | aColumn item: [:assoc | assoc value gtDisplayString ] ];
+		column: 'Icon' translated do: [ :column | 
+			column
+				item: [ :assoc | assoc value gtIcon ];
+				rowStencil: [ :eachIcon | eachIcon asElement margin: (BlInsets left: 5 right: 5) ];
+				noResize ];
+		column: 'Name' format: [:assoc | assoc key ];
+		column: 'Value' format: [:assoc | assoc value gtDisplayString ];
 		send: [:assoc | assoc value]
 ]
 
