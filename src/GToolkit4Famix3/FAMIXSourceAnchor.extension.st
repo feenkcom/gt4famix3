@@ -6,16 +6,21 @@ FAMIXSourceAnchor >> gtCompleteSourceFor: aView [
 	^ aView explicit
 		title: 'Complete source';
 		priority: 5;
-		stencil: [ 
-			| e text |
+		stencil: [ | e text |
 			text := self completeText asRopedText.
-			(text from: self startPos to: self endPos) attributes: { 
-				BlTextUnderlineAttribute new beNotOverwritableByStyler; paint: BrGlamorousColors primaryBorderColor }.
-			e := BrEditor new text: text; look: BrGlamorousCodeEditorLook new.
-			element gtStyler ifNotNil: [ :styler | e styler: styler ].
-			e scrollToPosition: (self completeText lineNumberCorrespondingToIndex: self startPos).
-			e 
-			 ]
+			(text from: self startPos to: self endPos)
+				attributes:
+					{(BlTextUnderlineAttribute new
+						beNotOverwritableByStyler;
+						paint: BrGlamorousColors primaryBorderColor)}.
+			e := BrEditor new
+				text: text;
+				look: BrGlamorousCodeEditorLook new.
+			element notNil
+				ifTrue: [ element gtStyler ifNotNil: [ :styler | e styler: styler ] ].
+			e
+				scrollToPosition: (self completeText lineNumberCorrespondingToIndex: self startPos).
+			e ]
 ]
 
 { #category : #'*GToolkit4Famix3' }
