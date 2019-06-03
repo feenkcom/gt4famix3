@@ -39,7 +39,8 @@ FAMIXSourceAnchor >> gtText [
 		attributes:
 			{(BlTextUnderlineAttribute new
 				beNotOverwritableByStyler;
-				paint: BrGlamorousColors primaryBorderColor)}.
+				paint: (Color lightGray alpha: 0.5);
+				width: 1)}.
 	self gtAddLinksTo: text.
 	^ text
 ]
