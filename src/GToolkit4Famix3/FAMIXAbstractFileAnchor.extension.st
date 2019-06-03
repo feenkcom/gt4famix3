@@ -7,20 +7,18 @@ FAMIXAbstractFileAnchor >> gtAddLinksTo: text [
 	associations := OrderedCollection new.
 	self correspondingFile entities
 		do: [ :each | 
-			(each sourceAnchor notNil and: [ each sourceAnchor isFile ])
-				ifTrue: [ each isAssociation
-						ifTrue: [ associations add: each sourceAnchor -> each to ]
-						ifFalse: [ ((each isKindOf: FAMIXStructuralEntity)
-								and: [ each declaredType notNil ])
-								ifTrue: [ associations add: each sourceAnchor -> each declaredType ] ] ] ].
+			each
+				gtLinksForFile: self fileReference
+				do: [ :entity :start :stop | 
+					stop < start
+						ifFalse: [ associations add: (start to: stop) -> entity ] ] ].
 	associations
 		sort: [ :a :b | 
-			a key startPos < b key startPos
-				or:
-					[ a key startPos = b key startPos and: [ a key endPos > b key endPos ] ] ].
+			a key first < b key first
+				or: [ a key first = b key first and: [ a key last > b key last ] ] ].
 	associations
 		do: [ :each | 
-			(text from: each key startPos to: each key endPos)
+			(text from: each key first to: each key last)
 				clearAttributes: [ :attr | 
 					attr class == BrTextHoverStylableAttribute
 						or: [ attr class == BrTextClickAttribute ] ];

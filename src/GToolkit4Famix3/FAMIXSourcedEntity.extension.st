@@ -14,6 +14,19 @@ FAMIXSourcedEntity >> gtASTNode [
 ]
 
 { #category : #'*GToolkit4Famix3' }
+FAMIXSourcedEntity >> gtLinksForFile: aFileReference do: aBlock [
+	(self propertyNamed: #ast)
+		ifNotNil: [ :ast | 
+			ast gtHasLinks
+				ifTrue: [ ^ ast gtLinksFor: self do: aBlock ] ].
+	self sourceAnchor
+		ifNotNil: [ :anchor | 
+			anchor isFile
+				ifTrue: [ anchor fileReference = aFileReference
+						ifTrue: [ aBlock value: self value: anchor startPos value: anchor endPos ] ] ]
+]
+
+{ #category : #'*GToolkit4Famix3' }
 FAMIXSourcedEntity >> gtSourceFor: aView [
 	<gtView>
 	^ self hasSourceAnchor 
