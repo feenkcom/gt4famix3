@@ -1,5 +1,5 @@
 # Glamorous Toolkit for Famix3
-This repository holds the Glamorous Toolkit extensions for Famix3
+This repository holds the Glamorous Toolkit extensions for [Famix3](https://github.com/feenkcom/famix3)
 
 ## How to load
 
