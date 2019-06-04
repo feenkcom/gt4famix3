@@ -12,9 +12,9 @@ BaselineOfGToolkit4Famix3 >> baseline: spec [
 		do: [ 
 			spec 
 				baseline: 'Famix3SmalltalkImporter' with: [
-					spec repository: 'github://feenkcom/famix3/src' ];
+					spec repository: 'github://feenkcom/famix3/src' ]";
 				baseline: 'GToolkit' with: [
-					spec repository: 'github://feenkcom/gtoolkit/src' ].
+					spec repository: 'github://feenkcom/gtoolkit/src' ]".
 			spec 
 				package: 'GToolkit4Famix3' with: [
 					spec requires: #('Famix3SmalltalkImporter') ]	].
