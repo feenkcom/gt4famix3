@@ -4,3 +4,8 @@ Extension { #name : #FAMIXEntity }
 FAMIXEntity >> gtIcon [
 	^ MooseIcons mooseMetamodelEntity
 ]
+
+{ #category : #'*GToolkit4Famix3' }
+FAMIXEntity >> gtLinksForFile: aFileReference do: aBlock [
+	
+]
