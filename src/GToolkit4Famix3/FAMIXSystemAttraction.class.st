@@ -67,7 +67,7 @@ FAMIXSystemAttraction >> view: classes highlighting: strongClasses on: view [
 				zIndex: -1; 
 				border: (BlBorder 
 					paint: ((strongClasses includes: each) 
-						ifTrue: [ classStrongColor alpha: 0.5 ]
+						ifTrue: [ classPaleColor alpha: 0.3 ]
 						ifFalse: [ classPaleColor alpha: 0.3]) width: 1) ];
 		connect: classes from: #yourself to: #superclass.
 	view edges
@@ -76,7 +76,7 @@ FAMIXSystemAttraction >> view: classes highlighting: strongClasses on: view [
 				zIndex: -1;
 				border: (BlBorder 
 					paint: ((strongClasses includes: fromElement graph model) 
-						ifTrue: [ classStrongColor alpha: 0.5 ]
+						ifTrue: [ classPaleColor alpha: 0.3 ]
 						ifFalse: [ classPaleColor alpha: 0.3]) width: 1) ];
 		connect: classes from: #yourself toAll: #methods.
 	view edges
@@ -85,7 +85,7 @@ FAMIXSystemAttraction >> view: classes highlighting: strongClasses on: view [
 				zIndex: -1;
 				border: (BlBorder 
 					paint: ((strongClasses includes: fromElement graph model) 
-						ifTrue: [ classStrongColor alpha: 0.5 ]
+						ifTrue: [ classPaleColor alpha: 0.3 ]
 						ifFalse: [ classPaleColor alpha: 0.3]) width: 1) ];
 		connect: classes from: #yourself toAll: #attributes.
 	view edges
@@ -94,7 +94,7 @@ FAMIXSystemAttraction >> view: classes highlighting: strongClasses on: view [
 				zIndex: -1;
 				border: (BlBorder 
 					paint: ((strongClasses includes: each parentType) 
-						ifTrue: [ methodStrongColor alpha: 0.5 ]
+						ifTrue: [ methodPaleColor alpha: 0.3 ]
 						ifFalse: [ methodPaleColor alpha: 0.3]) width: 1) ];
 		connect: methods from: #yourself toAll: #invokedMethods.
 	view edges
@@ -103,7 +103,7 @@ FAMIXSystemAttraction >> view: classes highlighting: strongClasses on: view [
 				zIndex: -1;
 				border: (BlBorder 
 					paint: ((strongClasses includes: each parentType) 
-						ifTrue: [ attributeStrongColor alpha: 0.5 ]
+						ifTrue: [ attributePaleColor alpha: 0.3 ]
 						ifFalse: [ attributePaleColor alpha: 0.3]) width: 1) ];
 		connect:  attributes fromAll: #accessingMethods to: #yourself.
 	view layout force
