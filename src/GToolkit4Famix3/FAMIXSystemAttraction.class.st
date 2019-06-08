@@ -40,7 +40,8 @@ FAMIXSystemAttraction >> paint: classes in: anElement [
 				geometry: BlEllipse new;
 				border: BlBorder empty;
 				size: 10@10;
-				background: classStrongColor.
+				background: classStrongColor;
+				when: BlClickEvent do: [:e | classElement phlow spawnObject: aClass].
 		allElements add: classElement.
 		classesToElements at: aClass put: classElement.
 		aClass methods do: [ :aMethod |
@@ -49,7 +50,8 @@ FAMIXSystemAttraction >> paint: classes in: anElement [
 				geometry: BlEllipse new;
 				border: BlBorder empty;
 				size: 6@6;
-				background: methodStrongColor.
+				background: methodStrongColor;
+				when: BlClickEvent do: [:e | methodElement phlow spawnObject: aMethod].
 			allElements add: methodElement.
 			classElement graph connectTo: methodElement.
 			methodLineElement := BlLineElement new
@@ -67,7 +69,8 @@ FAMIXSystemAttraction >> paint: classes in: anElement [
 				geometry: BlEllipse new;
 				border: BlBorder empty;
 				size: 6@6;
-				background: attributeStrongColor.
+				background: attributeStrongColor;
+				when: BlClickEvent do: [:e | attributeElement phlow spawnObject: anAttribute ].
 			allElements add: attributeElement.
 			classElement graph connectTo: attributeElement.
 			attributeLineElement := BlLineElement new
@@ -88,7 +91,7 @@ FAMIXSystemAttraction >> paint: classes in: anElement [
 			classesToElements at: aSuperClass ifPresent: [ :superClassElement |
 				superClassElement graph connectTo: classElement.
 				inheritanceLineElement := BlLineElement new
-						border: (BlBorder paint: (classPaleColor alpha: 0.3) width: 1);
+						border: (BlBorder paint: (classStrongColor alpha: 0.3) width: 1);
 						zIndex: -1;
 						fromAnchor: (BlElementCenterAnchor referenceElement: classElement relatedTo: superClassElement);
 						toAnchor: (BlElementCenterAnchor referenceElement: superClassElement relatedTo: classElement).
@@ -103,7 +106,7 @@ FAMIXSystemAttraction >> paint: classes in: anElement [
 				methodsToElements at: anInvokedMethod ifPresent: [:invokedMethodElement | 
 					methodElement graph connectTo: invokedMethodElement.
 					invocationLineElement := BlLineElement new
-						border: (BlBorder paint: (methodPaleColor alpha: 0.3) width: 1);
+						border: (BlBorder paint: (methodStrongColor alpha: 0.3) width: 1);
 						zIndex: -1;
 						fromAnchor: (BlElementCenterAnchor referenceElement: methodElement relatedTo: invokedMethodElement);
 						toAnchor: (BlElementCenterAnchor referenceElement: invokedMethodElement relatedTo: methodElement).
@@ -115,9 +118,9 @@ FAMIXSystemAttraction >> paint: classes in: anElement [
 		anAttribute accessingMethods do: [ :aMethod |
 			| accessLineElement |
 			methodsToElements at: aMethod ifPresent: [: methodElement |
-				methodElement graph connectTo: attributeElement.
+				methodElement graph connectTo: attributeElement .
 				accessLineElement := BlLineElement new
-					border: (BlBorder paint: (attributePaleColor alpha: 0.3) width: 1);
+					border: (BlBorder paint: (attributeStrongColor alpha: 0.3) width: 1);
 					zIndex: -1;
 					fromAnchor: (BlElementCenterAnchor referenceElement: methodElement relatedTo: attributeElement);
 					toAnchor: (BlElementCenterAnchor referenceElement: attributeElement relatedTo: methodElement).
