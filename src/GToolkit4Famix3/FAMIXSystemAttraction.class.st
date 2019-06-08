@@ -99,27 +99,27 @@ FAMIXSystemAttraction >> paint: classes in: anElement [
 		aMethod invokedMethods do: [ :anInvokedMethod |
 			| invocationLineElement invokedMethodElement |
 			anInvokedMethod ~= aMethod ifTrue: [ 
-				invokedMethodElement := methodsToElements at: anInvokedMethod.
+				methodsToElements at: anInvokedMethod ifPresent: [:  invokedMethodElement | 
 				invocationLineElement := BlLineElement new
 						border: (BlBorder paint: (methodPaleColor alpha: 0.3) width: 1);
 						zIndex: -1;
 						fromAnchor: (BlElementCenterAnchor referenceElement: methodElement relatedTo: invokedMethodElement);
 						toAnchor: (BlElementCenterAnchor referenceElement: invokedMethodElement relatedTo: methodElement).
 				invocationLineElement constraints ignoreByLayout.
-				allElements add: invocationLineElement ] ] ].
+				allElements add: invocationLineElement ] ] ] ].
 	attributesToElements keysDo: [ :anAttribute | 
 		| attributeElement |
 		attributeElement := attributesToElements at: anAttribute.
 		anAttribute accessingMethods do: [ :aMethod |
 			| accessLineElement methodElement |
-			methodElement := methodsToElements at: aMethod.
+			methodsToElements at: aMethod ifPresent: [: methodElement |
 			accessLineElement := BlLineElement new
 					border: (BlBorder paint: (attributePaleColor alpha: 0.3) width: 1);
 					zIndex: -1;
 					fromAnchor: (BlElementCenterAnchor referenceElement: methodElement relatedTo: attributeElement);
 					toAnchor: (BlElementCenterAnchor referenceElement: attributeElement relatedTo: methodElement).
 			accessLineElement constraints ignoreByLayout.
-			allElements add: accessLineElement ] ].
+			allElements add: accessLineElement ] ] ].
 	anElement addChildren: allElements
 
 	"view nodes
