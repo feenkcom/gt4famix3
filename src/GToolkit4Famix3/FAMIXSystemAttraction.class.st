@@ -86,6 +86,7 @@ FAMIXSystemAttraction >> paint: classes in: anElement [
 		aClass directSuperclasses do: [ :aSuperClass |
 			| inheritanceLineElement |
 			classesToElements at: aSuperClass ifPresent: [ :superClassElement |
+				superClassElement graph connectTo: classElement.
 				inheritanceLineElement := BlLineElement new
 						border: (BlBorder paint: (classPaleColor alpha: 0.3) width: 1);
 						zIndex: -1;
@@ -97,29 +98,31 @@ FAMIXSystemAttraction >> paint: classes in: anElement [
 		| methodElement |
 		methodElement := methodsToElements at: aMethod.
 		aMethod invokedMethods do: [ :anInvokedMethod |
-			| invocationLineElement invokedMethodElement |
+			| invocationLineElement |
 			anInvokedMethod ~= aMethod ifTrue: [ 
-				methodsToElements at: anInvokedMethod ifPresent: [:  invokedMethodElement | 
-				invocationLineElement := BlLineElement new
+				methodsToElements at: anInvokedMethod ifPresent: [:invokedMethodElement | 
+					methodElement graph connectTo: invokedMethodElement.
+					invocationLineElement := BlLineElement new
 						border: (BlBorder paint: (methodPaleColor alpha: 0.3) width: 1);
 						zIndex: -1;
 						fromAnchor: (BlElementCenterAnchor referenceElement: methodElement relatedTo: invokedMethodElement);
 						toAnchor: (BlElementCenterAnchor referenceElement: invokedMethodElement relatedTo: methodElement).
-				invocationLineElement constraints ignoreByLayout.
-				allElements add: invocationLineElement ] ] ] ].
+					invocationLineElement constraints ignoreByLayout.
+					allElements add: invocationLineElement ] ] ] ].
 	attributesToElements keysDo: [ :anAttribute | 
 		| attributeElement |
 		attributeElement := attributesToElements at: anAttribute.
 		anAttribute accessingMethods do: [ :aMethod |
-			| accessLineElement methodElement |
+			| accessLineElement |
 			methodsToElements at: aMethod ifPresent: [: methodElement |
-			accessLineElement := BlLineElement new
+				methodElement graph connectTo: attributeElement.
+				accessLineElement := BlLineElement new
 					border: (BlBorder paint: (attributePaleColor alpha: 0.3) width: 1);
 					zIndex: -1;
 					fromAnchor: (BlElementCenterAnchor referenceElement: methodElement relatedTo: attributeElement);
 					toAnchor: (BlElementCenterAnchor referenceElement: attributeElement relatedTo: methodElement).
-			accessLineElement constraints ignoreByLayout.
-			allElements add: accessLineElement ] ] ].
+				accessLineElement constraints ignoreByLayout.
+				allElements add: accessLineElement ] ] ].
 	anElement addChildren: allElements
 
 	"view nodes
