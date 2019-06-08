@@ -21,13 +21,13 @@ FAMIXType >> gtMethodsFor: aView [
 	^ aView columnedList
 		title: 'Methods';
 		priority: 10;
-		items: [ self methods ];		
+		items: [ self methods sorted: [:a :b | a signature < b signature]];
 		column: 'Icon' translated do: [ :column | 
 			column
 				item: [ :each | each gtIcon ];
 				rowStencil: [ :eachIcon | eachIcon asElement margin: (BlInsets left: 5 right: 5) ];
 				noResize ];
-		column: 'Name' translated format: [ :each | each gtDisplayString ]
+		column: 'Name' translated format: [ :each | each signature ]
 ]
 
 { #category : #'*GToolkit4Famix3' }
