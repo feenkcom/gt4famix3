@@ -1,6 +1,28 @@
 Extension { #name : #MooseEntity }
 
 { #category : #'*GToolkit4Famix3' }
+MooseEntity >> complexPropertyPragmas [
+	| navProps definedProps |
+	self mooseDescription
+		ifNil: [ Error
+				signal:
+					'Moose description are not initialized. Have you refreshed the meta-model? (e.g., MooseModel resetMeta)' ].
+	navProps := (Pragma
+		allNamed: #navigation:
+		from: self class
+		to: MooseEntity)
+		sorted: [ :a :b | (a argumentAt: 1) < (b argumentAt: 1) ].
+	definedProps := (self mooseDescription allAttributes
+		reject: [ :a | a type isPrimitive ])
+		flatCollect: [ :prop | 
+			(prop mmClass implementingClass >> prop implementingSelector) pragmas
+				select: [ :each | each keyword beginsWith: 'MSEProperty:' ] ].
+	^ (OrderedCollection withAll: definedProps)
+		addAll: navProps;
+		yourself
+]
+
+{ #category : #'*GToolkit4Famix3' }
 MooseEntity >> gtASTNode [
 	^ self propertyNamed: #ast ifAbsent: [  ]
 ]
@@ -50,4 +72,35 @@ MooseEntity >> gtPropertiesFor: aView [
 		items: [ self mooseDescription allPrimitiveAttributes sorted: [:x :y | x name < y name]];
 		column: 'Properties' evaluated: [:each | each name ];
 		column: 'Value' evaluated: [:each | [(self mmGetProperty: each) asString] on: Error do: [ :e | e printString ] ]
+]
+
+{ #category : #'*GToolkit4Famix3' }
+MooseEntity >> mooseSpecificSpotterProcessorsFor: aSpotterStep [
+	| entity assocs pragmaValueAssociations |
+	entity := self.
+	pragmaValueAssociations := entity complexPropertyPragmas
+		collect: [ :pragma | 
+			pragma -> 	(self perform: pragma methodSelector) ].
+	assocs := (pragmaValueAssociations
+		reject: [ :association | 
+			association value isNil
+				or: [ association value isCollection and: [ association value isEmpty ] ] ])
+		sorted: [ :a :b | 
+			(a key argumentAt: 1) asLowercase asString
+				< (b key argumentAt: 1) asLowercase asString ].
+	assocs
+		do: [ :assoc | 
+			aSpotterStep listProcessor
+				allCandidates: [ assoc value asMooseGroup ];
+				title: (assoc key argumentAt: 1);
+				itemIcon: #gtIcon;
+				filter: GTFilterSubstring;
+				itemName: #gtDisplayString;
+				order: 1 ]
+]
+
+{ #category : #'*GToolkit4Famix3' }
+MooseEntity >> spotterProcessorsFor: aSpotterStep [
+	super spotterProcessorsFor: aSpotterStep.
+	self mooseSpecificSpotterProcessorsFor: aSpotterStep
 ]

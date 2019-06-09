@@ -38,3 +38,12 @@ FAMIXSourcedEntity >> gtSourceFor: aView [
 FAMIXSourcedEntity >> gtStyler [
 	^ self sourceLanguage ifNotNil: [ :lang | lang gtStyler ]
 ]
+
+{ #category : #'*GToolkit4Famix3' }
+FAMIXSourcedEntity >> spotterPreviewSourceIn: composite [
+	<spotterPreview: 0>
+	composite text 
+		title: [ self mooseName ];
+		display: #yourself;
+		entity: self sourceText
+]
