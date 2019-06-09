@@ -2,9 +2,10 @@ Class {
 	#name : #FAMIXClassBlueprint,
 	#superclass : #BrStencil,
 	#instVars : [
-		'type',
+		'types',
 		'methodsToElements',
-		'attributesToElements'
+		'attributesToElements',
+		'classesToElements'
 	],
 	#category : #GToolkit4Famix3
 }
@@ -29,37 +30,34 @@ FAMIXClassBlueprint >> colorForMethod: aMethod [
 
 { #category : #rendering }
 FAMIXClassBlueprint >> create [
-	| childrenContainer classLabel classElement |
-	childrenContainer := BlElement new
-		border: (BlBorder paint: Color lightGray width: 2);
-		layout: (BlLinearLayout horizontal cellSpacing: 0);
-		constraintsDo: [ :c | 
-			c vertical fitContent.
+	| container |
+	container := BlElement new 
+		constraintsDo: [:c | 
 			c horizontal fitContent.
-			c linear horizontal alignCenter ].
-	classLabel := BlTextElement new
-		text: (self type name asRopedText
-				glamorousRegularFont;
-				fontSize: 12;
-				foreground: Color black);
-		constraintsDo: [ :c | 
-			c vertical fitContent.
-			c horizontal fitContent.
-			c linear horizontal alignCenter ].
-	classElement := BlElement new
-		constraintsDo: [ :c | 
-			c vertical fitContent.
-			c horizontal fitContent ];
-		layout: (BlLinearLayout vertical cellSpacing: 2);
-		addChild: classLabel;
-		addChild: childrenContainer.
-	childrenContainer addChild: (self createLayerForMethods: type constructors named: 'Initializers').
-	childrenContainer addChild: (self createLayerForMethods: type interfaceMethods named: 'Interface').
-	childrenContainer addChild: (self createLayerForMethods: type implementationMethods named: 'Implementation').
-	childrenContainer addChild: (self createLayerForMethods: type accessorMethods named: 'Accessors').
-	childrenContainer addChild: (self createLayerForAttributes).
+			c vertical fitContent ];
+		layout: (GtGraphTreeLayout new verticalGap: 50; horizontalGap: 20).
+	classesToElements := IdentityDictionary new. 
+	types do: [:class |
+		| classElement |
+		classElement := self createType: class.
+		classesToElements at: class put: classElement.
+		container addChild: classElement
+	].
+	classesToElements associationsDo: [:assoc |
+		assoc key directSubclasses do: [:subclass |
+			classesToElements at: subclass ifPresent: [:subclassElement |
+				assoc value graph connectTo: subclassElement.
+				container addChild: (
+					BlLineElement new 
+						constraintsDo: [:c | c ignoreByLayout];
+						border: (BlBorder paint: (Color gray alpha: 0.3) width: 2);
+							zIndex: -2;
+						fromAnchor: (BlElementBottomCenterAnchor referenceElement: assoc value relatedTo: subclassElement);
+							toAnchor: (BlElementTopCenterAnchor referenceElement: subclassElement relatedTo: assoc value);
+						fromHead: (BlArrowheadSimpleArrow new border: (BlBorder builder paint: (Color gray darker alpha: 0.3); width: 5; build))
+						) ]]].
 	methodsToElements associationsDo: [ :assoc |
-		assoc key queryAllOutgoingInvocations opposites withoutSelfLoops do: [ :anInvokedMethod |
+		assoc key queryAllOutgoingInvocations opposites "withoutSelfLoops" do: [ :anInvokedMethod |
 			methodsToElements at: anInvokedMethod ifPresent: [ :invokedMethodElement |
 				| lineElement |
 				lineElement := BlParabollaArcElement new
@@ -70,7 +68,7 @@ FAMIXClassBlueprint >> create [
 					toAnchor: (BlElementCenterLeftAnchor referenceElement: invokedMethodElement relatedTo: assoc value);
 					toHead: (BlArrowheadSimpleArrow new border: (BlBorder builder paint: (Color red darker alpha: 0.3); width: 1; build)).
 				lineElement constraints ignoreByLayout.
-				classElement addChild: lineElement ] ].
+				container addChild: lineElement ] ].
 		assoc key accessedAttributes do: [ :anAccessedAttribute |
 			attributesToElements at: anAccessedAttribute ifPresent: [ :accessedAttributeElement |
 				| lineElement |
@@ -82,15 +80,15 @@ FAMIXClassBlueprint >> create [
 					toAnchor: (BlElementCenterLeftAnchor referenceElement: accessedAttributeElement relatedTo: assoc value);
 					toHead: (BlArrowheadSimpleArrow new border: (BlBorder builder paint: (Color blue alpha: 0.2); width: 1; build)).
 				lineElement constraints ignoreByLayout.
-				classElement addChild: lineElement ] ] ].
-	^ classElement
+				container addChild: lineElement ] ] ].
+	^ container
 ]
 
 { #category : #rendering }
-FAMIXClassBlueprint >> createLayerForAttributes [
+FAMIXClassBlueprint >> createLayerForAttributes: aCollection [
 	| attributesContainer layerLabel |
 	attributesContainer := BlElement new 
-		padding: (BlInsets top: 10 left: 5 bottom: 5 right: 5);
+		padding: (BlInsets top: 5 left: 5 bottom: 5 right: 5);
 		constraintsDo: [ :c | 
 			c vertical fitContent.
 			c horizontal fitContent.
@@ -105,7 +103,7 @@ FAMIXClassBlueprint >> createLayerForAttributes [
 			c vertical fitContent.
 			c horizontal fitContent.
 			c linear horizontal alignCenter ].
-	self type attributes do: [ :anAttribute | 
+	aCollection do: [ :anAttribute | 
 		| attributeElement |
 		attributeElement := BlElement new
 			size: 5@5;
@@ -174,19 +172,57 @@ FAMIXClassBlueprint >> createLayerForMethods: aCollection named: aString [
 		when: BlClickEvent do: [:e | e target phlow spawnObject: aCollection. e consumed: true ].
 ]
 
+{ #category : #rendering }
+FAMIXClassBlueprint >> createType: aType [
+	| childrenContainer classLabel classElement |
+	childrenContainer := BlElement new
+		border: (BlBorder paint: Color lightGray width: 2);
+		layout: (BlLinearLayout horizontal cellSpacing: 0);
+		constraintsDo: [ :c | 
+			c vertical fitContent.
+			c horizontal fitContent.
+			c linear horizontal alignCenter ].
+	classLabel := BlTextElement new
+		text: (aType name asRopedText
+				glamorousRegularFont;
+				fontSize: 12;
+				foreground: Color black);
+		constraintsDo: [ :c | 
+			c vertical fitContent.
+			c horizontal fitContent.
+			c linear horizontal alignCenter ].
+	classElement := BlElement new
+		constraintsDo: [ :c | 
+			c vertical fitContent.
+			c horizontal fitContent ];
+		layout: (BlLinearLayout vertical cellSpacing: 2);
+		when: BlClickEvent do: [ :e | e target phlow spawnObject: aType ];
+		addChild: classLabel;
+		addChild: childrenContainer.
+	classElement graph model: aType.
+	childrenContainer addChild: (self createLayerForMethods: aType constructors named: 'Initializers').
+	childrenContainer addChild: (self createLayerForMethods: aType interfaceMethods named: 'Interface').
+	childrenContainer addChild: (self createLayerForMethods: aType implementationMethods named: 'Implementation').
+	childrenContainer addChild: (self createLayerForMethods: aType accessorMethods named: 'Accessors').
+	childrenContainer addChild: (self createLayerForAttributes: aType attributes).
+	^ classElement
+]
+
 { #category : #initialization }
 FAMIXClassBlueprint >> initialize [
 	super initialize.
 	methodsToElements := IdentityDictionary new.
-	attributesToElements := IdentityDictionary new
+	attributesToElements := IdentityDictionary new.
+	classesToElements := IdentityDictionary new.
+	types := OrderedCollection new
 ]
 
 { #category : #accessing }
-FAMIXClassBlueprint >> type [
-	^ type
+FAMIXClassBlueprint >> type: aType [
+	types := { aType }
 ]
 
 { #category : #accessing }
-FAMIXClassBlueprint >> type: anObject [
-	type := anObject
+FAMIXClassBlueprint >> types: aCollection [
+	types := aCollection
 ]
