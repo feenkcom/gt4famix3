@@ -57,7 +57,7 @@ FAMIXClassBlueprint >> create [
 						fromHead: (BlArrowheadSimpleArrow new border: (BlBorder builder paint: (Color gray darker alpha: 0.3); width: 5; build))
 						) ]]].
 	methodsToElements associationsDo: [ :assoc |
-		assoc key queryAllOutgoingInvocations opposites "withoutSelfLoops" do: [ :anInvokedMethod |
+		assoc key queryAllOutgoingInvocations opposites withoutSelfLoops do: [ :anInvokedMethod |
 			methodsToElements at: anInvokedMethod ifPresent: [ :invokedMethodElement |
 				| lineElement |
 				lineElement := BlParabollaArcElement new
@@ -121,7 +121,7 @@ FAMIXClassBlueprint >> createLayerForAttributes: aCollection [
 		layout: BlLinearLayout vertical;
 		addChild: layerLabel;
 		addChild: attributesContainer;
-		when: BlClickEvent do: [:e | e target phlow spawnObject: self type attributes. e consumed: true ].
+		when: BlClickEvent do: [:e | e target phlow spawnObject: aCollection. e consumed: true ].
 ]
 
 { #category : #rendering }
