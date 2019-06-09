@@ -10,3 +10,8 @@ FKDelphiProgram class >> annotation [
 	<package: #Delphi>
 	^self
 ]
+
+{ #category : #'as yet unclassified' }
+FKDelphiProgram >> includedUnits [
+	^ self providerUnits
+]

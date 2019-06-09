@@ -5,6 +5,11 @@ Class {
 }
 
 { #category : #testing }
+FKDelphiEmptyUnitTest >> testAST [
+	self assert: model allDelphiUnits anyOne fkDelphiAST notNil
+]
+
+{ #category : #testing }
 FKDelphiEmptyUnitTest >> testLoggerIsEmpty [
 	self assert: logger recordings isEmpty
 ]
@@ -19,6 +24,14 @@ FKDelphiEmptyUnitTest >> testUnit [
 
 { #category : #hooks }
 FKDelphiEmptyUnitTest >> unit [
+	^ 'unit Namespace.Unit;
+
+end.
+'
+]
+
+{ #category : #hooks }
+FKDelphiEmptyUnitTest >> unitPas [
 	^ 'unit Namespace.Unit;
 
 end.

@@ -5,6 +5,11 @@ Class {
 }
 
 { #category : #hooks }
+FKDelphiTwoUnitsWithSourceTest >> files [
+	^ { #unitAPas . #unitBPas }
+]
+
+{ #category : #hooks }
 FKDelphiTwoUnitsWithSourceTest >> pasFiles [
 	^ { #unitA . #unitB }
 ]
@@ -36,7 +41,23 @@ end.
 ]
 
 { #category : #hooks }
+FKDelphiTwoUnitsWithSourceTest >> unitAPas [
+	^ 'unit UnitA;
+
+end.
+'
+]
+
+{ #category : #hooks }
 FKDelphiTwoUnitsWithSourceTest >> unitB [
+	^ 'unit UnitB;
+
+end.
+'
+]
+
+{ #category : #hooks }
+FKDelphiTwoUnitsWithSourceTest >> unitBPas [
 	^ 'unit UnitB;
 
 end.

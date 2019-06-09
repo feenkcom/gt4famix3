@@ -1,12 +1,12 @@
 Class {
 	#name : #FKDelphiUnitGroup,
-	#superclass : #FAMIXNamespaceGroup,
+	#superclass : #FKDelphiScopingEntityGroup,
 	#category : #'GToolkit4Famix3-Delphi-Importer'
 }
 
 { #category : #meta }
 FKDelphiUnitGroup class >> annotation [
-	<MSEClass: #UnitGroup super: #FAMIXNamespaceGroup>
+	<MSEClass: #UnitGroup super: #FKDelphiScopingEntityGroup>
 	<package: #Delphi>
 	^self
 ]

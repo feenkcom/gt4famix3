@@ -3,7 +3,8 @@ Class {
 	#superclass : #FAMIXNamespace,
 	#instVars : [
 		'outgoingUsesAssociations',
-		'incomingUsesAssociations'
+		'incomingUsesAssociations',
+		'scopedVariables'
 	],
 	#category : #'GToolkit4Famix3-Delphi-Importer'
 }
@@ -18,6 +19,12 @@ FKDelphiScopingEntity class >> annotation [
 { #category : #query }
 FKDelphiScopingEntity >> ast [
 	^ DelphiParser parse: self sourceText
+]
+
+{ #category : #query }
+FKDelphiScopingEntity >> clientBehaviours [
+	<navigation: 'Client behaviours'>
+	^ self functions flatCollectAsSet: [:each | each clientBehaviours]
 ]
 
 { #category : #query }
@@ -42,15 +49,16 @@ FKDelphiScopingEntity >> incomingUsesAssociations: anObject [
 FKDelphiScopingEntity >> initialize [
 	super initialize.
 	outgoingUsesAssociations := FMNullMultivalueLink on: self opposite: #userUnit: selector: #outgoingUsesAssociations.
-	incomingUsesAssociations := FMNullMultivalueLink on: self opposite: #usedUnit: selector: #incomingUsesAssociations
+	incomingUsesAssociations := FMNullMultivalueLink on: self opposite: #usedUnit: selector: #incomingUsesAssociations.
+	scopedVariables := FMNullMultivalueLink on: self opposite: #parentScope: selector: #scopedVariables.
 
 ]
 
-{ #category : #query }
+{ #category : #lookup }
 FKDelphiScopingEntity >> lookup: aBlock named: aString [
 	| lookup |
 	^ (aBlock value: self)
-		detect: [ :each | each name = aString ]
+		detect: [ :each | each name asLowercase = aString asLowercase ]
 		ifNone: [ 
 			self outgoingUsesAssociations do: [ :association | 
 				lookup := (aBlock value: association usedUnit) 
@@ -60,18 +68,44 @@ FKDelphiScopingEntity >> lookup: aBlock named: aString [
 			nil ]
 ]
 
-{ #category : #query }
+{ #category : #lookup }
 FKDelphiScopingEntity >> lookupFunctionNamed: aString [
 	^ self 
 		lookup: [:unit | unit functions ] 
 		named: aString
 ]
 
-{ #category : #query }
+{ #category : #lookup }
 FKDelphiScopingEntity >> lookupTypeNamed: aString [
 	^ self 
 		lookup: [:unit | unit types ] 
 		named: aString
+]
+
+{ #category : #lookup }
+FKDelphiScopingEntity >> lookupUnitNamed: aString [
+	self flag: 'this is a hack. make it more explicit'.
+	^ self 
+		lookup: [:unit | {unit} ] 
+		named: aString
+]
+
+{ #category : #lookup }
+FKDelphiScopingEntity >> lookupVariableNamed: aString [
+	^ self 
+		lookup: [:unit | unit scopedVariables ] 
+		named: aString
+]
+
+{ #category : #lookup }
+FKDelphiScopingEntity >> lookupVariableWithNames: aCollectionOfStrings [
+	| possibleType possibleVariable |
+	aCollectionOfStrings size = 1 ifTrue: [ ^ self lookupVariableNamed: aCollectionOfStrings anyOne ].
+	possibleVariable := self lookupVariableNamed: aCollectionOfStrings first.
+	possibleVariable ifNotNil: [ ^ possibleVariable declaredType lookupVariableWithNames: aCollectionOfStrings allButFirst ].
+	possibleType := self lookupTypeNamed: aCollectionOfStrings first.
+	possibleType ifNotNil: [ ^ possibleType lookupVariableWithNames: aCollectionOfStrings allButFirst ].
+	^ nil
 ]
 
 { #category : #ui }
@@ -82,6 +116,36 @@ FKDelphiScopingEntity >> mooseFinderASTIn: composite [
 			titleIcon: MooseIcons mooseTree;
 			display: [ self ast ];
 			children: [ :each | each children ]
+]
+
+{ #category : #ui }
+FKDelphiScopingEntity >> mooseFinderFunctionDependenciesIn: composite [
+	<moosePresentationOrder: 20>
+	composite roassal2
+			title: 'Functions dependencies';
+			titleIcon: MooseIcons mooseDependencies;
+			initializeView: [ RTMondrian new ];
+			painting: [ :view |
+				view shape label text: #name; color: Color black; fontSize: 20.
+				view nodes: self functions.
+				view shape line color: (Color gray alpha: 0.5); width: 3. 
+				view edges connectToAll: #providerBehaviours.
+				view layout horizontalDominanceTree layered verticalGap: 20; horizontalGap: 50 .
+				view view elements @ RTSelectable
+				 ]
+]
+
+{ #category : #ui }
+FKDelphiScopingEntity >> mooseFinderWithinUsagesIn: composite [
+	<moosePresentationOrder: 20>
+	composite roassal2
+			title: 'Within usages';
+			titleIcon: MooseIcons mooseCluster;
+			initializeView: [ RTMondrian new ];
+			painting: [ :view |
+				(( {self} asSet , self providerUnits , self clientUnits) reject: #isStub) asMooseGroup 
+					viewUsesHighlighting: {self} 
+					on: view ]
 ]
 
 { #category : #accessing }
@@ -97,7 +161,25 @@ FKDelphiScopingEntity >> outgoingUsesAssociations: anObject [
 ]
 
 { #category : #query }
+FKDelphiScopingEntity >> providerBehaviours [
+	<navigation: 'Provider behaviours'>
+	^ self functions flatCollectAsSet: [:each | each providerBehaviours]
+]
+
+{ #category : #query }
 FKDelphiScopingEntity >> providerUnits [
 	<MSEProperty: #providerUnits type: #FKDelphiUnit> <derived> <multivalued>
 	^ (self outgoingUsesAssociations collectAsSet: [ :each | each usedUnit ]) reject: [ :each | each isNil ]
+]
+
+{ #category : #accessing }
+FKDelphiScopingEntity >> scopedVariables [
+	<MSEProperty: #scopedVariables type: #FKDelphiUnitVariable opposite: #parentScope> <multivalued> <derived>
+
+	^ scopedVariables
+]
+
+{ #category : #accessing }
+FKDelphiScopingEntity >> scopedVariables: anObject [
+	scopedVariables value: anObject
 ]

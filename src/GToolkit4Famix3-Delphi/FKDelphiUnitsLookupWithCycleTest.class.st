@@ -5,6 +5,11 @@ Class {
 }
 
 { #category : #hooks }
+FKDelphiUnitsLookupWithCycleTest >> files [
+	^ { #unitAPas . #unitBPas . #unitCPas }
+]
+
+{ #category : #hooks }
 FKDelphiUnitsLookupWithCycleTest >> pasFiles [
 	^ { #unitA . #unitB . #unitC }
 ]
@@ -34,6 +39,18 @@ end.
 ]
 
 { #category : #hooks }
+FKDelphiUnitsLookupWithCycleTest >> unitAPas [
+	^ 'unit UnitA;
+
+interface
+	uses UnitB, UnitC;	
+	procedure ProcA();
+
+end.
+'
+]
+
+{ #category : #hooks }
 FKDelphiUnitsLookupWithCycleTest >> unitB [
 	^ 'unit UnitB;
 
@@ -47,7 +64,33 @@ end.
 ]
 
 { #category : #hooks }
+FKDelphiUnitsLookupWithCycleTest >> unitBPas [
+	^ 'unit UnitB;
+
+interface
+	uses UnitA,UnitC;
+	procedure ProcA();
+	procedure ProcB();
+
+end.
+'
+]
+
+{ #category : #hooks }
 FKDelphiUnitsLookupWithCycleTest >> unitC [
+	^ 'unit UnitC;
+interface
+	uses UnitA,UnitB;
+	procedure ProcA();
+	procedure ProcB();
+	procedure ProcC();
+
+end.
+'
+]
+
+{ #category : #hooks }
+FKDelphiUnitsLookupWithCycleTest >> unitCPas [
 	^ 'unit UnitC;
 interface
 	uses UnitA,UnitB;

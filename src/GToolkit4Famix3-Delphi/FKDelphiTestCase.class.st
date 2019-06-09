@@ -13,8 +13,18 @@ Class {
 }
 
 { #category : #hooks }
+FKDelphiTestCase >> dfmFiles [
+	^ {}
+]
+
+{ #category : #hooks }
 FKDelphiTestCase >> dprFiles [
 	^ {}
+]
+
+{ #category : #hooks }
+FKDelphiTestCase >> files [
+	^ { #unitPas }
 ]
 
 { #category : #hooks }
@@ -24,14 +34,15 @@ FKDelphiTestCase >> pasFiles [
 
 { #category : #running }
 FKDelphiTestCase >> setUp [
-	| rootDirectory |
+	| rootDirectory pieces fileBaseName fileExtension |
 	importer := FKDelphiImporter new.
 	rootDirectory := FileSystem memory workingDirectory / 'src'.
 	rootDirectory createDirectory.
-	self pasFiles do: [ :each | 
-		(rootDirectory / each, 'pas') writeStreamDo: [ :s | s nextPutAll: (self perform: each) ] ].
-	self dprFiles do: [ :each | 
-		(rootDirectory / each, 'dpr') writeStreamDo: [ :s | s nextPutAll: (self perform: each) ] ].
+	self files do: [ :each |
+		pieces := each piecesCutWhereCamelCase.
+		fileBaseName := ('' join: pieces allButLast).
+		fileExtension := pieces last asLowercase.
+		(rootDirectory / fileBaseName , fileExtension) writeStreamDo: [ :s | s nextPutAll: (self perform: each) ] ].
 	logger := MemoryLogger new.
 	logger runDuring: [importer importDirectory: rootDirectory].
 	model := importer targetModel
@@ -39,5 +50,10 @@ FKDelphiTestCase >> setUp [
 
 { #category : #hooks }
 FKDelphiTestCase >> unit [
+	^ ''
+]
+
+{ #category : #hooks }
+FKDelphiTestCase >> unitPas [
 	^ ''
 ]

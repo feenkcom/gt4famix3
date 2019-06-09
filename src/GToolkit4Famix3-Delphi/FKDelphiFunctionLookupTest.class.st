@@ -1,16 +1,16 @@
 Class {
-	#name : #FKDelphiUnitsLookupTest,
+	#name : #FKDelphiFunctionLookupTest,
 	#superclass : #FKDelphiTestCase,
 	#category : #'GToolkit4Famix3-Delphi-Tests'
 }
 
 { #category : #hooks }
-FKDelphiUnitsLookupTest >> pasFiles [
-	^ { #unitA . #unitB . #unitC }
+FKDelphiFunctionLookupTest >> files [
+	^ { #unitAPas . #unitBPas . #unitCPas }
 ]
 
 { #category : #testing }
-FKDelphiUnitsLookupTest >> testUnitA [
+FKDelphiFunctionLookupTest >> testUnitA [
 	| unitA unitB unitC |
 	unitA := (model allDelphiUnits entityNamed: 'UnitA').
 	unitB := (model allDelphiUnits entityNamed: 'UnitB').
@@ -26,7 +26,7 @@ FKDelphiUnitsLookupTest >> testUnitA [
 ]
 
 { #category : #testing }
-FKDelphiUnitsLookupTest >> testUnitB [
+FKDelphiFunctionLookupTest >> testUnitB [
 	| unitB unitC |
 	unitB := (model allDelphiUnits entityNamed: 'UnitB').
 	unitC := (model allDelphiUnits entityNamed: 'UnitC').
@@ -37,7 +37,7 @@ FKDelphiUnitsLookupTest >> testUnitB [
 ]
 
 { #category : #hooks }
-FKDelphiUnitsLookupTest >> unitA [
+FKDelphiFunctionLookupTest >> unitAPas [
 	^ 'unit UnitA;
 
 interface
@@ -51,7 +51,7 @@ end.
 ]
 
 { #category : #hooks }
-FKDelphiUnitsLookupTest >> unitB [
+FKDelphiFunctionLookupTest >> unitBPas [
 	^ 'unit UnitB;
 
 interface
@@ -67,7 +67,7 @@ end.
 ]
 
 { #category : #hooks }
-FKDelphiUnitsLookupTest >> unitC [
+FKDelphiFunctionLookupTest >> unitCPas [
 	^ 'unit UnitC;
 interface
 	procedure ProcA();

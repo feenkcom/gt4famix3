@@ -5,6 +5,11 @@ Class {
 }
 
 { #category : #hooks }
+FKDelphiThreeDependingUnitsTest >> files [
+	^ { #unitAPas . #unitBPas . #unitCPas }
+]
+
+{ #category : #hooks }
 FKDelphiThreeDependingUnitsTest >> pasFiles [
 	^ { #unitA . #unitB . #unitC }
 ]
@@ -51,6 +56,22 @@ end.
 ]
 
 { #category : #hooks }
+FKDelphiThreeDependingUnitsTest >> unitAPas [
+	^ 'unit UnitA;
+
+interface
+
+uses UnitB, UnitC;
+
+implementation
+
+uses UnitD;
+
+end.
+'
+]
+
+{ #category : #hooks }
 FKDelphiThreeDependingUnitsTest >> unitB [
 	^ 'unit UnitB;
 
@@ -63,7 +84,27 @@ end.
 ]
 
 { #category : #hooks }
+FKDelphiThreeDependingUnitsTest >> unitBPas [
+	^ 'unit UnitB;
+
+interface
+
+uses UnitC;
+
+end.
+'
+]
+
+{ #category : #hooks }
 FKDelphiThreeDependingUnitsTest >> unitC [
+	^ 'unit UnitC;
+
+end.
+'
+]
+
+{ #category : #hooks }
+FKDelphiThreeDependingUnitsTest >> unitCPas [
 	^ 'unit UnitC;
 
 end.
