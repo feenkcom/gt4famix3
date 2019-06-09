@@ -16,6 +16,14 @@ FAMIXType >> gtAttributesFor: aView [
 ]
 
 { #category : #'*GToolkit4Famix3' }
+FAMIXType >> gtBlueprintFor: aView [
+	<gtView>
+	^ aView explicit
+		title: 'Blueprint';
+		stencil: [ (FAMIXClassBlueprint new type: self) asElement asPannableElement ]
+]
+
+{ #category : #'*GToolkit4Famix3' }
 FAMIXType >> gtMethodsFor: aView [
 	<gtView>
 	^ aView columnedList
