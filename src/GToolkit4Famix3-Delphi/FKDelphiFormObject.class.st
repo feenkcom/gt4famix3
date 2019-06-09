@@ -82,7 +82,7 @@ FKDelphiFormObject >> mooseNameOn: aStream [
 
 { #category : #accessing }
 FKDelphiFormObject >> objectProperties [
-	<MSEProperty: #objectProperties type: #FKDelphiFormObjectProperty opposite: #parentObject> <multivalued> <derived>
+	<MSEProperty: #objectProperties type: #FKDelphiFormObjectProperty" opposite: #parentObject"> <multivalued> <derived>
 	^ objectProperties
 ]
 
@@ -123,7 +123,7 @@ FKDelphiFormObject >> objects: anObject [
 
 { #category : #accessing }
 FKDelphiFormObject >> parentObject [
-	<MSEProperty: #parentObject type: #FKDelphiFormObject opposite: #objectProperties>
+	<MSEProperty: #parentObject type: #FKDelphiFormObject" opposite: #objectProperties">
 	^ parentObject
 ]
 
@@ -176,7 +176,7 @@ FKDelphiFormObject >> storedProcNamePropertyValue [
 
 { #category : #accessing }
 FKDelphiFormObject >> targetEntity [
-	<MSEProperty: #targetEntity type: #FAMIXContainerEntity opposite: #delphiFormObjects> 
+	<MSEProperty: #targetEntity type: #FAMIXContainerEntity" opposite: #delphiFormObjects"> 
 	<MSEComment: 'The entity that the object instantiates. It can be a class or an attribute'>
 	^ targetEntity
 ]

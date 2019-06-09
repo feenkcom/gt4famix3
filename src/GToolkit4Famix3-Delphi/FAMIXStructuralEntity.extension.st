@@ -2,7 +2,7 @@ Extension { #name : #FAMIXStructuralEntity }
 
 { #category : #'*GToolkit4Famix3-Delphi' }
 FAMIXStructuralEntity >> delphiFormObjects [
-	<MSEProperty: #delphiFormObjects type: #FKDelphiFormObject opposite: #targetEntity>
+	<MSEProperty: #delphiFormObjects type: #FKDelphiFormObject" opposite: #targetEntity">
 	^ self privateState 
 		attributeAt: #delphiFormObjects 
 		ifAbsentPut: [ FMMultivalueLink on: self opposite: #targetEntity: ]

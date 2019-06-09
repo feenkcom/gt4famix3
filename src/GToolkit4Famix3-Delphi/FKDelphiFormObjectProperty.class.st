@@ -27,7 +27,7 @@ FKDelphiFormObjectProperty >> name: anObject [
 
 { #category : #accessing }
 FKDelphiFormObjectProperty >> parentObject [
-	<MSEProperty: #parentObject type: #FKDelphiFormObject opposite: #objectProperties>
+	<MSEProperty: #parentObject type: #FKDelphiFormObject" opposite: #objectProperties">
 	^ parentObject
 ]
 
