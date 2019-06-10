@@ -15,6 +15,7 @@ Class {
 
 { #category : #accessing }
 FAMIXComponent >> entities [
+	<MSEProperty: #entities type: #FAMIXEntity>
 	^ entities
 ]
 
@@ -24,7 +25,17 @@ FAMIXComponent >> entities: anObject [
 ]
 
 { #category : #accessing }
+FAMIXComponent >> gtEntitiesFor: aView [
+	<gtView>
+	^ aView list 
+		title: 'Entities';
+		priority: 0;
+		items: [ self entities ]
+]
+
+{ #category : #accessing }
 FAMIXComponent >> incomingDependencies [
+	<MSEProperty: #entities type: #FAMIXComponentDependency>
 	^ incomingDependencies
 ]
 
@@ -37,8 +48,8 @@ FAMIXComponent >> incomingDependencies: anObject [
 FAMIXComponent >> initialize [
 	super initialize.
 	entities := OrderedCollection new.
-	outgoingDependencies := FMNullMultivalueLink on: self opposite: #source selector: #outgoingDependencies.
-	incomingDependencies := FMNullMultivalueLink on: self opposite: #target selector: #incomingDependencies.
+	outgoingDependencies := FMNullMultivalueLink on: self opposite: #source: selector: #outgoingDependencies.
+	incomingDependencies := FMNullMultivalueLink on: self opposite: #target: selector: #incomingDependencies.
 ]
 
 { #category : #accessing }
@@ -53,6 +64,7 @@ FAMIXComponent >> name: anObject [
 
 { #category : #accessing }
 FAMIXComponent >> outgoingDependencies [
+	<MSEProperty: #entities type: #FAMIXComponentDependency>
 	^ outgoingDependencies
 ]
 

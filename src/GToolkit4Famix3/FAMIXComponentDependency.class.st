@@ -3,10 +3,32 @@ Class {
 	#superclass : #FAMIXEntity,
 	#instVars : [
 		'source',
-		'target'
+		'target',
+		'entityDependencies'
 	],
 	#category : #GToolkit4Famix3
 }
+
+{ #category : #accessing }
+FAMIXComponentDependency >> addEntityDependency: anEntityDependency [
+	self entityDependencies add: anEntityDependency 
+]
+
+{ #category : #accessing }
+FAMIXComponentDependency >> entityDependencies [
+	^ entityDependencies
+]
+
+{ #category : #accessing }
+FAMIXComponentDependency >> entityDependencies: anObject [
+	entityDependencies := anObject
+]
+
+{ #category : #inititialize }
+FAMIXComponentDependency >> initialize [
+	super initialize.
+	entityDependencies := OrderedCollection new
+]
 
 { #category : #accessing }
 FAMIXComponentDependency >> source [
