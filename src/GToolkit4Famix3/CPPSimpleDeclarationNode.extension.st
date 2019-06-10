@@ -23,5 +23,6 @@ CPPSimpleDeclarationNode >> gtLinksFor: anEntity do: aBlock [
 						value: anEntity
 						value: specifiers last preprocessedStartPosition
 						value: specifiers last preprocessedStopPosition ].
-			self typeLinksFor: specifiers to: anEntity declaredType do: aBlock ]
+			self isTypedef
+				ifFalse: [ self typeLinksFor: specifiers to: anEntity declaredType do: aBlock ] ]
 ]
