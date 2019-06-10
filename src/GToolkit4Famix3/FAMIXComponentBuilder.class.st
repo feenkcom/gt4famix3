@@ -61,6 +61,11 @@ FAMIXComponentBuilder >> connect: aCollection from: aFromBlock toAll: aToAllBloc
 								target: aTargetComponent) ] ] ] ]
 ]
 
+{ #category : #accessing }
+FAMIXComponentBuilder >> dependencies [
+	^ dependencies
+]
+
 { #category : #building }
 FAMIXComponentBuilder >> ensureDependencyFrom: aSourceComponent to: aTargetComponent for: aDependency [
 	aSourceComponent outgoingDependencies 
