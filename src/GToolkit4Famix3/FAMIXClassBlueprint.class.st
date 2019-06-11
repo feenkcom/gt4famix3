@@ -147,7 +147,7 @@ FAMIXClassBlueprint >> createLayerForMethods: aCollection named: aString [
 	aCollection do: [ :aMethod | 
 		| methodElement |
 		methodElement := BlElement new
-			size: (aMethod numberOfOutgoingInvocations max: 5)@(aMethod numberOfLinesOfCode max: 5);
+			size: (aMethod numberOfOutgoingInvocations max: 5)@((aMethod numberOfLinesOfCode / 5) max: 5);
 			border: (BlBorder paint: Color black);
 			background: (self colorForMethod: aMethod);
 			when: BlClickEvent do: [:e | e target phlow spawnObject: aMethod. e consumed: true].

@@ -3,17 +3,32 @@ This class encapsulates the logic of the system attraction view. It is applicabl
 "
 Class {
 	#name : #FAMIXSystemAttraction,
-	#superclass : #Object,
+	#superclass : #BrStencil,
 	#instVars : [
 		'classStrongColor',
 		'classPaleColor',
 		'methodStrongColor',
 		'methodPaleColor',
 		'attributeStrongColor',
-		'attributePaleColor'
+		'attributePaleColor',
+		'types'
 	],
 	#category : #GToolkit4Famix3
 }
+
+{ #category : #'api - instantiation' }
+FAMIXSystemAttraction >> create [
+	<return: #Object>
+
+	| container |
+	container := BlElement new 
+	constraintsDo: [:c | 
+		c horizontal fitContent. 
+		c vertical fitContent ].
+	FAMIXSystemAttraction new paint: types in: container.
+	container layout: GtGraphForceBasedLayout new.
+	^ container asPannableElement
+]
 
 { #category : #'initialize-release' }
 FAMIXSystemAttraction >> initialize [ 
@@ -192,6 +207,16 @@ FAMIXSystemAttraction >> paint: classes in: anElement [
 						ifFalse: [ attributePaleColor alpha: 0.3]) width: 1) ];
 		connect:  attributes fromAll: #accessingMethods to: #yourself.
 	view layout force"
+]
+
+{ #category : #accessing }
+FAMIXSystemAttraction >> types [
+	^ types
+]
+
+{ #category : #accessing }
+FAMIXSystemAttraction >> types: anObject [
+	types := anObject
 ]
 
 { #category : #rendering }

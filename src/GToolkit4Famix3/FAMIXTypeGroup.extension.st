@@ -26,6 +26,7 @@ FAMIXTypeGroup >> paintHierarchyWith: mondrian [
 	mondrian nodes 
 		stencil: [ :c | 
 			BlElement new 
+				zIndex: 10;
 				border: (BlBorder paint: (Color black alpha: 0.5) width: 2);
 				width: (c numberOfAttributes max: 5);
 				height: (c numberOfMethods max: 5)];
