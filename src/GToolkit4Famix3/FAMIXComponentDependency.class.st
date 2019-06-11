@@ -34,10 +34,12 @@ FAMIXComponentDependency >> gtDisplayOn: aStream [
 { #category : #accessing }
 FAMIXComponentDependency >> gtEntityDependenciesFor: aView [
 	<gtView>
-	^ aView list 
+	^ aView columnedList 
 		title: 'Dependencies';
 		priority: 0;
-		items: [ self entityDependencies ]
+		items: [ self entityDependencies ];
+		column: 'Source' format: [:e | e source gtDisplayString];
+		column: 'Target' format: [:e | e target gtDisplayString]
 ]
 
 { #category : #inititialize }
