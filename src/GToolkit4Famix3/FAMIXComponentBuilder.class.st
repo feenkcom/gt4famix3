@@ -71,7 +71,7 @@ FAMIXComponentBuilder >> ensureDependencyFrom: aSourceComponent to: aTargetCompo
 	aSourceComponent outgoingDependencies 
 		detect: [ :aComponentDependency | aComponentDependency target = aTargetComponent ]
 		ifFound: [ :aComponentDependency | aComponentDependency addEntityDependency: aDependency ]
-		ifNone: [ dependencies add: (FAMIXComponentDependency new source: aSourceComponent; target: aTargetComponent) ]
+		ifNone: [ dependencies add: (FAMIXComponentDependency new source: aSourceComponent; target: aTargetComponent; addEntityDependency: aDependency) ]
 ]
 
 { #category : #accessing }

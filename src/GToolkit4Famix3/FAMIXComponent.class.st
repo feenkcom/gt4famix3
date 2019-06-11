@@ -30,7 +30,7 @@ FAMIXComponent >> gtEntitiesFor: aView [
 	^ aView list 
 		title: 'Entities';
 		priority: 0;
-		items: [ self entities ]
+		items: [ self entities sorted: [:a :b | a gtDisplayString < b gtDisplayString ]]
 ]
 
 { #category : #accessing }

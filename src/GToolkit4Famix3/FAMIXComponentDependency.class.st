@@ -24,6 +24,22 @@ FAMIXComponentDependency >> entityDependencies: anObject [
 	entityDependencies := anObject
 ]
 
+{ #category : #accessing }
+FAMIXComponentDependency >> gtDisplayOn: aStream [
+	self source gtDisplayOn: aStream.
+	aStream nextPutAll: ' -> '.
+	self target gtDisplayOn: aStream.
+]
+
+{ #category : #accessing }
+FAMIXComponentDependency >> gtEntityDependenciesFor: aView [
+	<gtView>
+	^ aView list 
+		title: 'Dependencies';
+		priority: 0;
+		items: [ self entityDependencies ]
+]
+
 { #category : #inititialize }
 FAMIXComponentDependency >> initialize [
 	super initialize.
