@@ -16,5 +16,9 @@ CPPFunctionDefinitionNode >> gtLinksFor: anEntity do: aBlock [
 		value: entity
 		value: self declarator id preprocessedStartPosition
 		value: self declarator id preprocessedStopPosition.
-	self typeLinksFor: specifiers to: entity declaredType do: aBlock
+	self typeLinksFor: specifiers to: entity declaredType do: aBlock.
+	(entity isMethod and: [ entity declaration notNil ])
+		ifTrue: [ declarator declarations
+				with: entity parameters
+				do: [ :node :parm | node gtLinksFor: parm do: aBlock ] ]
 ]
