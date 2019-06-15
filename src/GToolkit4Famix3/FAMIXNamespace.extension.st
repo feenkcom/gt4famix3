@@ -35,7 +35,7 @@ FAMIXNamespace >> gtNestingFor: aView [
 		stencil: [
 			| treemap |
 			treemap := GtTreeMap new
-				roots: self;
+				roots: {self};
 				deep: [ :namespace | namespace childScopes];
 				leaves: [ :namespace | namespace classes ];
 				leavesSize: [ :class | class numberOfMethods ].

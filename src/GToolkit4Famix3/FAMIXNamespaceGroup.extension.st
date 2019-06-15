@@ -13,10 +13,12 @@ FAMIXNamespaceGroup >> gtNestingFor: aView [
 		stencil: [
 			| treemap |
 			treemap := GtTreeMap new
-				roots: (self select: [:each | each isRoot]);
+				roots: (self collectAsSet: #root) asArray;
 				deep: [ :namespace | namespace childScopes];
 				leaves: [ :namespace | namespace classes ];
-				leavesSize: [ :class | class numberOfMethods ].
+				leavesSize: [ :class | class numberOfMethods ];
+				containerEllipse: [ :ellipse :namespace | (self includes: namespace) 
+						ifTrue: [ ellipse background: (Color gray alpha: 0.2) ] ].
 			treemap asElement asPannableElement
 		]
 ]
