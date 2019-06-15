@@ -17,8 +17,12 @@ FAMIXNamespaceGroup >> gtNestingFor: aView [
 				deep: [ :namespace | namespace childScopes];
 				leaves: [ :namespace | namespace classes ];
 				leavesSize: [ :class | class numberOfMethods ];
-				containerEllipse: [ :ellipse :namespace | (self includes: namespace) 
-						ifTrue: [ ellipse background: (Color gray alpha: 0.2) ] ].
+				containerEllipse: [ :ellipse :namespace | 
+					(self includes: namespace) 
+						ifTrue: [ ellipse background: (Color gray alpha: 0.2) ] ];
+				leafEllipse: [ :ellipse :class | 
+					(self includes: class container) 
+						ifFalse: [ ellipse background: (Color gray alpha: 0.2) ] ].
 			treemap asElement asPannableElement
 		]
 ]

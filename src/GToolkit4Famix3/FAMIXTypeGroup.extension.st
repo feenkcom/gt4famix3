@@ -22,6 +22,30 @@ FAMIXTypeGroup >> gtHierarchyFor: aView [
 ]
 
 { #category : #'*GToolkit4Famix3' }
+FAMIXTypeGroup >> gtWithinNestingMapFor: aView [
+	<gtView>
+	^ aView explicit
+		title: 'Within nesting and clients';
+		priority: 6;
+		stencil: [ 
+			| callers treemap |
+			callers := (self flatCollectAsSet: #clientTypes) \ self.
+			treemap := GtTreeMap new
+				roots: (self mooseModel allModelNamespaces collectAsSet: #root) asArray;
+				deep: [ :namespace | namespace childScopes];
+				leaves: [ :namespace | namespace classes ];
+				leavesSize: [ :class | class numberOfMethods ];
+				leafEllipse: [ :ellipse :class | 
+					(self includes: class) 
+						ifTrue: [ ellipse background: (Color blue alpha: 0.2) ]
+						ifFalse: [ 
+							(callers includes: class)
+								ifTrue: [ ellipse background: (Color red alpha:0.8) ]
+								ifFalse: [ ellipse background: (Color gray alpha: 0.2) ] ] ].
+			treemap asElement asPannableElement ]
+]
+
+{ #category : #'*GToolkit4Famix3' }
 FAMIXTypeGroup >> paintHierarchyWith: mondrian [
 	mondrian nodes 
 		stencil: [ :c | 
