@@ -8,7 +8,7 @@ FAMIXNamespaceGroup >> gtIcon [
 { #category : #'*GToolkit4Famix3' }
 FAMIXNamespaceGroup >> gtNestingFor: aView [
 	<gtView>
-	^ aView explicit 
+	^ aView pannable 
 		title: 'Map';
 		stencil: [
 			| treemap |
