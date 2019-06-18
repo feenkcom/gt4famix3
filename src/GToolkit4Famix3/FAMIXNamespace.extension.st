@@ -30,15 +30,27 @@ FAMIXNamespace >> gtIcon [
 { #category : #'*GToolkit4Famix3' }
 FAMIXNamespace >> gtNestingFor: aView [
 	<gtView>
-	^ aView explicit 
+	^ aView pannable 
 		title: 'Map';
 		stencil: [
-			| treemap |
-			treemap := GtTreeMap new
+			GtTreeMap new
 				roots: {self};
 				deep: [ :namespace | namespace childScopes];
 				leaves: [ :namespace | namespace classes ];
-				leavesSize: [ :class | class numberOfMethods ].
-			treemap asElement asPannableElement
-		]
+				leavesSize: [ :class | class numberOfMethods ];
+				containerEllipse: [ :ellipse :namespace | 
+					| label scaledLabel |
+					label := BlTextElement new 
+						text: (namespace name asRopedText
+							foreground: (Color white alpha: 0.7)).
+					scaledLabel := label asScalableElement 
+						zIndex: 10; 
+						constraintsDo: [:c | 
+							c horizontal matchParent. 
+							c vertical matchParent. 
+							c ignoreByLayout.
+							c ignored horizontal weight: 0.2.
+							c ignored horizontal alignCenter].
+					ellipse addChild: scaledLabel.
+					ellipse background: (Color gray alpha: 0.2) ] 	]
 ]
