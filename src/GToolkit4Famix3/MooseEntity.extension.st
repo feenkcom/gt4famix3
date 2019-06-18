@@ -51,16 +51,21 @@ MooseEntity >> gtNavigationFor: aView [
 
 { #category : #'*GToolkit4Famix3' }
 MooseEntity >> gtNavigationItems [
-	^ (self mooseDescription allAttributes reject: [ :attribute | attribute type isPrimitive]) 
-		collect: [ :attribute | 
-			| value |
-			value := self mmGetProperty: attribute.
-			(value isCollection and: [ value size = 1 ]) ifTrue: [ value := value anyOne ].
-			value isCollection ifTrue: [ value := value asMooseGroup ].
-			attribute name -> value ]
-		thenReject: [ :assoc | 
-			assoc value isNil or: [
-				assoc value isCollection and: [ assoc value isEmpty ] ] ]
+	| pragmaValueAssociations |
+	pragmaValueAssociations := self complexPropertyPragmas collect: [ :pragma | 
+		| value |
+		value := self perform: pragma methodSelector.
+		value isCollection ifTrue: [ 
+			value size = 1 
+				ifTrue: [ value := value anyOne ]
+				ifFalse: [ value := value asMooseGroup ] ].
+		((' ' join: ((pragma argumentAt: 1) piecesCutWhereCamelCase collect: #capitalized)) ) -> value ].
+	^ (pragmaValueAssociations
+		reject: [ :association | 
+			association value isNil or: [ 
+				association value isCollection and: [ 
+					association value isEmpty ] ] ])
+		sorted: [ :a :b | a key < b key ]
 ]
 
 { #category : #'*GToolkit4Famix3' }

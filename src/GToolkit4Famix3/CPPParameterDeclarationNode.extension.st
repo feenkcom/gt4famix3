@@ -7,9 +7,11 @@ CPPParameterDeclarationNode >> gtHasLinks [
 
 { #category : #'*GToolkit4Famix3' }
 CPPParameterDeclarationNode >> gtLinksFor: anEntity do: aBlock [
+	| var |
+	var := declarator ifNil: [ specifiers last ].
 	aBlock
 		value: anEntity
-		value: declarator preprocessedStartPosition
-		value: declarator preprocessedStopPosition.
+		value: var preprocessedStartPosition
+		value: var preprocessedStopPosition.
 	self typeLinksFor: specifiers to: anEntity declaredType do: aBlock
 ]

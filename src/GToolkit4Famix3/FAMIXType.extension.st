@@ -12,7 +12,16 @@ FAMIXType >> gtAttributesFor: aView [
 				item: [ :each | each gtIcon ];
 				rowStencil: [ :eachIcon | eachIcon asElement margin: (BlInsets left: 5 right: 5) ];
 				noResize ];
-		column: 'Name' translated format: [ :each | each gtDisplayString ]
+		column: 'Name' translated format: [ :each | each name ];
+		column: 'Declared type' translated format: [ :each | each declaredType gtDisplayString ]
+]
+
+{ #category : #'*GToolkit4Famix3' }
+FAMIXType >> gtBlueprintFor: aView [
+	<gtView>
+	^ aView explicit
+		title: 'Blueprint';
+		stencil: [ (FAMIXClassBlueprint new type: self) asElement asPannableElement ]
 ]
 
 { #category : #'*GToolkit4Famix3' }
@@ -27,7 +36,8 @@ FAMIXType >> gtMethodsFor: aView [
 				item: [ :each | each gtIcon ];
 				rowStencil: [ :eachIcon | eachIcon asElement margin: (BlInsets left: 5 right: 5) ];
 				noResize ];
-		column: 'Name' translated format: [ :each | each signature ]
+		column: 'Name' translated format: [ :each | each signature ];
+		column: 'Declared type' translated format: [ :each | each declaredType gtDisplayString ]
 ]
 
 { #category : #'*GToolkit4Famix3' }
