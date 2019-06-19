@@ -17,7 +17,7 @@ FAMIXFolder >> gtNestingFor: aView [
 		title: 'Map';
 		stencil: [
 			| treemap |
-			treemap := GtTreeMap new
+			treemap := GtNestedTreeMap new
 				roots: {self};
 				deep: [ :folder | folder folders];
 				leaves: [ :folder | folder files ];
