@@ -30,7 +30,7 @@ FAMIXTypeGroup >> gtWithinNestingMapFor: aView [
 		stencil: [ 
 			| callers treemap |
 			callers := (self flatCollectAsSet: #clientTypes) \ self.
-			treemap := GtTreeMap new
+			treemap := GtNestedTreeMap new
 				roots: (self mooseModel allModelNamespaces collectAsSet: #root) asArray;
 				deep: [ :namespace | namespace childScopes];
 				leaves: [ :namespace | namespace classes ];

@@ -33,7 +33,7 @@ FAMIXNamespace >> gtNestingFor: aView [
 	^ aView pannable 
 		title: 'Map';
 		stencil: [
-			GtTreeMap new
+			GtNestedTreeMap new
 				roots: {self};
 				deep: [ :namespace | namespace childScopes];
 				leaves: [ :namespace | namespace classes ];
