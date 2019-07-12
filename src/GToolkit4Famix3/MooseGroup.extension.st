@@ -16,6 +16,19 @@ MooseGroup >> gtIcon [
 ]
 
 { #category : #'*GToolkit4Famix3' }
+MooseGroup >> gtSpotterItemsFor: aStep [
+	<gtSearch>
+	^ aStep listProcessor
+		priority: 10;
+		title: 'Items';
+		candidatesLimit: 50;
+		allCandidates: [ self entities ];
+		itemName: [ :each | each gtDisplayString ];
+		filter: GTFilterSubstring;
+		wantsToDisplayOnEmptyQuery: true
+]
+
+{ #category : #'*GToolkit4Famix3' }
 MooseGroup >> spotterItemsFor: aStep [
 	<spotterOrder: 10>
 	^ aStep listProcessor
