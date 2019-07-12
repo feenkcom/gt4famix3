@@ -57,6 +57,18 @@ MooseModel >> gtItemsFor: aView [
 ]
 
 { #category : #'*GToolkit4Famix3' }
+MooseModel >> gtSpotterClassesFor: aStep [
+	<gtSearch>
+	self spotter: 'All classes' on: [ self allClasses ] for: aStep
+]
+
+{ #category : #'*GToolkit4Famix3' }
+MooseModel >> gtSpotterMethodsFor: aStep [
+	<gtSearch>
+	self spotter: 'All methods' on: [ self allMethods ] for: aStep
+]
+
+{ #category : #'*GToolkit4Famix3' }
 MooseModel >> spotter: aStringTitle on: aCandidatesBlock for: aStep [
 	aCandidatesBlock value isEmpty ifTrue: [ ^ self ].
 	^ aStep listProcessor
