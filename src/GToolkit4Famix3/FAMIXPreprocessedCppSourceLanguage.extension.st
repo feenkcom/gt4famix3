@@ -1,13 +1,6 @@
-Class {
-	#name : #FAMIXPreprocessedCppSourceLanguage,
-	#superclass : #FAMIXCppSourceLanguage,
-	#instVars : [
-		'preprocessor'
-	],
-	#category : #GToolkit4Famix3
-}
+Extension { #name : #FAMIXPreprocessedCppSourceLanguage }
 
-{ #category : #'as yet unclassified' }
+{ #category : #'*GToolkit4Famix3' }
 FAMIXPreprocessedCppSourceLanguage >> gtASTNodeFor: aString at: anInterval [
 	| ast preprocessedSource innerNode |
 	preprocessedSource := preprocessor copy
@@ -26,13 +19,8 @@ FAMIXPreprocessedCppSourceLanguage >> gtASTNodeFor: aString at: anInterval [
 	^ innerNode
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'*GToolkit4Famix3' }
 FAMIXPreprocessedCppSourceLanguage >> gtStyler [
 	^ (GtSmaCCPreprocessedParserStyler cppStyler: CPPParser)
 		preprocessor: preprocessor copy
-]
-
-{ #category : #accessing }
-FAMIXPreprocessedCppSourceLanguage >> preprocessor: anObject [
-	preprocessor := anObject
 ]
