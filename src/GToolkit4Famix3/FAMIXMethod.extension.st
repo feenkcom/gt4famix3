@@ -4,3 +4,9 @@ Extension { #name : #FAMIXMethod }
 FAMIXMethod >> gtIcon [ 
 	^ MooseIcons famixMethod
 ]
+
+{ #category : #'*GToolkit4Famix3' }
+FAMIXMethod >> mavenDirectory [
+	^ self sourceAnchor ifNotNil: [ :anchor | 
+		anchor fileReference mavenDirectory ]
+]
