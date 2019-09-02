@@ -22,6 +22,30 @@ MooseModel >> fileAnchorFor: aFileReference [
 ]
 
 { #category : #'*GToolkit4Famix3' }
+MooseModel >> generateAstPositionsFor: each basedOn: item [
+	^ each sourceAnchor isNil
+		ifTrue: [ | start stop |
+			start := each propertyNamed: #astStartPosition ifAbsent: [  ].
+			stop := each propertyNamed: #astStopPosition ifAbsent: [  ].
+			(start notNil and: [ stop notNil ])
+				ifTrue: [ (item notNil and: [ item sourceAnchor notNil ])
+						ifTrue: [ (item sourceAnchor isKindOf: FAMIXIndexedFileAnchor)
+								ifTrue: [ each
+										fileAnchorPath: item sourceAnchor fileName
+										startPos: start
+										endPos: stop ].
+							(item sourceAnchor isKindOf: FAMIXIndexedFileEntityAnchor)
+								ifTrue: [ each
+										sourceAnchor:
+											(FAMIXIndexedFileEntityAnchor new
+												correspondingFile: item sourceAnchor correspondingFile;
+												startPos: start;
+												endPos: stop;
+												model: self;
+												yourself) ] ] ] ]
+]
+
+{ #category : #'*GToolkit4Famix3' }
 MooseModel >> generateFileEntities [
 	| files |
 	files := Dictionary new.
@@ -49,6 +73,17 @@ MooseModel >> generateFileEntities [
 						ifFalse: [ file addEntity: each ].
 					each sourceAnchor correspondingFile isNil
 						ifTrue: [ each sourceAnchor correspondingFile: file ] ] ]
+]
+
+{ #category : #'*GToolkit4Famix3' }
+MooseModel >> generateMisssingSourceAnchors [
+	(self allWithSubTypesOf: FAMIXAssociation)
+		do: [ :each | self generateAstPositionsFor: each basedOn: each from ].
+	(self allWithSubTypesOf: FAMIXAnnotationInstance)
+		do:
+			[ :each | self generateAstPositionsFor: each basedOn: each annotatedEntity ].
+	(self allWithSubTypesOf: FAMIXLeafEntity)
+		do: [ :each | self generateAstPositionsFor: each basedOn: each belongsTo ]
 ]
 
 { #category : #'*GToolkit4Famix3' }
