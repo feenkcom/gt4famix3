@@ -92,15 +92,21 @@ MooseModel >> gtItemsFor: aView [
 ]
 
 { #category : #'*GToolkit4Famix3' }
+MooseModel >> gtSpotterAnnotationTypesFor: aStep [
+	<gtSearch>
+	self spotter: 'Annotation types' on: [ self allAnnotationTypes ] for: aStep
+]
+
+{ #category : #'*GToolkit4Famix3' }
 MooseModel >> gtSpotterClassesFor: aStep [
 	<gtSearch>
-	self spotter: 'All classes' on: [ self allClasses ] for: aStep
+	self spotter: 'Classes' on: [ self allClasses ] for: aStep
 ]
 
 { #category : #'*GToolkit4Famix3' }
 MooseModel >> gtSpotterMethodsFor: aStep [
 	<gtSearch>
-	self spotter: 'All methods' on: [ self allMethods ] for: aStep
+	self spotter: 'Methods' on: [ self allMethods ] for: aStep
 ]
 
 { #category : #'*GToolkit4Famix3' }
