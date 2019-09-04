@@ -22,6 +22,30 @@ MooseModel >> fileAnchorFor: aFileReference [
 ]
 
 { #category : #'*GToolkit4Famix3' }
+MooseModel >> generateAstPositionsFor: each basedOn: item [
+	^ each sourceAnchor isNil
+		ifTrue: [ | start stop |
+			start := each propertyNamed: #astStartPosition ifAbsent: [  ].
+			stop := each propertyNamed: #astStopPosition ifAbsent: [  ].
+			(start notNil and: [ stop notNil ])
+				ifTrue: [ (item notNil and: [ item sourceAnchor notNil ])
+						ifTrue: [ (item sourceAnchor isKindOf: FAMIXIndexedFileAnchor)
+								ifTrue: [ each
+										fileAnchorPath: item sourceAnchor fileName
+										startPos: start
+										endPos: stop ].
+							(item sourceAnchor isKindOf: FAMIXIndexedFileEntityAnchor)
+								ifTrue: [ each
+										sourceAnchor:
+											(FAMIXIndexedFileEntityAnchor new
+												correspondingFile: item sourceAnchor correspondingFile;
+												startPos: start;
+												endPos: stop;
+												model: self;
+												yourself) ] ] ] ]
+]
+
+{ #category : #'*GToolkit4Famix3' }
 MooseModel >> generateFileEntities [
 	| files |
 	files := Dictionary new.
@@ -52,20 +76,37 @@ MooseModel >> generateFileEntities [
 ]
 
 { #category : #'*GToolkit4Famix3' }
+MooseModel >> generateMisssingSourceAnchors [
+	(self allWithSubTypesOf: FAMIXAssociation)
+		do: [ :each | self generateAstPositionsFor: each basedOn: each from ].
+	(self allWithSubTypesOf: FAMIXAnnotationInstance)
+		do:
+			[ :each | self generateAstPositionsFor: each basedOn: each annotatedEntity ].
+	(self allWithSubTypesOf: FAMIXLeafEntity)
+		do: [ :each | self generateAstPositionsFor: each basedOn: each belongsTo ]
+]
+
+{ #category : #'*GToolkit4Famix3' }
 MooseModel >> gtItemsFor: aView [
 	^ aView empty
 ]
 
 { #category : #'*GToolkit4Famix3' }
+MooseModel >> gtSpotterAnnotationTypesFor: aStep [
+	<gtSearch>
+	self spotter: 'Annotation types' on: [ self allAnnotationTypes ] for: aStep
+]
+
+{ #category : #'*GToolkit4Famix3' }
 MooseModel >> gtSpotterClassesFor: aStep [
 	<gtSearch>
-	self spotter: 'All classes' on: [ self allClasses ] for: aStep
+	self spotter: 'Classes' on: [ self allClasses ] for: aStep
 ]
 
 { #category : #'*GToolkit4Famix3' }
 MooseModel >> gtSpotterMethodsFor: aStep [
 	<gtSearch>
-	self spotter: 'All methods' on: [ self allMethods ] for: aStep
+	self spotter: 'Methods' on: [ self allMethods ] for: aStep
 ]
 
 { #category : #'*GToolkit4Famix3' }
