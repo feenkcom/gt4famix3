@@ -15,10 +15,10 @@ Class {
 { #category : #importing }
 VSProjectImporter >> ensureFamixFileFromFile: targetFile [
 	^ files 
-		at: targetFile fullName
+		at: targetFile canonicalize fullName
 		ifAbsentPut: [ 
 			FAMIXFile new 
-				name: targetFile;
+				name: targetFile basename;
 				isStub: true;
 				parentFolder: (self ensureFamixFolderFromDirectory: targetFile parent) ]
 ]
@@ -26,12 +26,12 @@ VSProjectImporter >> ensureFamixFileFromFile: targetFile [
 { #category : #importing }
 VSProjectImporter >> ensureFamixFolderFromDirectory: aDirectory [
 	^ folders 
-		at: aDirectory fullName
+		at: aDirectory canonicalize fullName
 		ifAbsentPut: [ 
 			FAMIXFolder new 
-				name: aDirectory name;
-				isStub: true;
-				parent: (self ensureFamixFolderFromDirectory: aDirectory parent) ]
+				name: aDirectory basename;
+				isStub: true";
+				parent: (self ensureFamixFolderFromDirectory: aDirectory parent)" ]
 ]
 
 { #category : #importing }
@@ -68,7 +68,10 @@ VSProjectImporter >> importFromDirectory: aDirectory [
 VSProjectImporter >> importVisualStudioProject: aFile [
 	| xml vsProject |
 	xml := XMLDOMParser parse: aFile.
-	vsProject := VSProject new.
+	vsProject := VSProject new
+		projectFile: aFile;
+		name: aFile basenameWithoutExtension.
+	projects add: vsProject.
 	xml // #ClCompile do: [ :compileElement | 
 		(compileElement includesAttribute: #Include)
 			ifTrue: [ 
@@ -79,7 +82,18 @@ VSProjectImporter >> importVisualStudioProject: aFile [
 				fileCompile := VSProjectFileCompile new 
 					project: vsProject;
 					file: targetFamixFile.
-				compilations add: fileCompile ] ]
+				compilations add: fileCompile ] ].
+	xml // #ClInclude do: [ :includeElement | 
+		(includeElement includesAttribute: #Include)
+			ifTrue: [ 
+				| rawStringPath targetFile targetFamixFile fileInclude |
+				rawStringPath := includeElement attributeAt: #Include.
+				targetFile := aFile resolveString: (rawStringPath copyReplaceAll: '\' with: FileSystem disk delimiter asString).
+				targetFamixFile := self ensureFamixFileFromFile: targetFile.
+				fileInclude := VSProjectFileInclude new 
+					project: vsProject;
+					file: targetFamixFile.
+				includes add: fileInclude ] ]
 ]
 
 { #category : #importing }
@@ -88,5 +102,6 @@ VSProjectImporter >> initialize [
 	folders := Dictionary new.
 	files := Dictionary new.
 	compilations := OrderedCollection new.
-	includes := OrderedCollection new
+	includes := OrderedCollection new.
+	projects := OrderedCollection new
 ]

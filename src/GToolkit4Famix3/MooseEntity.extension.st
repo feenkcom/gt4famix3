@@ -16,7 +16,7 @@ MooseEntity >> complexPropertyPragmas [
 		reject: [ :a | a type isPrimitive ])
 		flatCollect: [ :prop | 
 			(prop mmClass implementingClass >> prop implementingSelector) pragmas
-				select: [ :each | each keyword beginsWith: 'MSEProperty:' ] ].
+				select: [ :each | each selector beginsWith: 'MSEProperty:' ] ].
 	^ (OrderedCollection withAll: definedProps)
 		addAll: navProps;
 		yourself
