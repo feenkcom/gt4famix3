@@ -2,7 +2,6 @@ Class {
 	#name : #VSProjectImporter,
 	#superclass : #Object,
 	#instVars : [
-		'directories',
 		'files',
 		'folders',
 		'projects',
@@ -32,6 +31,16 @@ VSProjectImporter >> ensureFamixFolderFromDirectory: aDirectory [
 				name: aDirectory basename;
 				isStub: true";
 				parent: (self ensureFamixFolderFromDirectory: aDirectory parent)" ]
+]
+
+{ #category : #accessing }
+VSProjectImporter >> files [
+	^ files
+]
+
+{ #category : #accessing }
+VSProjectImporter >> folders [
+	^ folders
 ]
 
 { #category : #importing }
