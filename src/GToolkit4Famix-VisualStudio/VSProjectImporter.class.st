@@ -29,8 +29,8 @@ VSProjectImporter >> ensureFamixFolderFromDirectory: aDirectory [
 		ifAbsentPut: [ 
 			FAMIXFolder new 
 				name: aDirectory basename;
-				isStub: true";
-				parent: (self ensureFamixFolderFromDirectory: aDirectory parent)" ]
+				isStub: true;
+				parentFolder: (self ensureFamixFolderFromDirectory: aDirectory parent) ]
 ]
 
 { #category : #accessing }
@@ -41,6 +41,37 @@ VSProjectImporter >> files [
 { #category : #accessing }
 VSProjectImporter >> folders [
 	^ folders
+]
+
+{ #category : #accessing }
+VSProjectImporter >> gtIncludeTreeFor: aView [
+	<gtView>
+	^ aView mondrian 
+		title: 'Include tree';
+		painting: [ :m |
+m nodes 
+	stencil: [ :folder |
+		(self projects anySatisfy: [ :po | po projectFile parentFolder = folder]) 
+			ifTrue: [ BrLabel new look: BrGlamorousLabelLook; text: folder name]
+			ifFalse: [ BlElement new geometry: BlEllipse new; border: (BlBorder paint: Color black width: 2); size: 10@10 ]
+		];
+	with: self folders values.
+m edges 
+	fromRightCenter;
+	toLeftCenter;
+	connectFrom: #parentFolder.
+m edges
+	stencil: [ 
+		BlParabollaArcElement new 
+						zIndex: 0;
+						curvatureFraction: 0.3;
+						border: (BlBorder paint: (Color orange alpha: 0.4) width: 2);
+						toHead: (BlArrowheadSimpleArrow new
+							border: (BlBorder builder paint: (Color orange alpha: 0.4); width: 2; build))
+		];
+	passive;
+	connect: self projects from: [:project | project projectFile parentFolder ] toAll: [ :project | project includedFiles collect: [: include | include file parentFolder  ]].
+m layout horizontalTree ].		
 ]
 
 { #category : #importing }
@@ -68,8 +99,8 @@ VSProjectImporter >> importFromDirectory: aDirectory [
 	| rootFolder |
 	self assert: [ aDirectory exists ].
 	self assert: [ aDirectory isDirectory ].
-	rootFolder := FAMIXFolder new name: '__ROOT__'.
-	folders at: '__ROOT__' put: rootFolder.
+	rootFolder := FAMIXFolder new name: aDirectory basename.
+	folders at: aDirectory canonicalize fullName put: rootFolder.
 	self importDirectory: aDirectory in: rootFolder .
 ]
 
@@ -78,7 +109,7 @@ VSProjectImporter >> importVisualStudioProject: aFile [
 	| xml vsProject |
 	xml := XMLDOMParser parse: aFile.
 	vsProject := VSProject new
-		projectFile: aFile;
+		projectFile: (self ensureFamixFileFromFile: aFile);
 		name: aFile basenameWithoutExtension.
 	projects add: vsProject.
 	xml // #ClCompile do: [ :compileElement | 
@@ -113,4 +144,9 @@ VSProjectImporter >> initialize [
 	compilations := OrderedCollection new.
 	includes := OrderedCollection new.
 	projects := OrderedCollection new
+]
+
+{ #category : #accessing }
+VSProjectImporter >> projects [
+	^ projects
 ]
