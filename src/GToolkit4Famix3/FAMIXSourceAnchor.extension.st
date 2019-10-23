@@ -34,7 +34,7 @@ FAMIXSourceAnchor >> gtSourceFor: aView [
 { #category : #'*GToolkit4Famix3' }
 FAMIXSourceAnchor >> gtText [
 	| text |
-	text := self completeText asRopedText.
+	text := BlRopedRawText string: self completeText.
 	(text from: self startPos to: self endPos)
 		attributes:
 			{(BlTextUnderlineAttribute new
