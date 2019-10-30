@@ -4,22 +4,19 @@ Class {
 	#category : #BaselineOfGToolkit4Famix3
 }
 
-{ #category : #baselines }
+{ #category : #baseline }
 BaselineOfGToolkit4Famix3 >> baseline: spec [
 	<baseline>
-	spec
-		for: #common
-		do: [ 
-			spec 
-				baseline: 'Famix3SmalltalkImporter' with: [
-					spec repository: 'github://feenkcom/famix3/src' ].
-			spec 
-				baseline: 'GToolkit4XMLSupport' with: [
-					spec repository: 'github://feenkcom/gt4xmlsupport/src' ].
-			spec 
-				package: 'GToolkit4Famix3' with: [
-					spec requires: #('Famix3SmalltalkImporter') ].
-			spec 
-				package: 'GToolkit4Famix3-VisualStudio' with: [
-					spec requires: #('GToolkit4XMLSupport') ]	]
+	spec for: #'common' do: [
+		spec 
+			baseline: 'Famix3SmalltalkImporter' with: [
+				spec repository: 'github://feenkcom/famix3:v0.7.14/src' ];
+			baseline: 'GToolkit4XMLSupport' with: [
+				spec repository: 'github://feenkcom/gt4xmlsupport:v0.6.1/src' ].
+		spec 
+			package: 'GToolkit4Famix3' with: [
+				spec requires: #('Famix3SmalltalkImporter' ). ];
+			package: 'GToolkit4Famix3-VisualStudio' with: [
+				spec requires: #('GToolkit4XMLSupport' ). ]. ].
+
 ]
