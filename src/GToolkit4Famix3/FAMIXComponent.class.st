@@ -34,6 +34,30 @@ FAMIXComponent >> gtEntitiesFor: aView [
 ]
 
 { #category : #accessing }
+FAMIXComponent >> gtIncomingDependenciesFor: aView [
+	<gtView>
+	^ aView columnedList 
+		title: 'Incoming';
+		priority: 10;
+		items: [ self incomingDependencies ];
+		column: 'From' format: [ :each | each source gtDisplayString ];
+		column: 'To' format: [:each | each target gtDisplayString ];
+		column: 'Amount' format: [:each | each entityDependencies size] width: 100
+]
+
+{ #category : #accessing }
+FAMIXComponent >> gtOutgoingDependenciesFor: aView [
+	<gtView>
+	^ aView columnedList 
+		title: 'Outgoing';
+		priority: 20;
+		items: [ self outgoingDependencies ];
+		column: 'From' format: [ :each | each source gtDisplayString ];
+		column: 'To' format: [:each | each target gtDisplayString ];
+		column: 'Amount' format: [:each | each entityDependencies size] width: 100
+]
+
+{ #category : #accessing }
 FAMIXComponent >> incomingDependencies [
 	<MSEProperty: #entities type: #FAMIXComponentDependency>
 	^ incomingDependencies
