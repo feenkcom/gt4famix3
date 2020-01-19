@@ -85,6 +85,25 @@ FAMIXComponentBuilder >> entitiesToComponents: anObject [
 ]
 
 { #category : #accessing }
+FAMIXComponentBuilder >> gtComponentsFor: aView [
+	<gtView>
+	^ aView list
+		title: 'Components';
+		items: [ self components ]
+]
+
+{ #category : #accessing }
+FAMIXComponentBuilder >> gtDependenciesFor: aView [
+	<gtView>
+	^ aView columnedList
+		title: 'Dependencies';
+		items: [ self dependencies ];
+		column: 'From' format: [:d | d source gtDisplayString];
+		column: 'To' format: [:d | d target gtDisplayString];
+		column: 'Amount' format: [:d | d entityDependencies size] width: 100
+]
+
+{ #category : #accessing }
 FAMIXComponentBuilder >> gtMapFor: aView [
 	<gtView>
 	^ aView mondrian
