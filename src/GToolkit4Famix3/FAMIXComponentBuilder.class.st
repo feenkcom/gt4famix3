@@ -117,5 +117,5 @@ FAMIXComponentBuilder >> paintMapWith: m [
 						toHead: (BlArrowheadSimpleArrow new
 							border: (BlBorder builder paint: (Color gray alpha: 0.2); width: 2; build))];
 		connect: dependencies from: #source to: #target.
-	m layout circle
+	m layout force charge: -3000
 ]
