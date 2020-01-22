@@ -128,13 +128,13 @@ FAMIXComponentBuilder >> paintMapWith: m [
 		fromNearestCircle;
 		toNearestCircle;
 		stencil: [:d | 
-			BlParabollaArcElement new 
-						when: BlClickEvent do: [:e | e target phlow spawnObject: d];
-						zIndex: -1;
-						curvatureFraction: 0.2;
-						border: (BlBorder paint: (Color gray alpha: 0.2) width: 2);
-						toHead: (BlArrowheadSimpleArrow new
-							border: (BlBorder builder paint: (Color gray alpha: 0.2); width: 2; build))];
+			BlParabollaArcElement new
+			when: BlClickEvent do: [:e | e target phlow spawnObject: d];
+			zIndex: -1;
+				curvatureFraction: 0.2;
+				border: (BlBorder paint: (Color gray alpha: 0.2) width: ((d entityDependencies size // 20) max: 1));
+				toHead: (BlArrowheadSimpleArrow new
+					border: (BlBorder builder paint: (Color gray alpha: 0.2); width: 2; build))];
 		connect: dependencies from: #source to: #target.
-	m layout force charge: -3000
+	m layout circle
 ]
