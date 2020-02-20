@@ -3,13 +3,13 @@ Extension { #name : #FAMIXTypeGroup }
 { #category : #'*GToolkit4Famix3' }
 FAMIXTypeGroup >> gtBlueprintHierarchyFor: aView [
 	<gtView>
-	^ aView explicit
+	^ aView pannable
 		title: 'Blueprint';
 		priority: 6;
 		stencil: [ 
-			(FAMIXClassBlueprint new 
+			FAMIXClassBlueprint new 
 				types: self;
-				asElement) asPannableElement ]
+				asElement ]
 ]
 
 { #category : #'*GToolkit4Famix3' }
