@@ -1,30 +1,6 @@
 Extension { #name : #CPPProgramNode }
 
 { #category : #'*GToolkit4Famix3' }
-CPPProgramNode >> preprocessedStartPosition [
-	^ self preprocessedStartPositionFor: self startPosition
-]
-
-{ #category : #'*GToolkit4Famix3' }
-CPPProgramNode >> preprocessedStartPositionFor: anInteger [
-	^ (self topParent attributeNamed: #preprocessedFile)
-		ifNotNil: [ :file | file startPositionFor: anInteger ]
-		ifNil: [ anInteger ]
-]
-
-{ #category : #'*GToolkit4Famix3' }
-CPPProgramNode >> preprocessedStopPosition [
-	^ self preprocessedStopPositionFor: self stopPosition
-]
-
-{ #category : #'*GToolkit4Famix3' }
-CPPProgramNode >> preprocessedStopPositionFor: anInteger [
-	^ (self topParent attributeNamed: #preprocessedFile)
-		ifNotNil: [ :file | file stopPositionFor: anInteger ]
-		ifNil: [ anInteger ]
-]
-
-{ #category : #'*GToolkit4Famix3' }
 CPPProgramNode >> typeLinksFor: specifiers to: anEntity do: aBlock [
 	| first last |
 	specifiers
