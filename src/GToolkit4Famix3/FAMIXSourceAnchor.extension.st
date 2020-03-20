@@ -37,10 +37,9 @@ FAMIXSourceAnchor >> gtText [
 	text := BlRopedRawText string: self completeText.
 	(text from: self startPos to: self endPos)
 		attributes:
-			{(BlTextUnderlineAttribute new
+			{(BlTextHighlightAttribute new
 				beNotOverwritableByStyler;
-				paint: (Color lightGray alpha: 0.5);
-				width: 1)}.
+				paint: (BrGlamorousColors neutralBackgroundColor))}.
 	self gtAddLinksTo: text.
 	^ text
 ]
