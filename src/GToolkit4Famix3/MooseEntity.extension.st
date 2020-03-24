@@ -107,5 +107,5 @@ MooseEntity >> mooseSpecificSpotterProcessorsFor: aSpotterStep [
 { #category : #'*GToolkit4Famix3' }
 MooseEntity >> spotterProcessorsFor: aSpotterStep [
 	super spotterProcessorsFor: aSpotterStep.
-	self mooseSpecificSpotterProcessorsFor: aSpotterStep
+	"self mooseSpecificSpotterProcessorsFor: aSpotterStep"
 ]
