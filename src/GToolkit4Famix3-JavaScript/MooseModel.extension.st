@@ -1,0 +1,53 @@
+Extension { #name : #MooseModel }
+
+{ #category : #'*GToolkit4Famix3-JavaScript' }
+MooseModel >> allAngularComponents [
+
+]
+
+{ #category : #'*GToolkit4Famix3-JavaScript' }
+MooseModel >> allAngularInjectables [
+	<navigation: 'All Angular injectables'>
+	^ self allWithType: FKAngularInjectable
+]
+
+{ #category : #'*GToolkit4Famix3-JavaScript' }
+MooseModel >> allAngularModules [
+	<navigation: 'All Angular modules'>
+	^ self allWithType: FKAngularModule
+]
+
+{ #category : #'*GToolkit4Famix3-JavaScript' }
+MooseModel >> allAngularTemplates [
+	<navigation: 'All Angular templates'>
+	^ self allWithType: FKAngularTemplate
+]
+
+{ #category : #'*GToolkit4Famix3-JavaScript' }
+MooseModel >> allJSInvocations [
+	^ self allWithType: FKJSInvocation
+]
+
+{ #category : #'*GToolkit4Famix3-JavaScript' }
+MooseModel >> spotterAngularComponentsFor: aStep [
+	<spotterOrder: 30>
+	self spotter: 'All angular components' on: [ self allAngularComponents ] for: aStep
+]
+
+{ #category : #'*GToolkit4Famix3-JavaScript' }
+MooseModel >> spotterAngularInjectablesFor: aStep [
+	<spotterOrder: 20>
+	self spotter: 'All angular injectables' on: [ self allAngularInjectables ] for: aStep
+]
+
+{ #category : #'*GToolkit4Famix3-JavaScript' }
+MooseModel >> spotterAngularModulesFor: aStep [
+	<spotterOrder: 10>
+	self spotter: 'All angular modules' on: [ self allAngularModules ] for: aStep
+]
+
+{ #category : #'*GToolkit4Famix3-JavaScript' }
+MooseModel >> spotterAngularTemplatesFor: aStep [
+	<spotterOrder: 40>
+	self spotter: 'All angular templates' on: [ self allAngularTemplates ] for: aStep
+]
