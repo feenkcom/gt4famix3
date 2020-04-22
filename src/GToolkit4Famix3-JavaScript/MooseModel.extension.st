@@ -8,24 +8,24 @@ MooseModel >> allAngularComponents [
 { #category : #'*GToolkit4Famix3-JavaScript' }
 MooseModel >> allAngularInjectables [
 	<navigation: 'All Angular injectables'>
-	^ self allWithType: FKAngularInjectable
+	^ self allWithType: GtAngularInjectable
 ]
 
 { #category : #'*GToolkit4Famix3-JavaScript' }
 MooseModel >> allAngularModules [
 	<navigation: 'All Angular modules'>
-	^ self allWithType: FKAngularModule
+	^ self allWithType: GtAngularModule
 ]
 
 { #category : #'*GToolkit4Famix3-JavaScript' }
 MooseModel >> allAngularTemplates [
 	<navigation: 'All Angular templates'>
-	^ self allWithType: FKAngularTemplate
+	^ self allWithType: GtAngularTemplate
 ]
 
 { #category : #'*GToolkit4Famix3-JavaScript' }
 MooseModel >> allJSInvocations [
-	^ self allWithType: FKJSInvocation
+	^ self allWithType: GtJSInvocation
 ]
 
 { #category : #'*GToolkit4Famix3-JavaScript' }

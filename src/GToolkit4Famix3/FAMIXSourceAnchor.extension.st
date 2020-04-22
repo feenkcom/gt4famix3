@@ -7,7 +7,9 @@ FAMIXSourceAnchor >> gtAddLinksTo: text [
 
 { #category : #'*GToolkit4Famix3' }
 FAMIXSourceAnchor >> gtCompleteSourceFor: aView [
-	<gtView>
+	<gtView> 
+	self completeText isEmpty
+		ifTrue: [ ^ aView empty ].
 	^ aView explicit
 		title: 'Complete source';
 		priority: 5;
@@ -18,7 +20,8 @@ FAMIXSourceAnchor >> gtCompleteSourceFor: aView [
 				look: BrGlamorousCodeEditorLook new.
 			element notNil
 				ifTrue: [ element gtStyler ifNotNil: [ :styler | e styler: styler ] ].
-			e scrollToPosition: (self completeText lineNumberCorrespondingToIndex: self startPos).
+			e
+				scrollToPosition: (self completeText lineNumberCorrespondingToIndex: self startPos).
 			e ]
 ]
 
