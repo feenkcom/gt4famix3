@@ -21,7 +21,14 @@ GtJavaScriptImporterTest >> samples [
 
 { #category : #running }
 GtJavaScriptImporterTest >> setUp [
-	importer := GtJavaScriptImporter new.
-	samples := self samples.
-	samples do: [ :each | importer importStream: each readStream ]
+	| dir |
+	dir := FileSystem memory workingDirectory / 'src'.
+	dir ensureCreateDirectory.
+	self samples
+		keysAndValuesDo: [ :i :each | 
+			| filename |
+			filename := dir / ('sample' , i printString , '.js').
+			filename writeStreamDo: [ :stream | stream nextPutAll: each ] ].
+	importer := GtJSImporter new.
+	importer importDirectory: dir
 ]

@@ -15,11 +15,11 @@ function b() {}
 { #category : #testing }
 GtJSImporterForTwoFunctionsWithOneInvocationTest >> testFunctionA [
 	| a |
-	a := importer functions at: 'a'.
+	a := importer model allFunctions detect: [ :each | each name = 'a' ].
 	self assert: a outgoingInvocations size equals: 1
 ]
 
 { #category : #testing }
 GtJSImporterForTwoFunctionsWithOneInvocationTest >> testFunctions [
-	self assert: importer functions size equals: 2.
+	self assert: importer model allFunctions size equals: 2
 ]

@@ -11,6 +11,6 @@ GtJSImporterForOneFunctionTest >> sample [
 
 { #category : #testing }
 GtJSImporterForOneFunctionTest >> testFunctionA [
-	self assert: importer functions size equals: 1.
-	self assert: importer functions anyOne name equals: 'a'
+	self assert: importer model allFunctions size equals: 1.
+	self assert: importer model allFunctions anyOne name equals: 'a'
 ]
