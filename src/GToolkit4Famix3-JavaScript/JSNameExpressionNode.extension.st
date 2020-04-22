@@ -9,6 +9,15 @@ JSNameExpressionNode >> isVariableReference [
 				or: [ parent isKindOf: JSClassExpressionNode ] ])
 		and: [ parent name == self ])
 		ifTrue: [ ^ false ].
+	(self parentOfType: JSClassExpressionNode)
+		ifNotNil: [ :cls | 
+			cls superclass notNil
+				ifTrue: [ (self isDescendantFrom: cls superclass)
+						ifTrue: [ ^ false ] ].
+			cls types
+				do: [ :each | 
+					(self isDescendantFrom: each)
+						ifTrue: [ ^ false ] ] ].
 	^ (parent isKindOf: JSVariableDeclarationNode) not
 		and: [ ((parent isKindOf: JSTryStatementNode)
 				and: [ parent exceptionType == self ]) not ]

@@ -444,12 +444,13 @@ GtJSImporter >> visitClassExpression: aClassExpression [
 	class sourceAnchor: (self sourceAnchorFor: aClassExpression).
 	aClassExpression superclass
 		ifNotNil: [ :spr | 
-			class
-				addSuperInheritance:
-					(FAMIXInheritance new
-						model: model;
-						subclass: class;
-						superclass: (self ensureJSClassForNode: spr)) ].
+			| inheritance |
+			inheritance := FAMIXInheritance new
+				subclass: class;
+				superclass: (self ensureJSClassForNode: spr).
+			model add: inheritance.
+			inheritance sourceAnchor: (self sourceAnchorFor: spr).
+			class addSuperInheritance: inheritance ].
 	self
 		assignScope: class
 		around: [ super visitClassExpression: aClassExpression ]

@@ -31,6 +31,24 @@ module.exports = MyClass;
 '
 ]
 
+{ #category : #files }
+GtJSImporterExamples >> demo_subclass_js [
+	^ '
+class SubClass extends MyClass {
+    constructor() {
+        this.iv3 = [];
+    }
+
+    get variable3() {
+        return this.iv3;
+    }
+}
+
+module.exports = SubClass;
+
+'
+]
+
 { #category : #samples }
 GtJSImporterExamples >> exampleImporter [
 	<gtExample>
@@ -43,6 +61,7 @@ GtJSImporterExamples >> exampleImporter [
 GtJSImporterExamples >> projectFiles [
 	^ super projectFiles , 
 	{
-		{'demo/class.js'. self demo_class_js}
+		{'demo/class.js'. self demo_class_js}.
+		{'demo/subclass.js'. self demo_subclass_js}
 	}
 ]
