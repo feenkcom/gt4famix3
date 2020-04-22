@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'arguments'
 	],
-	#category : #'GToolkit4Famix3-JavaScript-Dojo'
+	#category : #'GToolkit4Famix3-JavaScript-Model'
 }
 
 { #category : #accessing }

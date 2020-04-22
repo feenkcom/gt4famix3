@@ -195,10 +195,12 @@ GtJSImporter >> ensureVariableFor: node in: entity [
 		detect: [ :each | each name = name ]
 		ifNone: [ currentScope parameters
 				detect: [ :each | each name = name ]
-				ifNone: [ currentScope implicitVariables detect: [ :each | each name = name ] ifNone: [  ] ] ].
+				ifNone: [ currentScope implicitVariables
+						detect: [ :each | each name = name ]
+						ifNone: [  ] ] ].
 	(var isNil and: [ currentScope isJSScript ])
 		ifTrue: [ var := self ensureGlobalNamed: name ].
-	var isNil ] whileTrue: [ currentScope := currentScope container ].
+	var isNil ] whileTrue: [ currentScope := currentScope parentScope ].
 	^ var
 ]
 
@@ -451,6 +453,7 @@ GtJSImporter >> visitClassExpression: aClassExpression [
 			model add: inheritance.
 			inheritance sourceAnchor: (self sourceAnchorFor: spr).
 			class addSuperInheritance: inheritance ].
+	self currentScope addClass: class.
 	self
 		assignScope: class
 		around: [ super visitClassExpression: aClassExpression ]

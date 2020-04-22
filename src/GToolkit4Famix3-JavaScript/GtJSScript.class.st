@@ -1,7 +1,7 @@
 Class {
 	#name : #GtJSScript,
 	#superclass : #FAMIXBehaviouralEntity,
-	#category : #'GToolkit4Famix3-JavaScript-Dojo'
+	#category : #'GToolkit4Famix3-JavaScript-Model'
 }
 
 { #category : #meta }

@@ -36,7 +36,7 @@ GtJSImporterExamples >> demo_subclass_js [
 	^ '
 class SubClass extends MyClass {
     constructor() {
-        this.iv3 = [];
+        this.iv3 = Infinity;
     }
 
     get variable3() {
