@@ -1,11 +1,6 @@
 Extension { #name : #FAMIXBehaviouralEntity }
 
 { #category : #'*GToolkit4Famix3-JavaScript' }
-FAMIXBehaviouralEntity >> isJSScript [
-	^ false
-]
-
-{ #category : #'*GToolkit4Famix3-JavaScript' }
 FAMIXBehaviouralEntity >> potentialJSEntities [
 	<MSEProperty: #potentialJSEntities type: #FAMIXFunction opposite: #potentialJSFunctions>
 	<multivalued>

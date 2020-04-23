@@ -7,12 +7,14 @@ Class {
 		'files',
 		'modules',
 		'classes',
+		'globals',
 		'properties',
 		'scopeStack',
 		'currentModule',
 		'variableReferences',
 		'callExpressions',
-		'assignmentExpressions'
+		'assignmentExpressions',
+		'parserClass'
 	],
 	#category : #'GToolkit4Famix3-JavaScript-Importer'
 }
@@ -30,7 +32,8 @@ GtJSImporter >> addCandidate: function to: anInvocation [
 				ifTrue: [ function parameters size >= i
 						ifTrue: [ each isFunction
 								ifTrue: [ (function parameters at: i) addPotentialJSFunction: each ]
-								ifFalse: [ (function parameters at: i) addRValueEntity: each ] ] ] ].
+								ifFalse: [ each isMethod
+										ifFalse: [ (function parameters at: i) addRValueEntity: each ] ] ] ] ].
 	^ changed
 ]
 
@@ -45,9 +48,9 @@ GtJSImporter >> addVariablesInToLocalScope: aNode [
 				ifFalse: [ self ensureLocalVariableNamed: name ].
 			var sourceAnchor: (self sourceAnchorFor: each).
 			each equalToken notNil
-				ifTrue: [ assignmentExpressions add: each -> self currentScope.
+				ifTrue: [ assignmentExpressions add: each -> self codeScope.
 					FAMIXAccess new
-						from: self currentScope;
+						from: self codeScope;
 						to: var;
 						isWrite: true;
 						sourceAnchor: var sourceAnchor ] ]
@@ -63,6 +66,15 @@ GtJSImporter >> assignScope: modelObject around: aBlock [
 { #category : #accessing }
 GtJSImporter >> classNamed: aString [
 	^ classes at: aString ifAbsent: [  ]
+]
+
+{ #category : #private }
+GtJSImporter >> codeScope [
+	scopeStack
+		reverseDo: [ :each | 
+			(self isCodeItem: each)
+				ifTrue: [ ^ each ] ].
+	^ nil
 ]
 
 { #category : #'private-model' }
@@ -112,8 +124,11 @@ GtJSImporter >> currentScope [
 
 { #category : #'private-model' }
 GtJSImporter >> ensureFunctionNamed: aString for: aNode around: aBlock [
-	| function implicitVar start stop |
-	function := FAMIXFunction new name: aString.
+	| function implicitVar start stop isMethod |
+	isMethod := (self isCodeItem: self currentScope) not.
+	function := (isMethod
+		ifTrue: [ FAMIXMethod ]
+		ifFalse: [ FAMIXFunction ]) new name: aString.
 	aNode left isNil
 		ifTrue: [ start := aNode parameters first startPosition.
 			stop := aNode parameters last stopPosition ]
@@ -127,7 +142,7 @@ GtJSImporter >> ensureFunctionNamed: aString for: aNode around: aBlock [
 						,
 							(aNode left isNil
 								ifTrue: [ '(' ]
-								ifFalse: [ '' ]) , (s asString copyFrom: start to: stop)
+								ifFalse: [ '' ]) , (s copyFrom: start to: stop) asString
 						,
 							(aNode left isNil
 								ifTrue: [ ')' ]
@@ -144,20 +159,25 @@ GtJSImporter >> ensureFunctionNamed: aString for: aNode around: aBlock [
 				yourself.
 			model add: parm.
 			function addParameter: parm ].
-	implicitVar := FAMIXImplicitVariable new name: 'this'.
-	model add: implicitVar.
-	function addImplicitVariable: implicitVar.
-	implicitVar := FAMIXImplicitVariable new name: 'arguments'.
-	model add: implicitVar.
-	function addImplicitVariable: implicitVar.
-	self currentScope addFunction: function.
+	(aNode isKindOf: JSArrowFunctionNode)
+		ifFalse: [ implicitVar := FAMIXImplicitVariable new name: 'this'.
+			model add: implicitVar.
+			function addImplicitVariable: implicitVar.
+			implicitVar := FAMIXImplicitVariable new name: 'arguments'.
+			model add: implicitVar.
+			function addImplicitVariable: implicitVar ].
+	isMethod
+		ifTrue: [ self currentScope addMethod: function ]
+		ifFalse: [ self currentScope addFunction: function ].
 	self assignScope: function around: aBlock.
 	^ function
 ]
 
 { #category : #'private-model' }
 GtJSImporter >> ensureGlobalNamed: name [
-	^ model allGlobalVariables detect: [ :each | each name = name ] ifNone: [ model add: (FAMIXGlobalVariable new name: name) ]
+	^ globals
+		at: name
+		ifAbsentPut: [ model add: (FAMIXGlobalVariable new name: name) ]
 ]
 
 { #category : #'private-model' }
@@ -172,11 +192,11 @@ GtJSImporter >> ensureJSClassNamed: aString [
 
 { #category : #'private-model' }
 GtJSImporter >> ensureLocalVariableNamed: name [
-	^ self currentScope localVariables
+	^ self codeScope localVariables
 		detect: [ :each | each name = name ]
 		ifNone: [ | var |
 			var := FAMIXLocalVariable new name: name.
-			self currentScope addLocalVariable: var.
+			self codeScope addLocalVariable: var.
 			model add: var.
 			var ]
 ]
@@ -191,17 +211,24 @@ GtJSImporter >> ensureVariableFor: node in: entity [
 	| currentScope name var |
 	name := node name source.
 	currentScope := entity.
-	[ var := currentScope localVariables
-		detect: [ :each | each name = name ]
-		ifNone: [ currentScope parameters
+	[ var := (self isCodeItem: currentScope)
+		ifTrue: [ currentScope localVariables
 				detect: [ :each | each name = name ]
-				ifNone: [ currentScope implicitVariables
+				ifNone: [ currentScope parameters
 						detect: [ :each | each name = name ]
-						ifNone: [  ] ] ].
+						ifNone: [ currentScope implicitVariables
+								detect: [ :each | each name = name ]
+								ifNone: [  ] ] ] ].
 	(var isNil and: [ currentScope isJSScript ])
 		ifTrue: [ var := self ensureGlobalNamed: name ].
 	var isNil ] whileTrue: [ currentScope := currentScope parentScope ].
 	^ var
+]
+
+{ #category : #private }
+GtJSImporter >> filename: aFileReference matchesAny: patternCollection [
+	^ patternCollection
+		anySatisfy: [ :each | each match: aFileReference pathString ]
 ]
 
 { #category : #importing }
@@ -236,7 +263,12 @@ GtJSImporter >> hookupPotentialInvocations [
 
 { #category : #importing }
 GtJSImporter >> importDirectory: aDirectory [
-	self importSourceDirectory: aDirectory.
+	self importDirectory: aDirectory excluding: #()
+]
+
+{ #category : #importing }
+GtJSImporter >> importDirectory: aDirectory excluding: patternCollection [
+	self importSourceDirectory: aDirectory excluding: patternCollection.
 	self finishImport
 ]
 
@@ -244,18 +276,23 @@ GtJSImporter >> importDirectory: aDirectory [
 GtJSImporter >> importJSFile: aFile [
 	| ast |
 	self startingImportingFile.
-	ast := JSParser parse: aFile asFileReference contents.
+	ast := self parserClass
+		parseWithErrors: aFile asFileReference contents.
 	ast filename: aFile.
 	self acceptNode: ast.
 	self finishImportingFile
 ]
 
 { #category : #importing }
-GtJSImporter >> importSourceDirectory: aDirectory [
+GtJSImporter >> importSourceDirectory: aDirectory excluding: patternCollection [
 	directory := aDirectory asFileReference.
 	directory fileSystem store isMemoryFileSystem
 		ifFalse: [ directory := directory absolutePath ].
-	(JSParser sourceFilesIn: directory) do: [ :each | self importJSFile: each ] displayingProgress: 'Importing JS Files'
+	(self parserClass sourceFilesIn: directory)
+		do: [ :each | 
+			(self filename: each matchesAny: patternCollection)
+				ifFalse: [ self importJSFile: each ] ]
+		displayingProgress: 'Importing JS Files'
 ]
 
 { #category : #initialization }
@@ -266,7 +303,13 @@ GtJSImporter >> initialize [
 	files := Dictionary new.
 	modules := Dictionary new.
 	classes := Dictionary new.
+	globals := Dictionary new.
 	properties := Dictionary new
+]
+
+{ #category : #private }
+GtJSImporter >> isCodeItem: each [
+	^ (each isKindOf: FAMIXType) not
 ]
 
 { #category : #accessing }
@@ -288,6 +331,16 @@ GtJSImporter >> modelObjectFrom: aNode in: aScope [
 { #category : #accessing }
 GtJSImporter >> moduleNamed: aString [
 	^ modules at: aString ifAbsent: [  ]
+]
+
+{ #category : #accessing }
+GtJSImporter >> parserClass [
+	^ parserClass ifNil: [ JSParser ]
+]
+
+{ #category : #accessing }
+GtJSImporter >> parserClass: aClass [
+	parserClass := aClass
 ]
 
 { #category : #private }
@@ -434,14 +487,17 @@ GtJSImporter >> visitAssignmentExpression: anAssignmentExpression [
 
 { #category : #visiting }
 GtJSImporter >> visitCallExpression: aCallExpression [
-	callExpressions add: aCallExpression -> self currentScope.
+	callExpressions add: aCallExpression -> self codeScope.
 	super visitCallExpression: aCallExpression
 ]
 
 { #category : #visiting }
 GtJSImporter >> visitClassExpression: aClassExpression [
-	| class |
-	class := self ensureJSClassNamed: aClassExpression name source.
+	| class name |
+	name := aClassExpression name isNil
+		ifTrue: [ 'anonymous ' , aClassExpression startPosition printString ]
+		ifFalse: [ aClassExpression name source ].
+	class := self ensureJSClassNamed: name.
 	aClassExpression attributeNamed: #modelObject put: class.
 	class sourceAnchor: (self sourceAnchorFor: aClassExpression).
 	aClassExpression superclass
@@ -460,32 +516,15 @@ GtJSImporter >> visitClassExpression: aClassExpression [
 ]
 
 { #category : #visiting }
-GtJSImporter >> visitForInStatement: aForInStatement [
-	self processForIterator: aForInStatement.
-	super visitForInStatement: aForInStatement
-]
-
-{ #category : #visiting }
-GtJSImporter >> visitForOfStatement: aForOfStatement [
-	self processForIterator: aForOfStatement.
-	super visitForOfStatement: aForOfStatement
-]
-
-{ #category : #visiting }
-GtJSImporter >> visitForStatement: aForStatement [
-	self addVariablesInToLocalScope: aForStatement.
-	super visitForStatement: aForStatement
-]
-
-{ #category : #visiting }
 GtJSImporter >> visitFunction: aFunction [
 	| mooseFunction var |
 	var := nil.
 	aFunction name notNil
-		ifTrue: [ var := self ensureLocalVariableNamed: aFunction name source.
-			var sourceAnchor: (self sourceAnchorFor: aFunction name).
-			(self processVariableReference: aFunction in: self currentScope)
-				isWrite: true ].
+		ifTrue: [ (self isCodeItem: self currentScope)
+				ifTrue: [ var := self ensureLocalVariableNamed: aFunction name source.
+					var sourceAnchor: (self sourceAnchorFor: aFunction name).
+					(self processVariableReference: aFunction in: self currentScope)
+						isWrite: true ] ].
 	mooseFunction := self
 		ensureFunctionNamed: (self functionNameFor: aFunction)
 		for: aFunction
@@ -496,60 +535,10 @@ GtJSImporter >> visitFunction: aFunction [
 ]
 
 { #category : #visiting }
-GtJSImporter >> visitLexicalDeclaration: aNode [
-	aNode bindings
-		do: [ :each | 
-			| var name |
-			name := each variable source.
-			var := self ensureLocalVariableNamed: name.
-			var sourceAnchor: (self sourceAnchorFor: each).
-			each equalToken notNil
-				ifTrue: [ assignmentExpressions add: each -> self currentScope.
-					FAMIXAccess new
-						from: self currentScope;
-						to: var;
-						isWrite: true;
-						sourceAnchor: var sourceAnchor;
-						yourself ] ].
-	super visitLexicalDeclaration: aNode
-]
-
-{ #category : #visiting }
 GtJSImporter >> visitMethodDefinition: aMethodDefinition [
-	| method implicitVar |
-	method := FAMIXMethod new.
-	model add: method.
-	method name: aMethodDefinition name source.
-	method
-		signature:
-			(aMethodDefinition completeSource
-				ifNotNil: [ :s | 
-					method name
-						,
-							(s asString
-								copyFrom: aMethodDefinition left startPosition
-								to: aMethodDefinition right stopPosition) ]).
-	aMethodDefinition attributeNamed: #modelObject put: method.
-	method sourceAnchor: (self sourceAnchorFor: aMethodDefinition).
-	aMethodDefinition parameters
-		do: [ :each | 
-			| parm |
-			parm := FAMIXParameter new
-				name: each variable source;
-				sourceAnchor: (self sourceAnchorFor: each);
-				yourself.
-			model add: parm.
-			method addParameter: parm ].
-	implicitVar := FAMIXImplicitVariable new name: 'this'.
-	implicitVar declaredType: self currentScope.
-	model add: implicitVar.
-	method addImplicitVariable: implicitVar.
-	implicitVar := FAMIXImplicitVariable new name: 'arguments'.
-	model add: implicitVar.
-	method addImplicitVariable: implicitVar.
-	self currentScope addMethod: method.
 	self
-		assignScope: method
+		ensureFunctionNamed: aMethodDefinition name source
+		for: aMethodDefinition
 		around: [ super visitMethodDefinition: aMethodDefinition ]
 ]
 
@@ -563,7 +552,7 @@ GtJSImporter >> visitModule: aModule [
 { #category : #visiting }
 GtJSImporter >> visitNameExpression: aNameExpression [
 	aNameExpression isVariableReference
-		ifTrue: [ variableReferences add: aNameExpression -> self currentScope ].
+		ifTrue: [ variableReferences add: aNameExpression -> self codeScope ].
 	super visitNameExpression: aNameExpression
 ]
 
@@ -572,7 +561,7 @@ GtJSImporter >> visitNamedPropertyExpression: aNamedPropertyExpression [
 	| property access |
 	property := self ensurePropertyNamed: aNamedPropertyExpression name source.
 	access := FAMIXAccess new
-		from: self currentScope;
+		from: self codeScope;
 		to: property;
 		isWrite: aNamedPropertyExpression isAssignedTo;
 		sourceAnchor: (self sourceAnchorFor: aNamedPropertyExpression).
@@ -582,8 +571,20 @@ GtJSImporter >> visitNamedPropertyExpression: aNamedPropertyExpression [
 
 { #category : #visiting }
 GtJSImporter >> visitObjectLiteral: anObjectLiteral [
-	anObjectLiteral definitions do: [ :each | self createPropertyFromDefinition: each ].
-	super visitObjectLiteral: anObjectLiteral
+	| object |
+	object := GtJSObject new.
+	object
+		name:
+			'{' , anObjectLiteral startPosition printString , ':'
+				, anObjectLiteral stopPosition printString , '}'.
+	model add: object.
+	object sourceAnchor: (self sourceAnchorFor: anObjectLiteral).
+	"anObjectLiteral definitions
+		do: [ :each | self createPropertyFromDefinition: each ]."
+	self currentScope addType: object.
+	self
+		assignScope: object
+		around: [ super visitObjectLiteral: anObjectLiteral ]
 ]
 
 { #category : #visiting }
@@ -605,7 +606,25 @@ GtJSImporter >> visitTryStatement: aTryStatement [
 ]
 
 { #category : #visiting }
-GtJSImporter >> visitVariableStatement: aNode [
-	self addVariablesInToLocalScope: aNode.
-	super visitVariableStatement: aNode
+GtJSImporter >> visitVariableDeclaration: aVariableDeclaration [
+	| var name parent |
+	parent := aVariableDeclaration parent.
+	((parent isKindOf: JSFunctionNode)
+		or: [ parent isKindOf: JSMethodDefinitionNode ])
+		ifFalse: [ name := aVariableDeclaration variable source.
+			var := (scopeStack size = 1
+				and: [ (parent isKindOf: JSLexicalDeclarationNode) not ])
+				ifTrue: [ self ensureGlobalNamed: name ]
+				ifFalse: [ self ensureLocalVariableNamed: name ].
+			var sourceAnchor: (self sourceAnchorFor: aVariableDeclaration).
+			aVariableDeclaration equalToken notNil
+				ifTrue:
+					[ assignmentExpressions add: aVariableDeclaration -> self currentScope.
+					FAMIXAccess new
+						from: self currentScope;
+						to: var;
+						isWrite: true;
+						sourceAnchor: var sourceAnchor;
+						yourself ] ].
+	super visitVariableDeclaration: aVariableDeclaration
 ]

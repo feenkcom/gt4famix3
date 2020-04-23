@@ -51,7 +51,7 @@ GtDojoImporter >> acceptNode: aSmaCCParseNode [
 { #category : #private }
 GtDojoImporter >> addDojoClassPatternFor: aVariableDeclarationNode [
 	| patternAsts patternStrings declareName |
-	patternStrings := #('<1s>([`?supers{beList}`], { `?props{beList}` })' '<1s>(`?super`, { `?props{beList}` })' '<1s>(`?name`, [`?supers{beList}`], { `?props{beList}` })' '<1s>(`?name`, `?super`, { `?props{beList}` })').
+	patternStrings := #('<1s>([``?supers{beList}`], { ``?props{beList}` })' '<1s>(``?super`, { ``?props{beList}` })' '<1s>(``?name`, [``?supers{beList}`], { ``?props{beList}` })' '<1s>(`?name`, ``?super`, { ``?props{beList}` })').
 	declareName := aVariableDeclarationNode variable source.
 	patternAsts := patternStrings
 		inject: OrderedCollection new
@@ -168,7 +168,7 @@ GtDojoImporter >> initializeClassPatterns [
 GtDojoImporter >> initializeModulePatterns [
 	| patternAsts runner |
 	patternAsts := JSParser
-		parseAndCacheAll: 'define([`?prereqs{beList}`], function (`?args{beList}`) { `?statements{beList}` })'
+		parseAndCacheAll: 'define([``?prereqs{beList}`], function (``?args{beList}`) { ``?statements{beList}` })'
 		startingAt: JSParser startingStateForExpression.
 	runner := GtAstPatternRunner forPatterns: patternAsts do: [ :node | self createDojoModule: node around: [ node acceptVisitor: self ] ].
 	patterns add: runner

@@ -190,7 +190,6 @@ GtDojoImporterExamples >> functionNames [
 	importer := self exampleImporter.
 	script := importer scriptNamed: 'demo/variables.js'.
 	script functions detect: [ :each | each name = 'functionVar' ].
-	script functions detect: [ :each | each name = 'objectFunction' ].
 	script functions detect: [ :each | each name = 'yetAnotherFunction' ].
 	self assert: (script functions select: [ :each | each name = 'anotherFunction' ]) size = 2.
 	^ script functions
@@ -207,6 +206,17 @@ GtDojoImporterExamples >> invocations [
 	self assert: (invocations anySatisfy: [ :inv | inv candidates anySatisfy: [ :each | each name = 'f' ] ]).
 	self assert: (invocations anySatisfy: [ :inv | inv candidates anySatisfy: [ :each | each name = 'foo' ] ]).
 	^ invocations
+]
+
+{ #category : #'example-tests' }
+GtDojoImporterExamples >> methodNames [
+	<gtExample>
+	| importer script |
+	importer := self exampleImporter.
+	script := importer scriptNamed: 'demo/variables.js'.
+	script types first methods
+		detect: [ :each | each name = 'objectFunction' ].
+	^ script types first methods
 ]
 
 { #category : #'example-tests' }
