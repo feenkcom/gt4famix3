@@ -2,7 +2,10 @@ Extension { #name : #JSNameExpressionNode }
 
 { #category : #'*GToolkit4Famix3-JavaScript' }
 JSNameExpressionNode >> isVariableReference [
-	(parent isKindOf: JSPropertyAssignmentNode)
+	((parent isKindOf: JSPropertyAssignmentNode)
+		and: [ self == parent name ])
+		ifTrue: [ ^ false ].
+	(parent isKindOf: JSObjectLiteralNode)
 		ifTrue: [ ^ false ].
 	(((parent isKindOf: JSFunctionNode)
 		or: [ (parent isKindOf: JSMethodDefinitionNode)

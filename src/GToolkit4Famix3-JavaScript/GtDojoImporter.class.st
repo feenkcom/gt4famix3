@@ -34,6 +34,7 @@ Class {
 	#name : #GtDojoImporter,
 	#superclass : #GtJSImporter,
 	#instVars : [
+		'currentModule',
 		'patterns'
 	],
 	#category : #'GToolkit4Famix3-JavaScript-Dojo'

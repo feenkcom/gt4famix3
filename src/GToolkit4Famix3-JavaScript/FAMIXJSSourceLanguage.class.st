@@ -1,13 +1,16 @@
 Class {
 	#name : #FAMIXJSSourceLanguage,
 	#superclass : #FAMIXSourceLanguage,
+	#instVars : [
+		'parserClass'
+	],
 	#category : #'GToolkit4Famix3-JavaScript-Model'
 }
 
 { #category : #accessing }
 FAMIXJSSourceLanguage >> gtASTNodeFor: aString at: anInterval [
 	| ast |
-	ast := JSParser parseWithErrors: aString.
+	ast := self parserClass parseWithErrors: aString.
 	ast
 		withAllNodesDo: [ :each | 
 			(anInterval first <= each startPosition
@@ -18,5 +21,15 @@ FAMIXJSSourceLanguage >> gtASTNodeFor: aString at: anInterval [
 
 { #category : #accessing }
 FAMIXJSSourceLanguage >> gtStyler [
-	^ JSParser gtStyler
+	^ self parserClass gtStyler
+]
+
+{ #category : #accessing }
+FAMIXJSSourceLanguage >> parserClass [
+	^ parserClass ifNil: [ JSParser ]
+]
+
+{ #category : #accessing }
+FAMIXJSSourceLanguage >> parserClass: aSmaCCParser [
+	parserClass := aSmaCCParser
 ]
