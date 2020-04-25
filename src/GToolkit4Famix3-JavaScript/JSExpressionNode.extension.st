@@ -4,8 +4,3 @@ Extension { #name : #JSExpressionNode }
 JSExpressionNode >> isAssignedTo [
 	^ (parent isKindOf: JSAssignmentExpressionNode) and: [ parent lhs == self ]
 ]
-
-{ #category : #'*GToolkit4Famix3-JavaScript' }
-JSExpressionNode >> isFunction [
-	^ false
-]
