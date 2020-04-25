@@ -72,7 +72,7 @@ GtDojoImporter >> addDojoClassPatternFor: aVariableDeclarationNode [
 							(currentModule isNil
 								ifTrue: [ 'anonymous' ]
 								ifFalse: [ currentModule name ]).
-					node acceptVisitor: self ])
+					super acceptNode: node ])
 ]
 
 { #category : #'private-model' }
@@ -171,7 +171,7 @@ GtDojoImporter >> initializeModulePatterns [
 	patternAsts := JSParser
 		parseAndCacheAll: 'define([``?prereqs{beList}`], function (``?args{beList}`) { ``?statements{beList}` })'
 		startingAt: JSParser startingStateForExpression.
-	runner := GtAstPatternRunner forPatterns: patternAsts do: [ :node | self createDojoModule: node around: [ node acceptVisitor: self ] ].
+	runner := GtAstPatternRunner forPatterns: patternAsts do: [ :node | self createDojoModule: node around: [ super acceptNode: node ] ].
 	patterns add: runner
 ]
 
