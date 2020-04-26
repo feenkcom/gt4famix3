@@ -11,6 +11,11 @@ FAMIXEntity >> fkJsAST: anAST [
 ]
 
 { #category : #'*GToolkit4Famix3-JavaScript' }
+FAMIXEntity >> isJSScript [
+	^ false
+]
+
+{ #category : #'*GToolkit4Famix3-JavaScript' }
 FAMIXEntity >> mooseFinderFKJsASTIn: composite [
 	<moosePresentationOrder: 20>
 	composite tree
