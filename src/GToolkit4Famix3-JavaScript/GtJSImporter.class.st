@@ -165,9 +165,7 @@ GtJSImporter >> ensureFolderNamed: aFileReference [
 GtJSImporter >> ensureFunctionNamed: aString for: aNode around: aBlock [
 	| function implicitVar start stop isMethod |
 	isMethod := (self isCodeItem: self currentScope) not.
-	function := (isMethod
-		ifTrue: [ FAMIXMethod ]
-		ifFalse: [ FAMIXFunction ]) new name: aString.
+	function := (self functionClassFor: aNode) new name: aString.
 	aNode left isNil
 		ifTrue: [ start := aNode parameters first startPosition.
 			stop := aNode parameters last stopPosition ]
@@ -289,6 +287,13 @@ GtJSImporter >> finishImportingFile [
 	self processVariableReferences.
 	self processCallExpressions.
 	self processAssignmentExpressions
+]
+
+{ #category : #'private-model' }
+GtJSImporter >> functionClassFor: aFunctionNode [
+	^ (self isCodeItem: self currentScope)
+		ifTrue: [ FAMIXFunction ]
+		ifFalse: [ FAMIXMethod ]
 ]
 
 { #category : #'private-model' }

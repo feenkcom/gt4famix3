@@ -13,3 +13,16 @@ FAMIXBehaviouralEntity >> potentialJSEntities [
 FAMIXBehaviouralEntity >> potentialJSEntities: aCollection [
 	^ self potentialJSEntities value: aCollection
 ]
+
+{ #category : #'*GToolkit4Famix3-JavaScript' }
+FAMIXBehaviouralEntity >> reactElements [
+	<MSEProperty: #reactElements type: #GtReactComponentReference opposite: #sender>
+	^ self privateState
+		attributeAt: #reactElements
+		ifAbsentPut: [ FMMultivalueLink on: self opposite: #sender: ]
+]
+
+{ #category : #'*GToolkit4Famix3-JavaScript' }
+FAMIXBehaviouralEntity >> reactElements: aCollection [
+	^ self reactElements value: aCollection
+]
