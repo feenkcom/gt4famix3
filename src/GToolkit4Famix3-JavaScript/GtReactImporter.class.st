@@ -41,8 +41,6 @@ GtReactImporter >> initialize [
 GtReactImporter >> isReactComponent: aFunctionNode [
 	"Guess that it is a component if it contains an <element>"
 
-	(aFunctionNode isKindOf: JSArrowFunctionNode)
-		ifTrue: [ ^ false ].
 	aFunctionNode
 		allNodesDo: [ :node | 
 			((node isKindOf: JSXElementNode)

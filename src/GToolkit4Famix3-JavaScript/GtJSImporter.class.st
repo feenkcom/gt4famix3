@@ -188,16 +188,6 @@ GtJSImporter >> ensureFunctionNamed: aString for: aNode around: aBlock [
 	currentFile addEntity: function.
 	aNode attributeNamed: #modelObject put: function.
 	function sourceAnchor: (self sourceAnchorFor: aNode).
-	aNode parameters
-		do: [ :each | 
-			| parm |
-			parm := FAMIXParameter new
-				name: each variable source;
-				sourceAnchor: (self sourceAnchorFor: each);
-				yourself.
-			model add: parm.
-			currentFile addEntity: parm.
-			function addParameter: parm ].
 	(aNode isKindOf: JSArrowFunctionNode)
 		ifFalse: [ implicitVar := FAMIXImplicitVariable new name: 'this'.
 			model add: implicitVar.
@@ -368,6 +358,20 @@ GtJSImporter >> isCodeItem: each [
 	^ (each isKindOf: FAMIXType) not
 ]
 
+{ #category : #private }
+GtJSImporter >> isParameter: aNode [
+	| current previous |
+	current := aNode.
+	[ previous := current.
+	current := current parent.
+	current isNil
+		ifTrue: [ ^ false ].
+	(current isKindOf: JSFunctionNode)
+		or: [ (current isKindOf: JSArrowFunctionNode)
+				or: [ current isKindOf: JSMethodDefinitionNode ] ] ] whileFalse.
+	^ current parameters identityIncludes: previous
+]
+
 { #category : #accessing }
 GtJSImporter >> model [
 	^ model
@@ -387,6 +391,13 @@ GtJSImporter >> modelObjectFrom: aNode in: aScope [
 { #category : #accessing }
 GtJSImporter >> moduleNamed: aString [
 	^ modules at: aString ifAbsent: [  ]
+]
+
+{ #category : #private }
+GtJSImporter >> parameterClassFor: aVariableDeclaration [
+	^ (aVariableDeclaration parent isKindOf: JSObjectBindingPatternNode)
+		ifTrue: [ GtJSObjectBindingParameter ]
+		ifFalse: [ FAMIXParameter ]
 ]
 
 { #category : #accessing }
@@ -679,26 +690,33 @@ GtJSImporter >> visitTryStatement: aTryStatement [
 
 { #category : #visiting }
 GtJSImporter >> visitVariableDeclaration: aVariableDeclaration [
-	| var name parent access |
-	parent := aVariableDeclaration parent.
-	((parent isKindOf: JSFunctionNode)
-		or: [ parent isKindOf: JSMethodDefinitionNode ])
-		ifFalse: [ name := aVariableDeclaration variable source.
-			var := (scopeStack size = 1
-				and: [ (parent isKindOf: JSLexicalDeclarationNode) not ])
-				ifTrue: [ self ensureGlobalNamed: name ]
-				ifFalse: [ self ensureLocalVariableNamed: name ].
-			var sourceAnchor: (self sourceAnchorFor: aVariableDeclaration).
-			aVariableDeclaration equalToken notNil
-				ifTrue:
-					[ assignmentExpressions add: aVariableDeclaration -> self currentScope.
-					access := FAMIXAccess new
-						from: self currentScope;
-						to: var;
-						isWrite: true;
-						sourceAnchor: var sourceAnchor;
+	| var name access parm |
+	aVariableDeclaration variable notNil
+		ifTrue: [ (self isParameter: aVariableDeclaration)
+				ifTrue: [ parm := (self parameterClassFor: aVariableDeclaration) new
+						name: aVariableDeclaration variable source;
+						sourceAnchor: (self sourceAnchorFor: aVariableDeclaration);
 						yourself.
-					model add: access.
-					currentFile addEntity: access ] ].
+					model add: parm.
+					currentFile addEntity: parm.
+					self currentScope addParameter: parm ]
+				ifFalse: [ name := aVariableDeclaration variable source.
+					var := (scopeStack size = 1
+						and:
+							[ (aVariableDeclaration parent isKindOf: JSLexicalDeclarationNode) not ])
+						ifTrue: [ self ensureGlobalNamed: name ]
+						ifFalse: [ self ensureLocalVariableNamed: name ].
+					var sourceAnchor: (self sourceAnchorFor: aVariableDeclaration).
+					aVariableDeclaration equalToken notNil
+						ifTrue:
+							[ assignmentExpressions add: aVariableDeclaration -> self currentScope.
+							access := FAMIXAccess new
+								from: self currentScope;
+								to: var;
+								isWrite: true;
+								sourceAnchor: var sourceAnchor;
+								yourself.
+							model add: access.
+							currentFile addEntity: access ] ] ].
 	super visitVariableDeclaration: aVariableDeclaration
 ]
