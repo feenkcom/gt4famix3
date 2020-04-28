@@ -39,13 +39,16 @@ GtReactImporter >> initialize [
 
 { #category : #testing }
 GtReactImporter >> isReactComponent: aFunctionNode [
-	"Guess that it is a component if it contains an <element>"
+	"Guess that it is a component if it contains an <element> in a return statement"
 
 	aFunctionNode
-		allNodesDo: [ :node | 
-			((node isKindOf: JSXElementNode)
-				or: [ node isKindOf: JSXSelfClosingElementNode ])
-				ifTrue: [ ^ true ] ].
+		allNodesOfType: JSReturnStatementNode
+		do: [ :return | 
+			return
+				allNodesDo: [ :node | 
+					((node isKindOf: JSXElementNode)
+						or: [ node isKindOf: JSXSelfClosingElementNode ])
+						ifTrue: [ ^ true ] ] ].
 	^ false
 ]
 
