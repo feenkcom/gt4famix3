@@ -101,9 +101,10 @@ GtJSImporter >> createScriptFrom: moduleNode [
 		ensureFileNamed: moduleNode topParent filename asFileReference.
 	script := GtJSScript new name: relativeName.
 	model add: script.
-	currentFile addEntity: script.
 	script sourceAnchor: (self sourceAnchorFor: moduleNode).
 	currentFile addEntity: script.
+	currentFile script: script.
+	script module: currentFile.
 	scripts add: script.
 	scopeStack := OrderedCollection with: script
 ]
@@ -122,7 +123,7 @@ GtJSImporter >> ensureFileNamed: aFileReference [
 	^ files
 		at: filename
 		ifAbsentPut: [ | file |
-			file := FAMIXFile new.
+			file := GtJSModule new.
 			file name: aFileReference basename.
 			aFileReference exists
 				ifTrue: [ | encoding anchor |
@@ -372,6 +373,24 @@ GtJSImporter >> isParameter: aNode [
 	^ current parameters identityIncludes: previous
 ]
 
+{ #category : #private }
+GtJSImporter >> localFilename: aString from: aNode [
+	| currentDirectory name |
+	currentDirectory := aNode topParent filename asFileReference parent.
+	name := (aString substrings: '/\')
+		inject: currentDirectory
+		into: [ :sum :each | 
+			each = '..'
+				ifTrue: [ sum parent ]
+				ifFalse: [ sum / each ] ].
+	name exists
+		ifTrue: [ ^ name ].
+	name := name parent / (name basename , '.js').
+	name exists
+		ifTrue: [ ^ name ].
+	^ nil
+]
+
 { #category : #accessing }
 GtJSImporter >> model [
 	^ model
@@ -597,6 +616,22 @@ GtJSImporter >> visitFunction: aFunction [
 	var notNil
 		ifTrue: [ var addPotentialJSFunction: mooseFunction ].
 	^ mooseFunction
+]
+
+{ #category : #visiting }
+GtJSImporter >> visitImportDeclaration: aNode [
+	| import importedFilename importedFile |
+	importedFilename := self
+		localFilename: aNode from value pharoFromJSString
+		from: aNode.
+	importedFilename notNil
+		ifTrue: [ importedFile := self ensureFileNamed: importedFilename.
+			import := GtJSImport new.
+			import source: currentFile.
+			import target: importedFile.
+			model add: import.
+			import sourceAnchor: (self sourceAnchorFor: aNode) ].
+	^ super visitImportDeclaration: aNode
 ]
 
 { #category : #visiting }
