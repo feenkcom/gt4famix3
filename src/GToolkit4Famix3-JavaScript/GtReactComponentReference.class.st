@@ -11,7 +11,7 @@ Class {
 
 { #category : #accessing }
 GtReactComponentReference >> candidates [
-	<MSEProperty: #candidates type: #GtReactFunctionComponent opposite: #incomingElements>
+	<MSEProperty: #candidates type: #GtReactFunctionComponent opposite: #incomingReactComponentReferences>
 	<multivalued>
 	^ candidates
 ]
@@ -31,7 +31,7 @@ GtReactComponentReference >> initialize [
 	super initialize.
 	candidates := FMMultiMultivalueLink
 		on: self
-		opposite: #incomingElements
+		opposite: #incomingReactComponentReferences
 ]
 
 { #category : #accessing }
@@ -47,7 +47,7 @@ GtReactComponentReference >> name: aString [
 
 { #category : #accessing }
 GtReactComponentReference >> sender [
-	<MSEProperty: #sender type: #FAMIXBehaviouralEntity opposite: #reactElements>
+	<MSEProperty: #sender type: #FAMIXBehaviouralEntity opposite: #outgoingReactComponentReferences>
 	^sender
 ]
 
@@ -55,7 +55,7 @@ GtReactComponentReference >> sender [
 GtReactComponentReference >> sender: aBehaviouralEntity [
 	sender := FMMultivalueLink
 		on: self
-		update: #reactElements
+		update: #outgoingReactComponentReferences
 		from: self sender
 		to: aBehaviouralEntity
 ]
