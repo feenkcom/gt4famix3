@@ -24,6 +24,20 @@ GtReactImporter >> functionClassFor: aFunctionNode [
 ]
 
 { #category : #importing }
+GtReactImporter >> hookupComponentParametersFor: componentReference [
+	componentReference reactComponentProperties
+		do: [ :prop | 
+			componentReference candidates
+				do: [ :each | 
+					| parm |
+					parm := each parameters
+						detect: [ :p | p name = prop name ]
+						ifNone: [ nil ].
+					parm notNil
+						ifTrue: [ prop parameters add: parm ] ] ]
+]
+
+{ #category : #importing }
 GtReactImporter >> hookupComponentReferences [
 	| components |
 	components := Dictionary new.
@@ -32,8 +46,9 @@ GtReactImporter >> hookupComponentReferences [
 			(components at: each name ifAbsentPut: [ OrderedCollection new ])
 				add: each ].
 	model allReactComponentReferences
-		do:
-			[ :each | each candidates addAll: (components at: each name ifAbsent: [ #() ]) ]
+		do: [ :each | 
+			each candidates addAll: (components at: each name ifAbsent: [ #() ]).
+			self hookupComponentParametersFor: each ]
 ]
 
 { #category : #initialization }
@@ -63,11 +78,11 @@ GtReactImporter >> isReactComponent: aFunctionNode [
 GtReactImporter >> visitXAttribute: aNode [
 	| attribute |
 	(aNode value notNil and: [ elementStack notEmpty ])
-		ifTrue: [ attribute := GtReactComponentReferenceAttribute new.
+		ifTrue: [ attribute := GtReactComponentReferenceProperty new.
 			attribute name: aNode name source.
 			attribute sourceAnchor: (self sourceAnchorFor: aNode).
 			self storeAST: aNode into: attribute.
-			elementStack last reactComponentAttributes add: attribute.
+			elementStack last reactComponentProperties add: attribute.
 			model add: attribute.
 			currentFile addEntity: attribute ].
 	^ super visitXAttribute: aNode

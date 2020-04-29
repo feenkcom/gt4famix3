@@ -48,14 +48,14 @@ GtReactComponentReference >> name: aString [
 ]
 
 { #category : #accessing }
-GtReactComponentReference >> reactComponentAttributes [
-	<MSEProperty: #reactComponentAttributes type: #GtReactComponentReferenceAttribute opposite: #reference>
+GtReactComponentReference >> reactComponentProperties [
+	<MSEProperty: #reactComponentProperties type: #GtReactComponentReferenceProperty opposite: #reference>
 	<multivalued>
 	^ reactComponentAttributes
 ]
 
 { #category : #accessing }
-GtReactComponentReference >> reactComponentAttributes: aCollection [
+GtReactComponentReference >> reactComponentProperties: aCollection [
 	reactComponentAttributes nocheckValue: aCollection
 ]
 
