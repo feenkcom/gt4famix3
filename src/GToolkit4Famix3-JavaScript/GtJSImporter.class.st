@@ -786,17 +786,17 @@ GtJSImporter >> visitTryStatement: aTryStatement [
 
 { #category : #visiting }
 GtJSImporter >> visitVariableDeclaration: aVariableDeclaration [
-	| var name access parm |
+	| var name access |
 	aVariableDeclaration variable notNil
 		ifTrue: [ (self isParameter: aVariableDeclaration)
-				ifTrue: [ parm := (self parameterClassFor: aVariableDeclaration) new
+				ifTrue: [ var := (self parameterClassFor: aVariableDeclaration) new
 						name: aVariableDeclaration variable source;
 						sourceAnchor: (self sourceAnchorFor: aVariableDeclaration);
 						yourself.
-					model add: parm.
-					self storeAST: aVariableDeclaration into: parm.
-					currentFile addEntity: parm.
-					self currentScope addParameter: parm ]
+					model add: var.
+					self storeAST: aVariableDeclaration into: var.
+					currentFile addEntity: var.
+					self currentScope addParameter: var ]
 				ifFalse: [ name := aVariableDeclaration variable source.
 					var := (scopeStack size = 1
 						and:
@@ -804,24 +804,24 @@ GtJSImporter >> visitVariableDeclaration: aVariableDeclaration [
 						ifTrue: [ self ensureGlobalNamed: name ]
 						ifFalse: [ self ensureLocalVariableNamed: name ].
 					var sourceAnchor: (self sourceAnchorFor: aVariableDeclaration).
-					self storeAST: aVariableDeclaration into: var.
-					aVariableDeclaration equalToken notNil
-						ifTrue:
-							[ assignmentExpressions add: aVariableDeclaration -> self currentScope.
-							access := FAMIXAccess new
-								from: self currentScope;
-								to: var;
-								isWrite: true;
-								sourceAnchor: var sourceAnchor;
-								yourself.
-							model add: access.
-							self storeAST: aVariableDeclaration into: access.
-							currentFile addEntity: access.
-							(aVariableDeclaration value isKindOf: JSBooleanLiteralNode)
-								ifTrue: [ var declaredType: self booleanType ].
-							(aVariableDeclaration value isKindOf: JSNumericLiteralNode)
-								ifTrue: [ var declaredType: self numberType ].
-							(aVariableDeclaration value isKindOf: JSStringLiteralNode)
-								ifTrue: [ var declaredType: self stringType ] ] ] ].
+					self storeAST: aVariableDeclaration into: var ].
+			aVariableDeclaration equalToken notNil
+				ifTrue:
+					[ assignmentExpressions add: aVariableDeclaration -> self currentScope.
+					access := FAMIXAccess new
+						from: self currentScope;
+						to: var;
+						isWrite: true;
+						sourceAnchor: var sourceAnchor;
+						yourself.
+					model add: access.
+					self storeAST: aVariableDeclaration into: access.
+					currentFile addEntity: access.
+					(aVariableDeclaration value isKindOf: JSBooleanLiteralNode)
+						ifTrue: [ var declaredType: self booleanType ].
+					(aVariableDeclaration value isKindOf: JSNumericLiteralNode)
+						ifTrue: [ var declaredType: self numberType ].
+					(aVariableDeclaration value isKindOf: JSStringLiteralNode)
+						ifTrue: [ var declaredType: self stringType ] ] ].
 	super visitVariableDeclaration: aVariableDeclaration
 ]
