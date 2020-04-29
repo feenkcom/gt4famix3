@@ -2,23 +2,16 @@ Class {
 	#name : #GtReactImporter,
 	#superclass : #GtJSImporter,
 	#instVars : [
-		'functionComponents'
+		'functionComponents',
+		'elementStack'
 	],
 	#category : #'GToolkit4Famix3-JavaScript-React'
 }
 
 { #category : #importing }
 GtReactImporter >> finishImport [
-	| components |
 	super finishImport.
-	components := Dictionary new.
-	model allReactComponents
-		do: [ :each | 
-			(components at: each name ifAbsentPut: [ OrderedCollection new ])
-				add: each ].
-	model allReactComponentReferences
-		do:
-			[ :each | each candidates addAll: (components at: each name ifAbsent: [ #() ]) ]
+	self hookupComponentReferences
 ]
 
 { #category : #'private-model' }
@@ -30,11 +23,25 @@ GtReactImporter >> functionClassFor: aFunctionNode [
 		ifFalse: [ FAMIXMethod ]
 ]
 
+{ #category : #importing }
+GtReactImporter >> hookupComponentReferences [
+	| components |
+	components := Dictionary new.
+	model allReactComponents
+		do: [ :each | 
+			(components at: each name ifAbsentPut: [ OrderedCollection new ])
+				add: each ].
+	model allReactComponentReferences
+		do:
+			[ :each | each candidates addAll: (components at: each name ifAbsent: [ #() ]) ]
+]
+
 { #category : #initialization }
 GtReactImporter >> initialize [
 	super initialize.
 	self parserClass: JSXParser.
-	functionComponents := Dictionary new
+	functionComponents := Dictionary new.
+	elementStack := OrderedCollection new
 ]
 
 { #category : #testing }
@@ -52,7 +59,21 @@ GtReactImporter >> isReactComponent: aFunctionNode [
 	^ false
 ]
 
-{ #category : #generated }
+{ #category : #visiting }
+GtReactImporter >> visitXAttribute: aNode [
+	| attribute |
+	(aNode value notNil and: [ elementStack notEmpty ])
+		ifTrue: [ attribute := GtReactComponentReferenceAttribute new.
+			attribute name: aNode name source.
+			attribute sourceAnchor: (self sourceAnchorFor: aNode).
+			self storeAST: aNode into: attribute.
+			elementStack last reactComponentAttributes add: attribute.
+			model add: attribute.
+			currentFile addEntity: attribute ].
+	^ super visitXAttribute: aNode
+]
+
+{ #category : #visiting }
 GtReactImporter >> visitXElement: aNode [
 	| reference |
 	reference := GtReactComponentReference new.
@@ -60,10 +81,13 @@ GtReactImporter >> visitXElement: aNode [
 	reference sender: self codeScope.
 	model add: reference.
 	reference sourceAnchor: (self sourceAnchorFor: aNode).
-	super visitXElement: aNode
+	self storeAST: aNode into: reference.
+	elementStack add: reference.
+	[ super visitXElement: aNode ]
+		ensure: [ elementStack removeLast ]
 ]
 
-{ #category : #generated }
+{ #category : #visiting }
 GtReactImporter >> visitXSelfClosingElement: aNode [
 	| reference |
 	reference := GtReactComponentReference new.
@@ -71,5 +95,8 @@ GtReactImporter >> visitXSelfClosingElement: aNode [
 	reference sender: self codeScope.
 	model add: reference.
 	reference sourceAnchor: (self sourceAnchorFor: aNode).
-	super visitXElement: aNode
+	self storeAST: aNode into: reference.
+	elementStack add: reference.
+	[ super visitXElement: aNode ]
+		ensure: [ elementStack removeLast ]
 ]

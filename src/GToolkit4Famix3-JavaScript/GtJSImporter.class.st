@@ -16,7 +16,11 @@ Class {
 		'variableReferences',
 		'callExpressions',
 		'assignmentExpressions',
-		'parserClass'
+		'parserClass',
+		'stringType',
+		'numberType',
+		'booleanType',
+		'includeASTNodes'
 	],
 	#category : #'GToolkit4Famix3-JavaScript-Importer'
 }
@@ -44,6 +48,15 @@ GtJSImporter >> assignScope: modelObject around: aBlock [
 	scopeStack addLast: modelObject.
 	aBlock
 		ensure: [ scopeStack removeLast ]
+]
+
+{ #category : #private }
+GtJSImporter >> booleanType [
+	^ booleanType
+		ifNil: [ booleanType := FAMIXType new.
+			booleanType name: 'Boolean'.
+			model add: booleanType.
+			booleanType ]
 ]
 
 { #category : #accessing }
@@ -88,6 +101,7 @@ GtJSImporter >> createPropertyFromDefinition: propertyDefinition [
 		isWrite: true;
 		sourceAnchor: (self sourceAnchorFor: propertyDefinition).
 	model add: access.
+	self storeAST: propertyDefinition into: access.
 	currentFile addEntity: access
 ]
 
@@ -106,6 +120,8 @@ GtJSImporter >> createScriptFrom: moduleNode [
 	currentFile script: script.
 	script module: currentFile.
 	scripts add: script.
+	self storeAST: moduleNode into: currentFile.
+	self storeAST: moduleNode into: script.
 	scopeStack := OrderedCollection with: script
 ]
 
@@ -186,6 +202,7 @@ GtJSImporter >> ensureFunctionNamed: aString for: aNode around: aBlock [
 								ifTrue: [ ')' ]
 								ifFalse: [ '' ]) ]).
 	model add: function.
+	self storeAST: aNode into: function.
 	currentFile addEntity: function.
 	aNode attributeNamed: #modelObject put: function.
 	function sourceAnchor: (self sourceAnchorFor: aNode).
@@ -340,11 +357,22 @@ GtJSImporter >> importSourceDirectory: aDirectory excluding: patternCollection [
 		displayingProgress: 'Importing JS Files'
 ]
 
+{ #category : #accessing }
+GtJSImporter >> includeASTNodes [
+	^ includeASTNodes
+]
+
+{ #category : #accessing }
+GtJSImporter >> includeASTNodes: aBoolean [
+	includeASTNodes := aBoolean
+]
+
 { #category : #initialization }
 GtJSImporter >> initialize [
 	super initialize.
 	model := MooseModel new.
 	model sourceLanguage: FAMIXJSSourceLanguage new.
+	includeASTNodes := true.
 	folders := Dictionary new.
 	files := Dictionary new.
 	scripts := OrderedCollection new.
@@ -413,6 +441,15 @@ GtJSImporter >> moduleNamed: aString [
 ]
 
 { #category : #private }
+GtJSImporter >> numberType [
+	^ numberType
+		ifNil: [ numberType := FAMIXType new.
+			numberType name: 'Number'.
+			model add: numberType.
+			numberType ]
+]
+
+{ #category : #private }
 GtJSImporter >> parameterClassFor: aVariableDeclaration [
 	^ (aVariableDeclaration parent isKindOf: JSObjectBindingPatternNode)
 		ifTrue: [ GtJSObjectBindingParameter ]
@@ -467,6 +504,7 @@ GtJSImporter >> processCallExpressions [
 				ifFalse:
 					[ invocation receiver: (self modelObjectFrom: receiver in: each value) ].
 			model add: invocation.
+			self storeAST: each key into: invocation.
 			(self fileFor: each value)
 				ifNotNil: [ :file | file addEntity: invocation ] ]
 ]
@@ -481,6 +519,7 @@ GtJSImporter >> processVariableReference: node in: entity [
 		isWrite: node isAssignedTo;
 		sourceAnchor: (self sourceAnchorFor: node).
 	model add: access.
+	self storeAST: node into: access.
 	(self fileFor: entity) ifNotNil: [ :file | file addEntity: access ].
 	^ access
 ]
@@ -541,6 +580,21 @@ GtJSImporter >> startingImportingFile [
 ]
 
 { #category : #'private-model' }
+GtJSImporter >> storeAST: aNode into: anEntity [
+	includeASTNodes
+		ifTrue: [ anEntity propertyNamed: #ast put: aNode ]
+]
+
+{ #category : #private }
+GtJSImporter >> stringType [
+	^ stringType
+		ifNil: [ stringType := FAMIXType new.
+			stringType name: 'String'.
+			model add: stringType.
+			stringType ]
+]
+
+{ #category : #'private-model' }
 GtJSImporter >> variableNameForFunction: aFunction [
 	((aFunction isKindOf: JSFunctionNode) and: [ aFunction name notNil ])
 		ifTrue: [ ^ aFunction name source ].
@@ -580,6 +634,7 @@ GtJSImporter >> visitClassExpression: aClassExpression [
 		ifTrue: [ 'anonymous ' , aClassExpression startPosition printString ]
 		ifFalse: [ aClassExpression name source ].
 	class := self ensureJSClassNamed: name.
+	self storeAST: aClassExpression into: class.
 	currentFile addEntity: class.
 	aClassExpression attributeNamed: #modelObject put: class.
 	class sourceAnchor: (self sourceAnchorFor: aClassExpression).
@@ -590,6 +645,7 @@ GtJSImporter >> visitClassExpression: aClassExpression [
 				subclass: class;
 				superclass: (self ensureJSClassForNode: spr).
 			model add: inheritance.
+			self storeAST: spr into: inheritance.
 			currentFile addEntity: inheritance.
 			inheritance sourceAnchor: (self sourceAnchorFor: spr).
 			class addSuperInheritance: inheritance ].
@@ -607,6 +663,7 @@ GtJSImporter >> visitFunction: aFunction [
 		ifTrue: [ (self isCodeItem: self currentScope)
 				ifTrue: [ var := self ensureLocalVariableNamed: aFunction name source.
 					var sourceAnchor: (self sourceAnchorFor: aFunction name).
+					self storeAST: aFunction into: var.
 					(self processVariableReference: aFunction in: self currentScope)
 						isWrite: true ] ].
 	mooseFunction := self
@@ -630,6 +687,7 @@ GtJSImporter >> visitImportDeclaration: aNode [
 			import source: currentFile.
 			import target: importedFile.
 			model add: import.
+			self storeAST: aNode into: import.
 			import sourceAnchor: (self sourceAnchorFor: aNode) ].
 	^ super visitImportDeclaration: aNode
 ]
@@ -667,6 +725,7 @@ GtJSImporter >> visitNamedPropertyExpression: aNamedPropertyExpression [
 		isWrite: aNamedPropertyExpression isAssignedTo;
 		sourceAnchor: (self sourceAnchorFor: aNamedPropertyExpression).
 	model add: access.
+	self storeAST: aNamedPropertyExpression into: access.
 	currentFile addEntity: access.
 	super visitNamedPropertyExpression: aNamedPropertyExpression
 ]
@@ -680,6 +739,7 @@ GtJSImporter >> visitObjectLiteral: anObjectLiteral [
 			'{' , anObjectLiteral startPosition printString , ':'
 				, anObjectLiteral stopPosition printString , '}'.
 	model add: object.
+	self storeAST: anObjectLiteral into: object.
 	currentFile addEntity: object.
 	object sourceAnchor: (self sourceAnchorFor: anObjectLiteral).
 	anObjectLiteral definitions
@@ -717,6 +777,7 @@ GtJSImporter >> visitTryStatement: aTryStatement [
 			var := self ensureLocalVariableNamed: name.
 			var
 				sourceAnchor: (self sourceAnchorFor: aTryStatement exceptionType).
+			self storeAST: aTryStatement exceptionType into: var.
 			(self
 				processVariableReference: aTryStatement exceptionType
 				in: self currentScope) isWrite: true ].
@@ -733,6 +794,7 @@ GtJSImporter >> visitVariableDeclaration: aVariableDeclaration [
 						sourceAnchor: (self sourceAnchorFor: aVariableDeclaration);
 						yourself.
 					model add: parm.
+					self storeAST: aVariableDeclaration into: parm.
 					currentFile addEntity: parm.
 					self currentScope addParameter: parm ]
 				ifFalse: [ name := aVariableDeclaration variable source.
@@ -742,6 +804,7 @@ GtJSImporter >> visitVariableDeclaration: aVariableDeclaration [
 						ifTrue: [ self ensureGlobalNamed: name ]
 						ifFalse: [ self ensureLocalVariableNamed: name ].
 					var sourceAnchor: (self sourceAnchorFor: aVariableDeclaration).
+					self storeAST: aVariableDeclaration into: var.
 					aVariableDeclaration equalToken notNil
 						ifTrue:
 							[ assignmentExpressions add: aVariableDeclaration -> self currentScope.
@@ -752,6 +815,13 @@ GtJSImporter >> visitVariableDeclaration: aVariableDeclaration [
 								sourceAnchor: var sourceAnchor;
 								yourself.
 							model add: access.
-							currentFile addEntity: access ] ] ].
+							self storeAST: aVariableDeclaration into: access.
+							currentFile addEntity: access.
+							(aVariableDeclaration value isKindOf: JSBooleanLiteralNode)
+								ifTrue: [ var declaredType: self booleanType ].
+							(aVariableDeclaration value isKindOf: JSNumericLiteralNode)
+								ifTrue: [ var declaredType: self numberType ].
+							(aVariableDeclaration value isKindOf: JSStringLiteralNode)
+								ifTrue: [ var declaredType: self stringType ] ] ] ].
 	super visitVariableDeclaration: aVariableDeclaration
 ]

@@ -4,7 +4,8 @@ Class {
 	#instVars : [
 		'name',
 		'sender',
-		'candidates'
+		'candidates',
+		'reactComponentAttributes'
 	],
 	#category : #'GToolkit4Famix3-JavaScript-React'
 }
@@ -31,7 +32,8 @@ GtReactComponentReference >> initialize [
 	super initialize.
 	candidates := FMMultiMultivalueLink
 		on: self
-		opposite: #incomingReactComponentReferences
+		opposite: #incomingReactComponentReferences.
+	reactComponentAttributes := FMMultivalueLink on: self opposite: #reference:
 ]
 
 { #category : #accessing }
@@ -43,6 +45,18 @@ GtReactComponentReference >> name [
 { #category : #accessing }
 GtReactComponentReference >> name: aString [
 	name := aString
+]
+
+{ #category : #accessing }
+GtReactComponentReference >> reactComponentAttributes [
+	<MSEProperty: #reactComponentAttributes type: #GtReactComponentReferenceAttribute opposite: #reference>
+	<multivalued>
+	^ reactComponentAttributes
+]
+
+{ #category : #accessing }
+GtReactComponentReference >> reactComponentAttributes: aCollection [
+	reactComponentAttributes nocheckValue: aCollection
 ]
 
 { #category : #accessing }
