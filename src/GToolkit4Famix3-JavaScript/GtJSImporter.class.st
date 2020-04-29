@@ -53,7 +53,7 @@ GtJSImporter >> assignScope: modelObject around: aBlock [
 { #category : #private }
 GtJSImporter >> booleanType [
 	^ booleanType
-		ifNil: [ booleanType := FAMIXType new.
+		ifNil: [ booleanType := FAMIXPrimitiveType new.
 			booleanType name: 'Boolean'.
 			model add: booleanType.
 			booleanType ]
@@ -443,7 +443,7 @@ GtJSImporter >> moduleNamed: aString [
 { #category : #private }
 GtJSImporter >> numberType [
 	^ numberType
-		ifNil: [ numberType := FAMIXType new.
+		ifNil: [ numberType := FAMIXPrimitiveType new.
 			numberType name: 'Number'.
 			model add: numberType.
 			numberType ]
@@ -588,7 +588,7 @@ GtJSImporter >> storeAST: aNode into: anEntity [
 { #category : #private }
 GtJSImporter >> stringType [
 	^ stringType
-		ifNil: [ stringType := FAMIXType new.
+		ifNil: [ stringType := FAMIXPrimitiveType new.
 			stringType name: 'String'.
 			model add: stringType.
 			stringType ]
