@@ -4,14 +4,15 @@ Class {
 	#instVars : [
 		'name',
 		'sender',
-		'candidates'
+		'candidates',
+		'reactComponentAttributes'
 	],
 	#category : #'GToolkit4Famix3-JavaScript-React'
 }
 
 { #category : #accessing }
 GtReactComponentReference >> candidates [
-	<MSEProperty: #candidates type: #GtReactFunctionComponent opposite: #incomingElements>
+	<MSEProperty: #candidates type: #GtReactFunctionComponent opposite: #incomingReactComponentReferences>
 	<multivalued>
 	^ candidates
 ]
@@ -31,7 +32,8 @@ GtReactComponentReference >> initialize [
 	super initialize.
 	candidates := FMMultiMultivalueLink
 		on: self
-		opposite: #incomingElements
+		opposite: #incomingReactComponentReferences.
+	reactComponentAttributes := FMMultivalueLink on: self opposite: #reference:
 ]
 
 { #category : #accessing }
@@ -46,8 +48,20 @@ GtReactComponentReference >> name: aString [
 ]
 
 { #category : #accessing }
+GtReactComponentReference >> reactComponentProperties [
+	<MSEProperty: #reactComponentProperties type: #GtReactComponentReferenceProperty opposite: #reference>
+	<multivalued>
+	^ reactComponentAttributes
+]
+
+{ #category : #accessing }
+GtReactComponentReference >> reactComponentProperties: aCollection [
+	reactComponentAttributes nocheckValue: aCollection
+]
+
+{ #category : #accessing }
 GtReactComponentReference >> sender [
-	<MSEProperty: #sender type: #FAMIXBehaviouralEntity opposite: #reactElements>
+	<MSEProperty: #sender type: #FAMIXBehaviouralEntity opposite: #outgoingReactComponentReferences>
 	^sender
 ]
 
@@ -55,7 +69,7 @@ GtReactComponentReference >> sender [
 GtReactComponentReference >> sender: aBehaviouralEntity [
 	sender := FMMultivalueLink
 		on: self
-		update: #reactElements
+		update: #outgoingReactComponentReferences
 		from: self sender
 		to: aBehaviouralEntity
 ]

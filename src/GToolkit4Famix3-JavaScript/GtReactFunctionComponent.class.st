@@ -2,27 +2,27 @@ Class {
 	#name : #GtReactFunctionComponent,
 	#superclass : #FAMIXFunction,
 	#instVars : [
-		'incomingElements'
+		'incomingReactComponentReferences'
 	],
 	#category : #'GToolkit4Famix3-JavaScript-React'
 }
 
 { #category : #accessing }
-GtReactFunctionComponent >> incomingElements [
-	<MSEProperty: #incomingElements type: #GtReactComponentReference opposite: #candidates>
+GtReactFunctionComponent >> incomingReactComponentReferences [
+	<MSEProperty: #incomingReactComponentReferences type: #GtReactComponentReference opposite: #candidates>
 	<multivalued>
-	^ incomingElements
+	^ incomingReactComponentReferences
 ]
 
 { #category : #accessing }
-GtReactFunctionComponent >> incomingElements: aCollection [
-	incomingInvocations value: aCollection
+GtReactFunctionComponent >> incomingReactComponentReferences: aCollection [
+	incomingReactComponentReferences value: aCollection
 ]
 
 { #category : #'initialize-release' }
 GtReactFunctionComponent >> initialize [
 	super initialize.
-	incomingElements := FMMultiMultivalueLink
+	incomingReactComponentReferences := FMMultiMultivalueLink
 		on: self
 		opposite: #candidates
 ]

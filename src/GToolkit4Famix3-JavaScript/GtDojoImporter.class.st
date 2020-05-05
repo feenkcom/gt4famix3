@@ -81,29 +81,35 @@ GtDojoImporter >> createDojoClass: objectNode withSupers: aCollection named: aSt
 	| class template |
 	class := self ensureDojoClassNamed: aString.
 	class sourceAnchor: (self sourceAnchorFor: objectNode parent).
+	self storeAST: objectNode parent into: class.
 	template := nil.
 	objectNode definitions
 		do: [ :each | 
-			((each isKindOf: JSPropertyAssignmentNode) and: [ each name source = 'templateString' ])
+			((each isKindOf: JSPropertyAssignmentNode)
+				and: [ each name source = 'templateString' ])
 				ifTrue: [ template := each value ] ].
 	template notNil
 		ifTrue: [ class isWidget: true.
 			class template: (self templateStringForNode: template) ].
 	aCollection
 		do: [ :each | 
-			class
-				addSuperInheritance:
-					(FAMIXInheritance new
-						subclass: class;
-						superclass: (self ensureDojoClassForNode: each)) ]
+			| inheritance |
+			inheritance := FAMIXInheritance new
+				subclass: class;
+				superclass: (self ensureDojoClassForNode: each).
+			model add: inheritance.
+			self storeAST: each into: inheritance.
+			class addSuperInheritance: inheritance ]
 ]
 
 { #category : #'private-model' }
 GtDojoImporter >> createDojoModule: aNode around: aBlock [
 	| declareIndex patternsSize functionParameters |
 	declareIndex := 0.
-	currentModule := self ensureDojoModuleNamed: (self relativeNameFor: aNode includeExtension: false).
+	currentModule := self
+		ensureDojoModuleNamed: (self relativeNameFor: aNode includeExtension: false).
 	currentModule sourceAnchor: (self sourceAnchorFor: aNode).
+	self storeAST: aNode into: currentModule.
 	functionParameters := aNode arguments last parameters.
 	aNode arguments first expressions
 		keysAndValuesDo: [ :i :each | 
@@ -114,7 +120,11 @@ GtDojoImporter >> createDojoModule: aNode around: aBlock [
 			prereqModule := self ensureDojoModuleNamed: prereqName.
 			currentModule addRequiredModule: prereqModule.
 			i <= functionParameters size
-				ifTrue: [ (aNode attributeNamed: #parameterMapping ifAbsentPut: [ Dictionary new ]) at: (functionParameters at: i) source put: (self fileNameFrom: each) ] ].
+				ifTrue: [ (aNode
+						attributeNamed: #parameterMapping
+						ifAbsentPut: [ Dictionary new ])
+						at: (functionParameters at: i) source
+						put: (self fileNameFrom: each) ] ].
 	patternsSize := patterns size.
 	(declareIndex > 0 and: [ declareIndex <= functionParameters size ])
 		ifTrue: [ self addDojoClassPatternFor: (functionParameters at: declareIndex) ].

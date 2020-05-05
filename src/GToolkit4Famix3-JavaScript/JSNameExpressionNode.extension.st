@@ -21,7 +21,8 @@ JSNameExpressionNode >> isVariableReference [
 				do: [ :each | 
 					(self isDescendantFrom: each)
 						ifTrue: [ ^ false ] ] ].
-	^ (parent isKindOf: JSVariableDeclarationNode) not
+	^ ((parent isKindOf: JSVariableDeclarationNode)
+		and: [ parent variable == self ]) not
 		and: [ ((parent isKindOf: JSTryStatementNode)
 				and: [ parent exceptionType == self ]) not ]
 ]
