@@ -120,7 +120,7 @@ MooseModel >> spotter: aStringTitle on: aCandidatesBlock for: aStep [
 "		itemIcon: [ :each | each mooseIcon ];"
 		actLogic: [ :each :step |
 			step exit.
-			GtInspector openOn: each ];
+			Gt2Inspector openOn: each ];
 		filter: GTFilterSubstring;
 		wantsToDisplayOnEmptyQuery: true
 ]
