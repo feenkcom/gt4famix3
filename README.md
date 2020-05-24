@@ -3,12 +3,4 @@ This repository holds the Glamorous Toolkit extensions for [Famix3](https://gith
 
 ## How to load
 
-```
-EpMonitor current disable.
-[ 
-  Metacello new
-    baseline: 'GToolkit4Famix3';
-    repository: 'github://feenkcom/gt4famix3/src';
-    load
-] ensure: [ EpMonitor current enable ].
-```
+The ideal way to load the code is by loading the entire [Glamorous Toolkit project](https://github.com/feenkcom/gtoolkit).
