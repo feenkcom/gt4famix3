@@ -1,6 +1,18 @@
 Extension { #name : #FAMIXSourcedEntity }
 
 { #category : #'*GToolkit4Famix3' }
+FAMIXSourcedEntity >> astStartPosition: aNumber [
+	<MSEProperty: #astStartPosition type: #Number>
+	self privateState attributeAt: #astStartPosition put: aNumber 
+]
+
+{ #category : #'*GToolkit4Famix3' }
+FAMIXSourcedEntity >> astStopPosition: aNumber [
+	<MSEProperty: #astStopPosition type: #Number>
+	self privateState attributeAt: #astStopPosition put: aNumber 
+]
+
+{ #category : #'*GToolkit4Famix3' }
 FAMIXSourcedEntity >> findASTNode [
 	^ self sourceLanguage
 		ifNotNil: [ :lang | 
