@@ -24,7 +24,7 @@ FAMIXTypeGroup >> gtHierarchyFor: aView [
 { #category : #'*GToolkit4Famix3' }
 FAMIXTypeGroup >> gtWithinNestingMapFor: aView [
 	<gtView>
-	^ aView explicit
+	^ aView pannable
 		title: 'Within nesting and clients';
 		priority: 6;
 		stencil: [ 
@@ -37,12 +37,12 @@ FAMIXTypeGroup >> gtWithinNestingMapFor: aView [
 				leavesSize: [ :class | class numberOfMethods ];
 				leafEllipse: [ :ellipse :class | 
 					(self includes: class) 
-						ifTrue: [ ellipse background: (Color blue alpha: 0.2) ]
+						ifTrue: [ ellipse background: (BrGlamorousColors errorBackgroundColor) ]
 						ifFalse: [ 
 							(callers includes: class)
 								ifTrue: [ ellipse background: (Color red alpha:0.8) ]
 								ifFalse: [ ellipse background: (Color gray alpha: 0.2) ] ] ].
-			treemap asElement asPannableElement ]
+			treemap asElement ]
 ]
 
 { #category : #'*GToolkit4Famix3' }
