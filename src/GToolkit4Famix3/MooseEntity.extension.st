@@ -39,14 +39,10 @@ MooseEntity >> gtNavigationFor: aView [
 		title: 'Navigation';
 		priority: 1;
 		items: [ self gtNavigationItems ];
-		column: 'Icon' translated do: [ :column | 
-			column
-				item: [ :assoc | assoc value gtIcon ];
-				rowStencil: [ :eachIcon | eachIcon asElement margin: (BlInsets left: 5 right: 5) ];
-				noResize ];
-		column: 'Name' format: [:assoc | assoc key ];
-		column: 'Value' format: [:assoc | assoc value gtDisplayString ];
-		send: [:assoc | assoc value]
+		column: 'Icon' icon: [ :assoc | assoc value gtIcon ];
+		column: 'Name' text: [ :assoc | assoc key ];
+		column: 'Value' text: [ :assoc | assoc value gtDisplayString ];
+		send: [ :assoc | assoc value ]
 ]
 
 { #category : #'*GToolkit4Famix3' }
@@ -71,12 +67,19 @@ MooseEntity >> gtNavigationItems [
 { #category : #'*GToolkit4Famix3' }
 MooseEntity >> gtPropertiesFor: aView [
 	<gtView>
-	(self mooseDescription notNil and: [ self mooseDescription allPrimitiveAttributes notEmpty]) ifFalse: [ ^ aView empty ].
+	(self mooseDescription notNil
+		and: [ self mooseDescription allPrimitiveAttributes notEmpty ])
+		ifFalse: [ ^ aView empty ].
 	^ aView columnedList
 		title: 'Properties';
-		items: [ self mooseDescription allPrimitiveAttributes sorted: [:x :y | x name < y name]];
-		column: 'Properties' evaluated: [:each | each name ];
-		column: 'Value' evaluated: [:each | [(self mmGetProperty: each) asString] on: Error do: [ :e | e printString ] ]
+		items: [ self mooseDescription allPrimitiveAttributes
+				sorted: [ :x :y | x name < y name ] ];
+		column: 'Properties' item: [ :each | each name ];
+		column: 'Value'
+			item: [ :each | 
+			[ (self mmGetProperty: each) asString ]
+				on: Error
+				do: [ :e | e printString ] ]
 ]
 
 { #category : #'*GToolkit4Famix3' }

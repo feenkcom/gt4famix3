@@ -6,14 +6,11 @@ FAMIXType >> gtAttributesFor: aView [
 	^ aView columnedList
 		title: 'Attributes';
 		priority: 15;
-		items: [ self attributes ];		
-		column: 'Icon' translated do: [ :column | 
-			column
-				item: [ :each | each gtIcon ];
-				rowStencil: [ :eachIcon | eachIcon asElement margin: (BlInsets left: 5 right: 5) ];
-				noResize ];
-		column: 'Name' translated format: [ :each | each name ];
-		column: 'Declared type' translated format: [ :each | each declaredType gtDisplayString ]
+		items: [ self attributes ];
+		column: 'Icon' icon: [ :each | each gtIcon ];
+		column: 'Name' translated text: [ :each | each name ];
+		column: 'Declared type' translated
+			text: [ :each | each declaredType gtDisplayString ]
 ]
 
 { #category : #'*GToolkit4Famix3' }
@@ -30,14 +27,11 @@ FAMIXType >> gtMethodsFor: aView [
 	^ aView columnedList
 		title: 'Methods';
 		priority: 10;
-		items: [ self methods sorted: [:a :b | a signature < b signature]];
-		column: 'Icon' translated do: [ :column | 
-			column
-				item: [ :each | each gtIcon ];
-				rowStencil: [ :eachIcon | eachIcon asElement margin: (BlInsets left: 5 right: 5) ];
-				noResize ];
-		column: 'Name' translated format: [ :each | each signature ];
-		column: 'Declared type' translated format: [ :each | each declaredType gtDisplayString ]
+		items: [ self methods sorted: [ :a :b | a signature < b signature ] ];
+		column: 'Icon' icon: [ :each | each gtIcon ];
+		column: 'Name' translated text: [ :each | each signature ];
+		column: 'Declared type' translated
+			text: [ :each | each declaredType gtDisplayString ]
 ]
 
 { #category : #'*GToolkit4Famix3' }
