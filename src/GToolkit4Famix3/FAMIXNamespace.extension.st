@@ -7,7 +7,7 @@ FAMIXNamespace >> gtChildrenFor: aView [
 		title: 'Children';
 		priority: 2;
 		items: [{self}];
-		itemStencil: [ :each | 
+		stencil: [ :each | 
 			BlElement new
 				constraintsDo: [ :c | 
 					c horizontal fitContent. 
