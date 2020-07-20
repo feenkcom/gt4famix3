@@ -102,7 +102,7 @@ MooseEntity >> mooseSpecificSpotterProcessorsFor: aSpotterStep [
 				allCandidates: [ assoc value asMooseGroup ];
 				title: (assoc key argumentAt: 1);
 				itemIcon: #gtIcon;
-				filter: GTFilterSubstring;
+				filter: GtFilterSubstring;
 				itemName: #gtDisplayString;
 				order: 1 ]
 ]

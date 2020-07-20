@@ -121,7 +121,7 @@ MooseModel >> spotter: aStringTitle on: aCandidatesBlock for: aStep [
 		actLogic: [ :each :step |
 			step exit.
 			GtInspector openOn: each ];
-		filter: GTFilterSubstring;
+		filter: GtFilterSubstring;
 		wantsToDisplayOnEmptyQuery: true
 ]
 

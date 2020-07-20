@@ -8,7 +8,7 @@ FMMetaRepository >> gtGtSpotterClassesFor: aStep [
 		title: 'Classes';
 		allCandidates: [ self classes ];
 		itemName: [ :class | class fullName ];
-		filter: GTFilterSubstring
+		filter: GtFilterSubstring
 ]
 
 { #category : #'*GToolkit4Famix3' }
@@ -19,5 +19,5 @@ FMMetaRepository >> gtGtSpotterPackagesFor: aStep [
 		title: 'Packages';
 		allCandidates: [ self packages ];
 		itemName: [ :example | example fullName ];
-		filter: GTFilterSubstring
+		filter: GtFilterSubstring
 ]
