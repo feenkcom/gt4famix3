@@ -24,7 +24,7 @@ MooseGroup >> gtSpotterItemsFor: aStep [
 		candidatesLimit: 50;
 		allCandidates: [ self entities ];
 		itemName: [ :each | each gtDisplayString ];
-		filter: GTFilterSubstring;
+		filter: GtFilterSubstring;
 		wantsToDisplayOnEmptyQuery: true
 ]
 
@@ -36,6 +36,6 @@ MooseGroup >> spotterItemsFor: aStep [
 		candidatesLimit: 50;
 		allCandidates: [ self entities ];
 		itemName: [ :each | each gtDisplayString ];
-		filter: GTFilterSubstring;
+		filter: GtFilterSubstring;
 		wantsToDisplayOnEmptyQuery: true
 ]
