@@ -40,7 +40,26 @@ MooseEntity >> gtNavigationFor: aView [
 		priority: 1;
 		items: [ self gtNavigationItems ];
 		column: 'Icon' icon: [ :assoc | assoc value gtIcon ];
-		column: 'Name' text: [ :assoc | assoc key ];
+		"column: 'Name' text: [ :assoc | assoc key ];"
+		column: 'Name' do: [ :aColumn | aColumn
+			cellStencil: [
+				BrLabel new
+					look: (BrGlamorousLabelLook new );
+					addLook: (BrGlamorousWithContextMenuLook
+						content: [ BrGlamorousSimpleContextMenuContent new
+								items: {(
+									'Browse the method implementing the navigation' -> [ :e | 
+										|navigationPragma|
+										navigationPragma := e userData  at: #navigationPragma.
+										e phlow spawnObject: (navigationPragma  methodClass >> navigationPragma methodSelector) asRingDefinition ])};
+								yourself ]) ];
+			dataBinder: [ :eachLabel :assoc | 
+				|displayValue|
+				displayValue := (' ' join: ((assoc key argumentAt: 1) piecesCutWhereCamelCase collect: #capitalized)).
+				
+				eachLabel 
+					in: [ :aLabel | aLabel userData  at: #navigationPragma put: assoc key ];
+					text: displayValue ] ];
 		column: 'Value' text: [ :assoc | assoc value gtDisplayString ];
 		send: [ :assoc | assoc value ]
 ]
@@ -55,13 +74,13 @@ MooseEntity >> gtNavigationItems [
 			value size = 1 
 				ifTrue: [ value := value anyOne ]
 				ifFalse: [ value := value asMooseGroup ] ].
-		((' ' join: ((pragma argumentAt: 1) piecesCutWhereCamelCase collect: #capitalized)) ) -> value ].
+		pragma -> value ].
 	^ (pragmaValueAssociations
 		reject: [ :association | 
 			association value isNil or: [ 
 				association value isCollection and: [ 
 					association value isEmpty ] ] ])
-		sorted: [ :a :b | a key < b key ]
+		sorted: [ :a :b | (a key argumentAt: 1) < (b key argumentAt: 1) ]
 ]
 
 { #category : #'*GToolkit4Famix3' }
