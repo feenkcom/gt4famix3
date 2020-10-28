@@ -52,7 +52,7 @@ FAMIXSystemAttraction >> paint: classes in: anElement [
 	classes do: [ :aClass |
 		| classElement |
 		classElement := BlElement new 
-				geometry: BlEllipse new;
+				geometry: BlEllipseGeometry new;
 				border: BlBorder empty;
 				size: 10@10;
 				background: classStrongColor;
@@ -62,7 +62,7 @@ FAMIXSystemAttraction >> paint: classes in: anElement [
 		aClass methods do: [ :aMethod |
 			| methodElement methodLineElement |
 			methodElement := BlElement new 
-				geometry: BlEllipse new;
+				geometry: BlEllipseGeometry new;
 				border: BlBorder empty;
 				size: 6@6;
 				background: methodStrongColor;
@@ -81,7 +81,7 @@ FAMIXSystemAttraction >> paint: classes in: anElement [
 		aClass attributes do: [ :anAttribute |
 			| attributeElement attributeLineElement |
 			attributeElement := BlElement new 
-				geometry: BlEllipse new;
+				geometry: BlEllipseGeometry new;
 				border: BlBorder empty;
 				size: 6@6;
 				background: attributeStrongColor;
