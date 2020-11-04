@@ -10,7 +10,7 @@ BaselineOfGToolkit4Famix3 >> baseline: spec [
 	spec for: #'common' do: [
 		spec 
 			baseline: 'Famix3SmalltalkImporter' with: [
-				spec repository: 'github://feenkcom/famix3:v0.8.2/src' ];
+				spec repository: 'github://feenkcom/famix3:v0.8.3/src' ];
 			baseline: 'GToolkit4XMLSupport' with: [
 				spec repository: 'github://feenkcom/gt4xmlsupport:v0.8.0/src' ].
 		spec 
