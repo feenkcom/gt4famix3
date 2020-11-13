@@ -71,7 +71,7 @@ FAMIXSystemAttraction >> paint: classes in: anElement [
 			classElement graph connectTo: methodElement.
 			methodLineElement := BlLineElement new
 				border: (BlBorder paint: (classPaleColor alpha: 0.3) width: 1);
-				constraintsDo: [:c | c ignoredByLayout ];
+				constraintsDo: [:c | c ignoreByLayout ];
 				zIndex: -1;
 				fromAnchor: (BlElementCenterAnchor referenceElement: classElement relatedTo: methodElement);
 				toAnchor: (BlElementCenterAnchor referenceElement: methodElement relatedTo: classElement).
@@ -90,7 +90,7 @@ FAMIXSystemAttraction >> paint: classes in: anElement [
 			classElement graph connectTo: attributeElement.
 			attributeLineElement := BlLineElement new
 				border: (BlBorder paint: (classPaleColor alpha: 0.3) width: 1);
-				constraintsDo: [:c | c ignoredByLayout ];
+				constraintsDo: [:c | c ignoreByLayout ];
 				zIndex: -1;
 				fromAnchor: (BlElementCenterAnchor referenceElement: classElement relatedTo: attributeElement);
 				toAnchor: (BlElementCenterAnchor referenceElement: attributeElement relatedTo: classElement).
