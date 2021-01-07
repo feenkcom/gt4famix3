@@ -414,9 +414,11 @@ GtJSImporter >> localFilename: aString from: aNode [
 				ifFalse: [ sum / each ] ].
 	name exists
 		ifTrue: [ ^ name ].
-	name := name parent / (name basename , self parserClass fileExtension).
-	name exists
-		ifTrue: [ ^ name ].
+	name := name parent / name basename.
+	self parserClass fileExtensions
+		do: [ :each |
+			(name , each) exists
+				ifTrue: [ ^ name , each ] ].
 	^ nil
 ]
 
