@@ -55,7 +55,7 @@ FAMIXAbstractFileAnchor >> gtCompleteSourceFor: aView [
 { #category : #'*GToolkit4Famix3' }
 FAMIXAbstractFileAnchor >> gtText [
 	| text |
-	text := BlRopedRawText string: self completeText.
+	text := self completeText asRopedText.
 	(text from: self startPos to: self endPos)
 		attributes:
 			{(BlTextHighlightAttribute new
