@@ -15,7 +15,7 @@ GtReactFunctionComponentGroup >> gtReactDependenciesFor: aView [
 				stencil: [:c | 
 					BrLabel new
 						when: BlClickEvent do: [:e | e target phlow spawnObject: c];
-						look: BrGlamorousLabelLook;
+						aptitude: BrGlamorousLabelAptitude;
 						text: c name];
 				with: self.
 			m edges 

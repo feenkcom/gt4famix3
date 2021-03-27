@@ -17,6 +17,6 @@ FAMIXSourceAnchor >> gtSourceFor: aView [
 	^ aView textEditor
 		title: 'Source';
 		priority: 10;
-		look: BrGlamorousCodeEditorLook;
+		aptitude: BrGlamorousCodeEditorAptitude;
 		text: [ self sourceText ]
 ]

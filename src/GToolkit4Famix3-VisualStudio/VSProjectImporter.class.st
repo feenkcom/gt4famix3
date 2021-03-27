@@ -52,7 +52,7 @@ VSProjectImporter >> gtIncludeTreeFor: aView [
 m nodes 
 	stencil: [ :folder |
 		(self projects anySatisfy: [ :po | po projectFile parentFolder = folder]) 
-			ifTrue: [ BrLabel new look: BrGlamorousLabelLook; text: folder name]
+			ifTrue: [ BrLabel new aptitude: BrGlamorousLabelAptitude; text: folder name]
 			ifFalse: [ BlElement new geometry: BlEllipseGeometry new; border: (BlBorder paint: Color black width: 2); size: 10@10 ]
 		];
 	with: self folders values.

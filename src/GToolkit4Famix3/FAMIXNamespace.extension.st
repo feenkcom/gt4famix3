@@ -15,7 +15,7 @@ FAMIXNamespace >> gtChildrenFor: aView [
 				layout: BlLinearLayout horizontal;
 				addChild: each gtIcon asElement;
 				addChild: (BrLabel new
-					look: BrGlamorousListLabelLook;
+					aptitude: BrGlamorousListLabelAptitude;
 					text: each name asRopedText) ];
 		children: [ :each | 
 			each structuralChildren sorted: [:entity1 :entity2 | 

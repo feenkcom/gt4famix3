@@ -44,8 +44,8 @@ MooseEntity >> gtNavigationFor: aView [
 		column: 'Name' do: [ :aColumn | aColumn
 			cellStencil: [
 				BrLabel new
-					look: (BrGlamorousLabelLook new );
-					addLook: (BrGlamorousWithContextMenuLook
+					aptitude: (BrGlamorousLabelAptitude new );
+					addAptitude: (BrGlamorousWithContextMenuAptitude
 						content: [ BrGlamorousSimpleContextMenuContent new
 								items: {(
 									'Browse the method implementing the navigation' -> [ :e | 
