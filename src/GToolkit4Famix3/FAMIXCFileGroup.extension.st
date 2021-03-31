@@ -13,7 +13,7 @@ FAMIXCFileGroup >> paintIncludesWith: m [
 	| grouped |
 	grouped := self groupedBy: [:each | each basenameWithoutExtension].
 	m nodes 
-		stencil: [:each | BrLabel new look: BrGlamorousLabelLook; text: each anyOne basenameWithoutExtension asRopedText ];
+		stencil: [:each | BrLabel new aptitude: BrGlamorousLabelAptitude; text: each anyOne basenameWithoutExtension asRopedText ];
 		with: grouped values.
 	m edges 
 		fromRightCenter;

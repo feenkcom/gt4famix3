@@ -44,7 +44,7 @@ FAMIXAbstractFileAnchor >> gtCompleteSourceFor: aView [
 			text := self gtText.
 			e := BrEditor new
 				text: text;
-				look: BrGlamorousCodeEditorLook new.
+				aptitude: BrGlamorousCodeEditorAptitude new.
 			element notNil
 				ifTrue: [ element gtStyler ifNotNil: [ :styler | e styler: styler ] ].
 			e
