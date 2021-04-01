@@ -9,10 +9,10 @@ Class {
 }
 
 { #category : #private }
-GtSmaCCPreprocessedParserStyler >> ast [
+GtSmaCCPreprocessedParserStyler >> astForText: aText [
 	preprocessedSource := preprocessor copy
-		processSource: text asString
-			inInterval: (1 to: text size)
+		processSource: aText asString
+			inInterval: (1 to: aText size)
 			isMacro: false;
 		preprocessedFile.
 	^ parserClass
