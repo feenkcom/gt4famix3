@@ -25,7 +25,7 @@ FAMIXAbstractFileAnchor >> gtAddLinksTo: text [
 				attributes:
 					{(BrTextHoverStylableAttribute new
 						beNotOverwritableByStyler;
-						attribute: (BlTextUnderlineAttribute new paint: BrGlamorousColors linkColor)).
+						attribute: (BlTextUnderlineAttribute new color: BrGlamorousColors linkColor)).
 					(BrTextClickAttribute new
 						beNotOverwritableByStyler;
 						action:
@@ -61,6 +61,9 @@ FAMIXAbstractFileAnchor >> gtText [
 			{(BlTextHighlightAttribute new
 				beNotOverwritableByStyler;
 				paint: (BrGlamorousColors neutralBackgroundColor))}.
-	self gtAddLinksTo: text.
+				
+	self flag: #TODO.
+	"computing links is slow and should be refactored to be a dedicated styler"
+	"self gtAddLinksTo: text."
 	^ text
 ]
