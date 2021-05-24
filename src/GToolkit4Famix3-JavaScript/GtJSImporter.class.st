@@ -681,7 +681,7 @@ GtJSImporter >> visitImportDeclaration: aNode [
 	importedFilename := self
 		localFilename: aNode from value pharoFromJSString
 		from: aNode.
-	importedFilename notNil
+	(importedFilename notNil and: [ importedFilename exists and: [importedFilename isFile] ])
 		ifTrue: [ importedFile := self ensureFileNamed: importedFilename.
 			import := GtJSImport new.
 			import source: currentFile.
