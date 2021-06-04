@@ -1,5 +1,6 @@
 "
 A generic component
+
 "
 Class {
 	#name : #FAMIXComponent,

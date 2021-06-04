@@ -29,6 +29,7 @@ asts do: [ :each |
 			modules add: node 
 	] ].
 modules.
+
 "
 Class {
 	#name : #GtDojoImporter,

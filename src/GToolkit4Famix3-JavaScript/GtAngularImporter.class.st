@@ -6,6 +6,7 @@ modules := importer modules values asMooseGroup .
 view := RTMondrian new.
 (modules reject: #isStub) asMooseGroup viewDependenciesOn: view.
 view
+
 "
 Class {
 	#name : #GtAngularImporter,
