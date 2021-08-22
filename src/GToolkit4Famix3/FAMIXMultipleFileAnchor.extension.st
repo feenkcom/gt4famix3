@@ -1,8 +1,7 @@
 Extension { #name : 'FAMIXMultipleFileAnchor' }
 
 { #category : '*GToolkit4Famix3' }
-FAMIXMultipleFileAnchor >> gtMultipleSourcesFor: aView [
-	<gtView>
+FAMIXMultipleFileAnchor >> gtCompleteSourceFor: aView [
 	^ aView columnedList 
 		title: 'Sources';
 		priority: 20;
