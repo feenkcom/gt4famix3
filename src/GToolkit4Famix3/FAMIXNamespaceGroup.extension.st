@@ -1,11 +1,11 @@
-Extension { #name : #FAMIXNamespaceGroup }
+Extension { #name : 'FAMIXNamespaceGroup' }
 
-{ #category : #'*GToolkit4Famix3' }
+{ #category : '*GToolkit4Famix3' }
 FAMIXNamespaceGroup >> gtIcon [
 	^ MooseIcons famixNamespaceGroup 
 ]
 
-{ #category : #'*GToolkit4Famix3' }
+{ #category : '*GToolkit4Famix3' }
 FAMIXNamespaceGroup >> gtNestingFor: aView [
 	<gtView>
 	^ aView pannable 
@@ -38,7 +38,7 @@ FAMIXNamespaceGroup >> gtNestingFor: aView [
 						ifFalse: [ ellipse background: (Color gray alpha: 0.2) ] ] ]
 ]
 
-{ #category : #'*GToolkit4Famix3' }
+{ #category : '*GToolkit4Famix3' }
 FAMIXNamespaceGroup >> paintTreeWith: m [
 	m nodes 
 		stencil: [ :each | BlTextElement new text: each name asRopedText glamorousRegularSize ];

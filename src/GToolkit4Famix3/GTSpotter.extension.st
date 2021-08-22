@@ -1,6 +1,6 @@
-Extension { #name : #GTSpotter }
+Extension { #name : 'GTSpotter' }
 
-{ #category : #'*GToolkit4Famix3' }
+{ #category : '*GToolkit4Famix3' }
 GTSpotter >> spotterMooseModelsFor: aStep [
 	<spotterOrder: 8>
 	aStep listProcessor

@@ -1,15 +1,15 @@
 Class {
-	#name : #FAMIXComponentBuilder,
-	#superclass : #Object,
+	#name : 'FAMIXComponentBuilder',
+	#superclass : 'Object',
 	#instVars : [
 		'components',
 		'entitiesToComponents',
 		'dependencies'
 	],
-	#category : #GToolkit4Famix3
+	#category : 'GToolkit4Famix3'
 }
 
-{ #category : #building }
+{ #category : 'building' }
 FAMIXComponentBuilder >> component: aString with: aCollection [
 	| component |
 	component := FAMIXComponent new name: aString; entities: aCollection.
@@ -21,17 +21,17 @@ FAMIXComponentBuilder >> component: aString with: aCollection [
 	^ component
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 FAMIXComponentBuilder >> components [
 	^ components
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 FAMIXComponentBuilder >> components: anObject [
 	components := anObject
 ]
 
-{ #category : #building }
+{ #category : 'building' }
 FAMIXComponentBuilder >> connect: aCollection from: aFromBlock to: aToBlock [
 	aCollection do: [ :aDependency |
 		entitiesToComponents 
@@ -46,7 +46,7 @@ FAMIXComponentBuilder >> connect: aCollection from: aFromBlock to: aToBlock [
 							for: aDependency ] ] ]
 ]
 
-{ #category : #building }
+{ #category : 'building' }
 FAMIXComponentBuilder >> connect: aCollection from: aFromBlock toAll: aToAllBlock [
 	aCollection do: [ :aDependency |
 		entitiesToComponents 
@@ -61,12 +61,12 @@ FAMIXComponentBuilder >> connect: aCollection from: aFromBlock toAll: aToAllBloc
 								target: aTargetComponent) ] ] ] ]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 FAMIXComponentBuilder >> dependencies [
 	^ dependencies
 ]
 
-{ #category : #building }
+{ #category : 'building' }
 FAMIXComponentBuilder >> ensureDependencyFrom: aSourceComponent to: aTargetComponent for: aDependency [
 	aSourceComponent outgoingDependencies 
 		detect: [ :aComponentDependency | aComponentDependency target = aTargetComponent ]
@@ -74,17 +74,17 @@ FAMIXComponentBuilder >> ensureDependencyFrom: aSourceComponent to: aTargetCompo
 		ifNone: [ dependencies add: (FAMIXComponentDependency new source: aSourceComponent; target: aTargetComponent; addEntityDependency: aDependency) ]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 FAMIXComponentBuilder >> entitiesToComponents [
 	^ entitiesToComponents
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 FAMIXComponentBuilder >> entitiesToComponents: anObject [
 	entitiesToComponents := anObject
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 FAMIXComponentBuilder >> gtComponentsFor: aView [
 	<gtView>
 	^ aView list
@@ -92,7 +92,7 @@ FAMIXComponentBuilder >> gtComponentsFor: aView [
 		items: [ self components ]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 FAMIXComponentBuilder >> gtDependenciesFor: aView [
 	<gtView>
 	^ aView columnedList
@@ -103,7 +103,7 @@ FAMIXComponentBuilder >> gtDependenciesFor: aView [
 		column: 'Amount' format: [:d | d entityDependencies size] width: 100
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 FAMIXComponentBuilder >> gtMapFor: aView [
 	<gtView>
 	^ aView mondrian
@@ -111,7 +111,7 @@ FAMIXComponentBuilder >> gtMapFor: aView [
 		painting: [ :m | self paintMapWith: m ]
 ]
 
-{ #category : #initialize }
+{ #category : 'initialize' }
 FAMIXComponentBuilder >> initialize [
 	super initialize.
 	entitiesToComponents := IdentityDictionary new.
@@ -119,7 +119,7 @@ FAMIXComponentBuilder >> initialize [
 	dependencies := OrderedCollection new
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 FAMIXComponentBuilder >> paintMapWith: m [
 	m nodes 
 		stencil: [ :c | BlTextElement new text: c name asRopedText glamorousRegularFont];

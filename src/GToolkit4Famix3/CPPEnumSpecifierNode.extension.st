@@ -1,11 +1,11 @@
-Extension { #name : #CPPEnumSpecifierNode }
+Extension { #name : 'CPPEnumSpecifierNode' }
 
-{ #category : #'*GToolkit4Famix3' }
+{ #category : '*GToolkit4Famix3' }
 CPPEnumSpecifierNode >> gtHasLinks [
 	^ true
 ]
 
-{ #category : #'*GToolkit4Famix3' }
+{ #category : '*GToolkit4Famix3' }
 CPPEnumSpecifierNode >> gtLinksFor: anEntity do: aBlock [
 	| start stop token |
 	token := name ifNil: [ enumToken ].

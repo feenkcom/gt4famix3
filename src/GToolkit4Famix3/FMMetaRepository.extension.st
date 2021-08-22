@@ -1,6 +1,6 @@
-Extension { #name : #FMMetaRepository }
+Extension { #name : 'FMMetaRepository' }
 
-{ #category : #'*GToolkit4Famix3' }
+{ #category : '*GToolkit4Famix3' }
 FMMetaRepository >> gtGtSpotterClassesFor: aStep [
 	<gtSearch>
 	aStep listProcessor
@@ -11,7 +11,7 @@ FMMetaRepository >> gtGtSpotterClassesFor: aStep [
 		filter: GtFilterSubstring
 ]
 
-{ #category : #'*GToolkit4Famix3' }
+{ #category : '*GToolkit4Famix3' }
 FMMetaRepository >> gtGtSpotterPackagesFor: aStep [
 	<gtSearch>
 	aStep listProcessor

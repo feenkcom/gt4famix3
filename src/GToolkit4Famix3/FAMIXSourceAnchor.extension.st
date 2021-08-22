@@ -1,17 +1,17 @@
-Extension { #name : #FAMIXSourceAnchor }
+Extension { #name : 'FAMIXSourceAnchor' }
 
-{ #category : #'*GToolkit4Famix3' }
+{ #category : '*GToolkit4Famix3' }
 FAMIXSourceAnchor >> gtAddLinksTo: text [
 	
 ]
 
-{ #category : #'*GToolkit4Famix3' }
+{ #category : '*GToolkit4Famix3' }
 FAMIXSourceAnchor >> gtCompleteSourceFor: aView [
 	<gtView>
 	^ self gtSourceFor: aView
 ]
 
-{ #category : #'*GToolkit4Famix3' }
+{ #category : '*GToolkit4Famix3' }
 FAMIXSourceAnchor >> gtSourceFor: aView [
 	<gtView>
 	^ aView textEditor

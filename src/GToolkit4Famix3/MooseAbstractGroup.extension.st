@@ -1,6 +1,6 @@
-Extension { #name : #MooseAbstractGroup }
+Extension { #name : 'MooseAbstractGroup' }
 
-{ #category : #'*GToolkit4Famix3' }
+{ #category : '*GToolkit4Famix3' }
 MooseAbstractGroup >> gtDisplayOn: aStream [ 
 	super gtDisplayOn: aStream.
 	aStream nextPut: $(. 
@@ -8,7 +8,7 @@ MooseAbstractGroup >> gtDisplayOn: aStream [
 	aStream nextPut: $)
 ]
 
-{ #category : #'*GToolkit4Famix3' }
+{ #category : '*GToolkit4Famix3' }
 MooseAbstractGroup >> gtItemsFor: aView [
 	<gtView>
 	^ aView columnedList
@@ -27,7 +27,7 @@ MooseAbstractGroup >> gtItemsFor: aView [
 		column: 'Name' translated text: [ :each | each gtDisplayString ]
 ]
 
-{ #category : #'*GToolkit4Famix3' }
+{ #category : '*GToolkit4Famix3' }
 MooseAbstractGroup >> gtNavigationItems [
 	
 	^ super gtNavigationItems

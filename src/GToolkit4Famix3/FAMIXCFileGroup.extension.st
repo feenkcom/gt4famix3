@@ -1,6 +1,6 @@
-Extension { #name : #FAMIXCFileGroup }
+Extension { #name : 'FAMIXCFileGroup' }
 
-{ #category : #'*GToolkit4Famix3' }
+{ #category : '*GToolkit4Famix3' }
 FAMIXCFileGroup >> gtIncludesOn: aView [
 	<gtView>
 	^ aView mondrian
@@ -8,7 +8,7 @@ FAMIXCFileGroup >> gtIncludesOn: aView [
 		painting: [ :m | self paintIncludesWith: m ]
 ]
 
-{ #category : #'*GToolkit4Famix3' }
+{ #category : '*GToolkit4Famix3' }
 FAMIXCFileGroup >> paintIncludesWith: m [
 	| grouped |
 	grouped := self groupedBy: [:each | each basenameWithoutExtension].

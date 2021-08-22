@@ -1,6 +1,6 @@
-Extension { #name : #FAMIXAnnotationInstance }
+Extension { #name : 'FAMIXAnnotationInstance' }
 
-{ #category : #'*GToolkit4Famix3' }
+{ #category : '*GToolkit4Famix3' }
 FAMIXAnnotationInstance >> gtIcon [
 	^ MooseIcons famixAnnotationInstance
 ]

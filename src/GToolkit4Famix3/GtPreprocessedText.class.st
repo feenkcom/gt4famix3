@@ -1,36 +1,36 @@
 Class {
-	#name : #GtPreprocessedText,
-	#superclass : #Object,
+	#name : 'GtPreprocessedText',
+	#superclass : 'Object',
 	#instVars : [
 		'preprocessedSource',
 		'text'
 	],
-	#category : #GToolkit4Famix3
+	#category : 'GToolkit4Famix3'
 }
 
-{ #category : #converting }
+{ #category : 'converting' }
 GtPreprocessedText >> asString [
 	^ text asString
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtPreprocessedText >> from: startIndex to: stopIndex [
 	^ text
 		from: (preprocessedSource startPositionFor: startIndex)
 		to: (preprocessedSource stopPositionFor: stopIndex)
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtPreprocessedText >> preprocessedSource: anObject [
 	preprocessedSource := anObject
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtPreprocessedText >> size [
 	^ text size
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 GtPreprocessedText >> text: blText [
 	text := blText
 ]

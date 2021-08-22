@@ -1,18 +1,18 @@
-Extension { #name : #FAMIXSourcedEntity }
+Extension { #name : 'FAMIXSourcedEntity' }
 
-{ #category : #'*GToolkit4Famix3' }
+{ #category : '*GToolkit4Famix3' }
 FAMIXSourcedEntity >> astStartPosition: aNumber [
 	<MSEProperty: #astStartPosition type: #Number>
 	self privateState attributeAt: #astStartPosition put: aNumber 
 ]
 
-{ #category : #'*GToolkit4Famix3' }
+{ #category : '*GToolkit4Famix3' }
 FAMIXSourcedEntity >> astStopPosition: aNumber [
 	<MSEProperty: #astStopPosition type: #Number>
 	self privateState attributeAt: #astStopPosition put: aNumber 
 ]
 
-{ #category : #'*GToolkit4Famix3' }
+{ #category : '*GToolkit4Famix3' }
 FAMIXSourcedEntity >> findASTNode [
 	^ self sourceLanguage
 		ifNotNil: [ :lang | 
@@ -23,12 +23,12 @@ FAMIXSourcedEntity >> findASTNode [
 						at: (anchor startPos to: anchor endPos) ] ]
 ]
 
-{ #category : #'*GToolkit4Famix3' }
+{ #category : '*GToolkit4Famix3' }
 FAMIXSourcedEntity >> gtASTNode [
 	^ self propertyNamed: #ast ifAbsentPut: [ self findASTNode ]
 ]
 
-{ #category : #'*GToolkit4Famix3' }
+{ #category : '*GToolkit4Famix3' }
 FAMIXSourcedEntity >> gtLinksForFile: aFileReference do: aBlock [
 	(self propertyNamed: #ast)
 		ifNotNil: [ :ast | 
@@ -41,7 +41,7 @@ FAMIXSourcedEntity >> gtLinksForFile: aFileReference do: aBlock [
 						ifTrue: [ aBlock value: self value: anchor startPos value: anchor endPos ] ] ]
 ]
 
-{ #category : #'*GToolkit4Famix3' }
+{ #category : '*GToolkit4Famix3' }
 FAMIXSourcedEntity >> gtSourceFor: aView [
 	<gtView>
 	^ self hasSourceAnchor 
@@ -49,12 +49,12 @@ FAMIXSourcedEntity >> gtSourceFor: aView [
 		ifTrue: [ self sourceAnchor gtCompleteSourceFor: aView ]
 ]
 
-{ #category : #'*GToolkit4Famix3' }
+{ #category : '*GToolkit4Famix3' }
 FAMIXSourcedEntity >> gtStyler [
 	^ self sourceLanguage ifNotNil: [ :lang | lang gtStyler ]
 ]
 
-{ #category : #'*GToolkit4Famix3' }
+{ #category : '*GToolkit4Famix3' }
 FAMIXSourcedEntity >> spotterPreviewSourceIn: composite [
 	<spotterPreview: 0>
 	composite text 

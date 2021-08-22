@@ -1,37 +1,37 @@
 Class {
-	#name : #FAMIXComponentDependency,
-	#superclass : #FAMIXEntity,
+	#name : 'FAMIXComponentDependency',
+	#superclass : 'FAMIXEntity',
 	#instVars : [
 		'source',
 		'target',
 		'entityDependencies'
 	],
-	#category : #GToolkit4Famix3
+	#category : 'GToolkit4Famix3'
 }
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 FAMIXComponentDependency >> addEntityDependency: anEntityDependency [
 	self entityDependencies add: anEntityDependency 
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 FAMIXComponentDependency >> entityDependencies [
 	^ entityDependencies
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 FAMIXComponentDependency >> entityDependencies: anObject [
 	entityDependencies := anObject
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 FAMIXComponentDependency >> gtDisplayOn: aStream [
 	self source gtDisplayOn: aStream.
 	aStream nextPutAll: ' -> '.
 	self target gtDisplayOn: aStream.
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 FAMIXComponentDependency >> gtEntityDependenciesFor: aView [
 	<gtView>
 	^ aView columnedList 
@@ -42,18 +42,18 @@ FAMIXComponentDependency >> gtEntityDependenciesFor: aView [
 		column: 'Target' format: [:e | e target gtDisplayString]
 ]
 
-{ #category : #inititialize }
+{ #category : 'inititialize' }
 FAMIXComponentDependency >> initialize [
 	super initialize.
 	entityDependencies := OrderedCollection new
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 FAMIXComponentDependency >> source [
 	^ source
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 FAMIXComponentDependency >> source: aComponent [
 	source := FMMultivalueLink on: self
 					update: #outgoingDependencies
@@ -61,12 +61,12 @@ FAMIXComponentDependency >> source: aComponent [
 					to: aComponent
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 FAMIXComponentDependency >> target [
 	^ target
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 FAMIXComponentDependency >> target: aComponent [
 	target := FMMultivalueLink on: self
 					update: #incomingDependencies
