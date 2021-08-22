@@ -1,6 +1,6 @@
-Extension { #name : #MooseIcons }
+Extension { #name : 'MooseIcons' }
 
-{ #category : #'*GToolkit4Famix3' }
+{ #category : '*GToolkit4Famix3' }
 MooseIcons class >> famixAnnotationInstance [
 ^ self icons
 					at: #famixAnnotationInstance ifAbsentPut: [(Form
@@ -10,7 +10,7 @@ MooseIcons class >> famixAnnotationInstance [
 	offset: (0@0))]
 ]
 
-{ #category : #'*GToolkit4Famix3' }
+{ #category : '*GToolkit4Famix3' }
 MooseIcons class >> famixAnnotationInstanceGroup [
 ^ self icons
 					at: #famixAnnotationInstanceGroup ifAbsentPut: [(Form
@@ -20,7 +20,7 @@ MooseIcons class >> famixAnnotationInstanceGroup [
 	offset: (0@0))]
 ]
 
-{ #category : #'*GToolkit4Famix3' }
+{ #category : '*GToolkit4Famix3' }
 MooseIcons class >> famixAnnotationType [
 ^ self icons
 					at: #famixAnnotationType ifAbsentPut: [(Form
@@ -30,7 +30,7 @@ MooseIcons class >> famixAnnotationType [
 	offset: (0@0))]
 ]
 
-{ #category : #'*GToolkit4Famix3' }
+{ #category : '*GToolkit4Famix3' }
 MooseIcons class >> famixAnnotationTypeGroup [
 ^ self icons
 					at: #famixAnnotationTypeGroup ifAbsentPut: [(Form
@@ -40,7 +40,7 @@ MooseIcons class >> famixAnnotationTypeGroup [
 	offset: (0@0))]
 ]
 
-{ #category : #'*GToolkit4Famix3' }
+{ #category : '*GToolkit4Famix3' }
 MooseIcons class >> famixAttribute [
 ^ self icons
 					at: #famixAttribute ifAbsentPut: [(Form
@@ -50,7 +50,7 @@ MooseIcons class >> famixAttribute [
 	offset: (0@0))]
 ]
 
-{ #category : #'*GToolkit4Famix3' }
+{ #category : '*GToolkit4Famix3' }
 MooseIcons class >> famixAttributeGroup [
 ^ self icons
 					at: #famixAttributeGroup ifAbsentPut: [(Form
@@ -60,7 +60,7 @@ MooseIcons class >> famixAttributeGroup [
 	offset: (0@0))]
 ]
 
-{ #category : #'*GToolkit4Famix3' }
+{ #category : '*GToolkit4Famix3' }
 MooseIcons class >> famixClass [
 ^ self icons
 					at: #famixClass ifAbsentPut: [(Form
@@ -70,7 +70,7 @@ MooseIcons class >> famixClass [
 	offset: (0@0))]
 ]
 
-{ #category : #'*GToolkit4Famix3' }
+{ #category : '*GToolkit4Famix3' }
 MooseIcons class >> famixClassGroup [
 ^ self icons
 					at: #famixClassGroup ifAbsentPut: [(Form
@@ -80,7 +80,7 @@ MooseIcons class >> famixClassGroup [
 	offset: (0@0))]
 ]
 
-{ #category : #'*GToolkit4Famix3' }
+{ #category : '*GToolkit4Famix3' }
 MooseIcons class >> famixFunction [
 ^ self icons
 					at: #famixFunction ifAbsentPut: [(Form
@@ -90,7 +90,7 @@ MooseIcons class >> famixFunction [
 	offset: (0@0))]
 ]
 
-{ #category : #'*GToolkit4Famix3' }
+{ #category : '*GToolkit4Famix3' }
 MooseIcons class >> famixFunctionGroup [
 ^ self icons
 					at: #famixFunctionGroup ifAbsentPut: [(Form
@@ -100,7 +100,7 @@ MooseIcons class >> famixFunctionGroup [
 	offset: (0@0))]
 ]
 
-{ #category : #'*GToolkit4Famix3' }
+{ #category : '*GToolkit4Famix3' }
 MooseIcons class >> famixInterface [
 ^ self icons
 					at: #famixInterface ifAbsentPut: [(Form
@@ -110,7 +110,7 @@ MooseIcons class >> famixInterface [
 	offset: (0@0))]
 ]
 
-{ #category : #'*GToolkit4Famix3' }
+{ #category : '*GToolkit4Famix3' }
 MooseIcons class >> famixInterfaceGroup [
 ^ self icons
 					at: #famixInterfaceGroup ifAbsentPut: [(Form
@@ -120,7 +120,7 @@ MooseIcons class >> famixInterfaceGroup [
 	offset: (0@0))]
 ]
 
-{ #category : #'*GToolkit4Famix3' }
+{ #category : '*GToolkit4Famix3' }
 MooseIcons class >> famixMethod [
 ^ self icons
 					at: #famixMethod ifAbsentPut: [(Form
@@ -130,7 +130,7 @@ MooseIcons class >> famixMethod [
 	offset: (0@0))]
 ]
 
-{ #category : #'*GToolkit4Famix3' }
+{ #category : '*GToolkit4Famix3' }
 MooseIcons class >> famixMethodGroup [
 ^ self icons
 					at: #famixMethodGroup ifAbsentPut: [(Form
@@ -140,7 +140,7 @@ MooseIcons class >> famixMethodGroup [
 	offset: (0@0))]
 ]
 
-{ #category : #'*GToolkit4Famix3' }
+{ #category : '*GToolkit4Famix3' }
 MooseIcons class >> famixNamespace [
 ^ self icons
 					at: #famixNamespace ifAbsentPut: [(Form
@@ -150,7 +150,7 @@ MooseIcons class >> famixNamespace [
 	offset: (0@0))]
 ]
 
-{ #category : #'*GToolkit4Famix3' }
+{ #category : '*GToolkit4Famix3' }
 MooseIcons class >> famixNamespaceGroup [
 ^ self icons
 					at: #famixNamespaceGroup ifAbsentPut: [(Form
@@ -160,7 +160,7 @@ MooseIcons class >> famixNamespaceGroup [
 	offset: (0@0))]
 ]
 
-{ #category : #'*GToolkit4Famix3' }
+{ #category : '*GToolkit4Famix3' }
 MooseIcons class >> famixPackage [
 ^ self icons
 					at: #famixPackage ifAbsentPut: [(Form
@@ -170,7 +170,7 @@ MooseIcons class >> famixPackage [
 	offset: (0@0))]
 ]
 
-{ #category : #'*GToolkit4Famix3' }
+{ #category : '*GToolkit4Famix3' }
 MooseIcons class >> famixPackageGroup [
 ^ self icons
 					at: #famixPackageGroup ifAbsentPut: [(Form
@@ -180,7 +180,7 @@ MooseIcons class >> famixPackageGroup [
 	offset: (0@0))]
 ]
 
-{ #category : #'*GToolkit4Famix3' }
+{ #category : '*GToolkit4Famix3' }
 MooseIcons class >> importIcons: iconCollection fromFolder: aString inClass: aClass category: aCategory [
 	iconCollection
 		do: [:each |
@@ -195,7 +195,7 @@ MooseIcons class >> importIcons: iconCollection fromFolder: aString inClass: aCl
 			aClass compile: method classified: aCategory ]
 ]
 
-{ #category : #'*GToolkit4Famix3' }
+{ #category : '*GToolkit4Famix3' }
 MooseIcons class >> importMooseFinderIcons [
 	"self importMooseFinderIcons"
 	| wantedIcons |
@@ -257,7 +257,7 @@ MooseIcons class >> importMooseFinderIcons [
 	self importIcons: wantedIcons fromFolder: 'icons' inClass: self class category: '*moose-finder'
 ]
 
-{ #category : #'*GToolkit4Famix3' }
+{ #category : '*GToolkit4Famix3' }
 MooseIcons class >> mooseAccept [
 ^ self icons
 		at: #mooseAccept ifAbsentPut: [(Form
@@ -267,7 +267,7 @@ MooseIcons class >> mooseAccept [
 	offset: 0@0)]
 ]
 
-{ #category : #'*GToolkit4Famix3' }
+{ #category : '*GToolkit4Famix3' }
 MooseIcons class >> mooseAdd [
 ^ self icons
 		at: #mooseAdd ifAbsentPut: [(Form
@@ -277,7 +277,7 @@ MooseIcons class >> mooseAdd [
 	offset: 0@0)]
 ]
 
-{ #category : #'*GToolkit4Famix3' }
+{ #category : '*GToolkit4Famix3' }
 MooseIcons class >> mooseAst [
 ^ self icons
 					at: #mooseAst ifAbsentPut: [(Form
@@ -287,7 +287,7 @@ MooseIcons class >> mooseAst [
 	offset: (0@0))]
 ]
 
-{ #category : #'*GToolkit4Famix3' }
+{ #category : '*GToolkit4Famix3' }
 MooseIcons class >> mooseBars [
 ^ self icons
 					at: #mooseBars ifAbsentPut: [(Form
@@ -297,7 +297,7 @@ MooseIcons class >> mooseBars [
 	offset: (0@0))]
 ]
 
-{ #category : #'*GToolkit4Famix3' }
+{ #category : '*GToolkit4Famix3' }
 MooseIcons class >> mooseBlueprint [
 ^ self icons
 					at: #mooseBlueprint ifAbsentPut: [(Form
@@ -307,7 +307,7 @@ MooseIcons class >> mooseBlueprint [
 	offset: (0@0))]
 ]
 
-{ #category : #'*GToolkit4Famix3' }
+{ #category : '*GToolkit4Famix3' }
 MooseIcons class >> mooseCancel [
 ^ self icons
 		at: #mooseCancel ifAbsentPut: [(Form
@@ -317,7 +317,7 @@ MooseIcons class >> mooseCancel [
 	offset: 0@0)]
 ]
 
-{ #category : #'*GToolkit4Famix3' }
+{ #category : '*GToolkit4Famix3' }
 MooseIcons class >> mooseCircularTreeMap [
 ^ self icons
 					at: #mooseCircularTreeMap ifAbsentPut: [(Form
@@ -327,7 +327,7 @@ MooseIcons class >> mooseCircularTreeMap [
 	offset: (0@0))]
 ]
 
-{ #category : #'*GToolkit4Famix3' }
+{ #category : '*GToolkit4Famix3' }
 MooseIcons class >> mooseCluster [
 ^ self icons
 					at: #mooseCluster ifAbsentPut: [(Form
@@ -337,7 +337,7 @@ MooseIcons class >> mooseCluster [
 	offset: (0@0))]
 ]
 
-{ #category : #'*GToolkit4Famix3' }
+{ #category : '*GToolkit4Famix3' }
 MooseIcons class >> mooseCycles [
 ^ self icons
 					at: #mooseCycles ifAbsentPut: [(Form
@@ -347,7 +347,7 @@ MooseIcons class >> mooseCycles [
 	offset: (0@0))]
 ]
 
-{ #category : #'*GToolkit4Famix3' }
+{ #category : '*GToolkit4Famix3' }
 MooseIcons class >> mooseDSM [
 ^ self icons
 					at: #mooseDSM ifAbsentPut: [(Form
@@ -357,7 +357,7 @@ MooseIcons class >> mooseDSM [
 	offset: (0@0))]
 ]
 
-{ #category : #'*GToolkit4Famix3' }
+{ #category : '*GToolkit4Famix3' }
 MooseIcons class >> mooseDependencies [
 ^ self icons
 					at: #mooseDependencies ifAbsentPut: [(Form
@@ -367,7 +367,7 @@ MooseIcons class >> mooseDependencies [
 	offset: (0@0))]
 ]
 
-{ #category : #'*GToolkit4Famix3' }
+{ #category : '*GToolkit4Famix3' }
 MooseIcons class >> mooseEditor [
 ^ self icons
 					at: #mooseEditor ifAbsentPut: [(Form
@@ -377,7 +377,7 @@ MooseIcons class >> mooseEditor [
 	offset: (0@0))]
 ]
 
-{ #category : #'*GToolkit4Famix3' }
+{ #category : '*GToolkit4Famix3' }
 MooseIcons class >> mooseEg [
 ^ self icons
 					at: #mooseEg ifAbsentPut: [(Form
@@ -387,7 +387,7 @@ MooseIcons class >> mooseEg [
 	offset: (0@0))]
 ]
 
-{ #category : #'*GToolkit4Famix3' }
+{ #category : '*GToolkit4Famix3' }
 MooseIcons class >> mooseEvaluator [
 ^ self icons
 					at: #mooseEvaluator ifAbsentPut: [(Form
@@ -397,7 +397,7 @@ MooseIcons class >> mooseEvaluator [
 	offset: (0@0))]
 ]
 
-{ #category : #'*GToolkit4Famix3' }
+{ #category : '*GToolkit4Famix3' }
 MooseIcons class >> mooseFame [
 ^ self icons
 					at: #mooseFame ifAbsentPut: [(Form
@@ -407,7 +407,7 @@ MooseIcons class >> mooseFame [
 	offset: (0@0))]
 ]
 
-{ #category : #'*GToolkit4Famix3' }
+{ #category : '*GToolkit4Famix3' }
 MooseIcons class >> mooseFolder [
 ^ self icons
 					at: #mooseFolder ifAbsentPut: [(Form
@@ -417,7 +417,7 @@ MooseIcons class >> mooseFolder [
 	offset: (0@0))]
 ]
 
-{ #category : #'*GToolkit4Famix3' }
+{ #category : '*GToolkit4Famix3' }
 MooseIcons class >> mooseHorizontalBars [
 ^ self icons
 					at: #mooseHorizontalBars ifAbsentPut: [(Form
@@ -427,7 +427,7 @@ MooseIcons class >> mooseHorizontalBars [
 	offset: (0@0))]
 ]
 
-{ #category : #'*GToolkit4Famix3' }
+{ #category : '*GToolkit4Famix3' }
 MooseIcons class >> mooseImportFuel [
 ^ self icons
 					at: #mooseImportFuel ifAbsentPut: [(Form
@@ -437,7 +437,7 @@ MooseIcons class >> mooseImportFuel [
 	offset: (0@0))]
 ]
 
-{ #category : #'*GToolkit4Famix3' }
+{ #category : '*GToolkit4Famix3' }
 MooseIcons class >> mooseImportMse [
 ^ self icons
 					at: #mooseImportMse ifAbsentPut: [(Form
@@ -447,7 +447,7 @@ MooseIcons class >> mooseImportMse [
 	offset: (0@0))]
 ]
 
-{ #category : #'*GToolkit4Famix3' }
+{ #category : '*GToolkit4Famix3' }
 MooseIcons class >> mooseImportSmalltalk [
 ^ self icons
 					at: #mooseImportSmalltalk ifAbsentPut: [(Form
@@ -457,7 +457,7 @@ MooseIcons class >> mooseImportSmalltalk [
 	offset: (0@0))]
 ]
 
-{ #category : #'*GToolkit4Famix3' }
+{ #category : '*GToolkit4Famix3' }
 MooseIcons class >> mooseIncoming [
 ^ self icons
 					at: #mooseIncoming ifAbsentPut: [(Form
@@ -467,12 +467,12 @@ MooseIcons class >> mooseIncoming [
 	offset: (0@0))]
 ]
 
-{ #category : #'*GToolkit4Famix3' }
+{ #category : '*GToolkit4Famix3' }
 MooseIcons class >> mooseInspect [
 	^ GLMUIThemeExtraIcons glamorousInspect
 ]
 
-{ #category : #'*GToolkit4Famix3' }
+{ #category : '*GToolkit4Famix3' }
 MooseIcons class >> mooseList [
 ^ self icons
 					at: #mooseList ifAbsentPut: [(Form
@@ -482,7 +482,7 @@ MooseIcons class >> mooseList [
 	offset: (0@0))]
 ]
 
-{ #category : #'*GToolkit4Famix3' }
+{ #category : '*GToolkit4Famix3' }
 MooseIcons class >> mooseMetamodelEntity [
 ^ self icons
 					at: #mooseMetamodelEntity ifAbsentPut: [(Form
@@ -492,7 +492,7 @@ MooseIcons class >> mooseMetamodelEntity [
 	offset: (0@0))]
 ]
 
-{ #category : #'*GToolkit4Famix3' }
+{ #category : '*GToolkit4Famix3' }
 MooseIcons class >> mooseMetamodelGroup [
 ^ self icons
 					at: #mooseMetamodelGroup ifAbsentPut: [(Form
@@ -502,7 +502,7 @@ MooseIcons class >> mooseMetamodelGroup [
 	offset: (0@0))]
 ]
 
-{ #category : #'*GToolkit4Famix3' }
+{ #category : '*GToolkit4Famix3' }
 MooseIcons class >> mooseMethodsBrowser [
 ^ self icons
 					at: #mooseMethodsBrowser ifAbsentPut: [(Form
@@ -512,7 +512,7 @@ MooseIcons class >> mooseMethodsBrowser [
 	offset: (0@0))]
 ]
 
-{ #category : #'*GToolkit4Famix3' }
+{ #category : '*GToolkit4Famix3' }
 MooseIcons class >> mooseNavigation [
 ^ self icons
 					at: #mooseNavigation ifAbsentPut: [(Form
@@ -522,7 +522,7 @@ MooseIcons class >> mooseNavigation [
 	offset: (0@0))]
 ]
 
-{ #category : #'*GToolkit4Famix3' }
+{ #category : '*GToolkit4Famix3' }
 MooseIcons class >> mooseOutgoing [
 ^ self icons
 					at: #mooseOutgoing ifAbsentPut: [(Form
@@ -532,7 +532,7 @@ MooseIcons class >> mooseOutgoing [
 	offset: (0@0))]
 ]
 
-{ #category : #'*GToolkit4Famix3' }
+{ #category : '*GToolkit4Famix3' }
 MooseIcons class >> mooseProperties [
 ^ self icons
 					at: #mooseProperties ifAbsentPut: [(Form
@@ -542,7 +542,7 @@ MooseIcons class >> mooseProperties [
 	offset: (0@0))]
 ]
 
-{ #category : #'*GToolkit4Famix3' }
+{ #category : '*GToolkit4Famix3' }
 MooseIcons class >> mooseRemove [
 ^ self icons
 		at: #mooseRemove ifAbsentPut: [(Form
@@ -552,7 +552,7 @@ MooseIcons class >> mooseRemove [
 	offset: 0@0)]
 ]
 
-{ #category : #'*GToolkit4Famix3' }
+{ #category : '*GToolkit4Famix3' }
 MooseIcons class >> mooseScatterplot [
 ^ self icons
 					at: #mooseScatterplot ifAbsentPut: [(Form
@@ -562,12 +562,12 @@ MooseIcons class >> mooseScatterplot [
 	offset: (0@0))]
 ]
 
-{ #category : #'*GToolkit4Famix3' }
+{ #category : '*GToolkit4Famix3' }
 MooseIcons class >> mooseSearch [
 	^ GLMUIThemeExtraIcons glamorousSearch 
 ]
 
-{ #category : #'*GToolkit4Famix3' }
+{ #category : '*GToolkit4Famix3' }
 MooseIcons class >> mooseSourceText [
 ^ self icons
 					at: #mooseSourceText ifAbsentPut: [(Form
@@ -577,7 +577,7 @@ MooseIcons class >> mooseSourceText [
 	offset: (0@0))]
 ]
 
-{ #category : #'*GToolkit4Famix3' }
+{ #category : '*GToolkit4Famix3' }
 MooseIcons class >> mooseSourceTextPartial [
 ^ self icons
 					at: #mooseSourceTextPartial ifAbsentPut: [(Form
@@ -587,7 +587,7 @@ MooseIcons class >> mooseSourceTextPartial [
 	offset: (0@0))]
 ]
 
-{ #category : #'*GToolkit4Famix3' }
+{ #category : '*GToolkit4Famix3' }
 MooseIcons class >> mooseSourceTextSelected [
 ^ self icons
 					at: #mooseSourceTextSelected ifAbsentPut: [(Form
@@ -597,7 +597,7 @@ MooseIcons class >> mooseSourceTextSelected [
 	offset: (0@0))]
 ]
 
-{ #category : #'*GToolkit4Famix3' }
+{ #category : '*GToolkit4Famix3' }
 MooseIcons class >> mooseSystemComplexity [
 ^ self icons
 					at: #mooseSystemComplexity ifAbsentPut: [(Form
@@ -607,7 +607,7 @@ MooseIcons class >> mooseSystemComplexity [
 	offset: (0@0))]
 ]
 
-{ #category : #'*GToolkit4Famix3' }
+{ #category : '*GToolkit4Famix3' }
 MooseIcons class >> mooseTree [
 ^ self icons
 					at: #mooseTree ifAbsentPut: [(Form
@@ -617,7 +617,7 @@ MooseIcons class >> mooseTree [
 	offset: (0@0))]
 ]
 
-{ #category : #'*GToolkit4Famix3' }
+{ #category : '*GToolkit4Famix3' }
 MooseIcons class >> mooseTreeMap [
 ^ self icons
 					at: #mooseTreeMap ifAbsentPut: [(Form
@@ -627,7 +627,7 @@ MooseIcons class >> mooseTreeMap [
 	offset: (0@0))]
 ]
 
-{ #category : #'*GToolkit4Famix3' }
+{ #category : '*GToolkit4Famix3' }
 MooseIcons class >> mooseUml [
 ^ self icons
 					at: #mooseUml ifAbsentPut: [(Form
@@ -637,7 +637,7 @@ MooseIcons class >> mooseUml [
 	offset: (0@0))]
 ]
 
-{ #category : #'*GToolkit4Famix3' }
+{ #category : '*GToolkit4Famix3' }
 MooseIcons class >> mooseView [
 ^ self icons
 					at: #mooseView ifAbsentPut: [(Form
@@ -647,7 +647,7 @@ MooseIcons class >> mooseView [
 	offset: (0@0))]
 ]
 
-{ #category : #'*GToolkit4Famix3' }
+{ #category : '*GToolkit4Famix3' }
 MooseIcons class >> mooseXml [
 ^ self icons
 					at: #mooseXml ifAbsentPut: [(Form

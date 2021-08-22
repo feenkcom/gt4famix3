@@ -1,6 +1,6 @@
-Extension { #name : #FAMIXTypeGroup }
+Extension { #name : 'FAMIXTypeGroup' }
 
-{ #category : #'*GToolkit4Famix3' }
+{ #category : '*GToolkit4Famix3' }
 FAMIXTypeGroup >> gtBlueprintHierarchyFor: aView [
 	<gtView>
 	^ aView pannable
@@ -12,7 +12,7 @@ FAMIXTypeGroup >> gtBlueprintHierarchyFor: aView [
 				asElement ]
 ]
 
-{ #category : #'*GToolkit4Famix3' }
+{ #category : '*GToolkit4Famix3' }
 FAMIXTypeGroup >> gtHierarchyFor: aView [
 	<gtView>
 	^ aView mondrian
@@ -21,7 +21,7 @@ FAMIXTypeGroup >> gtHierarchyFor: aView [
 		painting: [ :m | self paintHierarchyWith: m ]
 ]
 
-{ #category : #'*GToolkit4Famix3' }
+{ #category : '*GToolkit4Famix3' }
 FAMIXTypeGroup >> gtWithinNestingMapFor: aView [
 	<gtView>
 	^ aView pannable
@@ -45,7 +45,7 @@ FAMIXTypeGroup >> gtWithinNestingMapFor: aView [
 			treemap asElement ]
 ]
 
-{ #category : #'*GToolkit4Famix3' }
+{ #category : '*GToolkit4Famix3' }
 FAMIXTypeGroup >> paintHierarchyWith: mondrian [
 	mondrian nodes 
 		stencil: [ :c | 

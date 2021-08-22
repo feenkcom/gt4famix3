@@ -1,6 +1,6 @@
-Extension { #name : #FAMIXPackageGroup }
+Extension { #name : 'FAMIXPackageGroup' }
 
-{ #category : #'*GToolkit4Famix3' }
+{ #category : '*GToolkit4Famix3' }
 FAMIXPackageGroup >> gtIcon [
 	^ MooseIcons famixPackageGroup 
 ]

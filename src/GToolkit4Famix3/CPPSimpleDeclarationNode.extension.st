@@ -1,11 +1,11 @@
-Extension { #name : #CPPSimpleDeclarationNode }
+Extension { #name : 'CPPSimpleDeclarationNode' }
 
-{ #category : #'*GToolkit4Famix3' }
+{ #category : '*GToolkit4Famix3' }
 CPPSimpleDeclarationNode >> gtHasLinks [
 	^ true
 ]
 
-{ #category : #'*GToolkit4Famix3' }
+{ #category : '*GToolkit4Famix3' }
 CPPSimpleDeclarationNode >> gtLinksFor: anEntity do: aBlock [
 	(declarators notEmpty
 		and: [ specifiers isEmpty

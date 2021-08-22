@@ -1,6 +1,6 @@
-Extension { #name : #FAMIXAbstractFileAnchor }
+Extension { #name : 'FAMIXAbstractFileAnchor' }
 
-{ #category : #'*GToolkit4Famix3' }
+{ #category : '*GToolkit4Famix3' }
 FAMIXAbstractFileAnchor >> gtAddLinksTo: text [
 	| associations |
 	self correspondingFile ifNil: [ ^ self ].
@@ -32,7 +32,7 @@ FAMIXAbstractFileAnchor >> gtAddLinksTo: text [
 								[ :aText :aTarget :aTextEditor :anEvent | aTarget phlow selectObject: each value ])} ]
 ]
 
-{ #category : #'*GToolkit4Famix3' }
+{ #category : '*GToolkit4Famix3' }
 FAMIXAbstractFileAnchor >> gtCompleteSourceFor: aView [
 	<gtView> 
 	self completeText isEmpty
@@ -52,7 +52,7 @@ FAMIXAbstractFileAnchor >> gtCompleteSourceFor: aView [
 			e ]
 ]
 
-{ #category : #'*GToolkit4Famix3' }
+{ #category : '*GToolkit4Famix3' }
 FAMIXAbstractFileAnchor >> gtText [
 	| text |
 	text := self completeText asRopedText.

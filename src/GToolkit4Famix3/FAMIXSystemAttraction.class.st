@@ -3,8 +3,8 @@ This class encapsulates the logic of the system attraction view. It is applicabl
 
 "
 Class {
-	#name : #FAMIXSystemAttraction,
-	#superclass : #BrStencil,
+	#name : 'FAMIXSystemAttraction',
+	#superclass : 'BrStencil',
 	#instVars : [
 		'classStrongColor',
 		'classPaleColor',
@@ -14,10 +14,10 @@ Class {
 		'attributePaleColor',
 		'types'
 	],
-	#category : #GToolkit4Famix3
+	#category : 'GToolkit4Famix3'
 }
 
-{ #category : #'api - instantiation' }
+{ #category : 'api - instantiation' }
 FAMIXSystemAttraction >> create [
 	<return: #Object>
 
@@ -31,7 +31,7 @@ FAMIXSystemAttraction >> create [
 	^ container asPannableElement
 ]
 
-{ #category : #'initialize-release' }
+{ #category : 'initialize-release' }
 FAMIXSystemAttraction >> initialize [ 
 	classStrongColor := Color black.
 	classPaleColor := Color r: 0.7 g: 0.7 b: 0.7.	
@@ -43,7 +43,7 @@ FAMIXSystemAttraction >> initialize [
 	attributePaleColor := Color r: 0.7 g: 0.7 b: 1.0.
 ]
 
-{ #category : #rendering }
+{ #category : 'rendering' }
 FAMIXSystemAttraction >> paint: classes in: anElement [
 	| methodsToElements attributesToElements allElements classesToElements |
 	classesToElements := IdentityDictionary new.
@@ -210,17 +210,17 @@ FAMIXSystemAttraction >> paint: classes in: anElement [
 	view layout force"
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 FAMIXSystemAttraction >> types [
 	^ types
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 FAMIXSystemAttraction >> types: anObject [
 	types := anObject
 ]
 
-{ #category : #rendering }
+{ #category : 'rendering' }
 FAMIXSystemAttraction >> view: classes highlighting: strongClasses on: view [
 	| methods attributes |
 

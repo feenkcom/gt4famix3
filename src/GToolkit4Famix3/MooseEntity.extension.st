@@ -1,6 +1,6 @@
-Extension { #name : #MooseEntity }
+Extension { #name : 'MooseEntity' }
 
-{ #category : #'*GToolkit4Famix3' }
+{ #category : '*GToolkit4Famix3' }
 MooseEntity >> complexPropertyPragmas [
 	| navProps definedProps |
 	self mooseDescription
@@ -22,17 +22,17 @@ MooseEntity >> complexPropertyPragmas [
 		yourself
 ]
 
-{ #category : #'*GToolkit4Famix3' }
+{ #category : '*GToolkit4Famix3' }
 MooseEntity >> gtASTNode [
 	^ self propertyNamed: #ast ifAbsent: [  ]
 ]
 
-{ #category : #'*GToolkit4Famix3' }
+{ #category : '*GToolkit4Famix3' }
 MooseEntity >> gtIcon [
 	^ MooseIcons mooseMetamodelEntity
 ]
 
-{ #category : #'*GToolkit4Famix3' }
+{ #category : '*GToolkit4Famix3' }
 MooseEntity >> gtNavigationFor: aView [
 	<gtView>
 	^ aView columnedList
@@ -64,7 +64,7 @@ MooseEntity >> gtNavigationFor: aView [
 		send: [ :assoc | assoc value ]
 ]
 
-{ #category : #'*GToolkit4Famix3' }
+{ #category : '*GToolkit4Famix3' }
 MooseEntity >> gtNavigationItems [
 	| pragmaValueAssociations |
 	pragmaValueAssociations := self complexPropertyPragmas collect: [ :pragma | 
@@ -83,7 +83,7 @@ MooseEntity >> gtNavigationItems [
 		sorted: [ :a :b | (a key argumentAt: 1) < (b key argumentAt: 1) ]
 ]
 
-{ #category : #'*GToolkit4Famix3' }
+{ #category : '*GToolkit4Famix3' }
 MooseEntity >> gtPropertiesFor: aView [
 	<gtView>
 	(self mooseDescription notNil
@@ -101,7 +101,7 @@ MooseEntity >> gtPropertiesFor: aView [
 				do: [ :e | e printString ] ]
 ]
 
-{ #category : #'*GToolkit4Famix3' }
+{ #category : '*GToolkit4Famix3' }
 MooseEntity >> mooseSpecificSpotterProcessorsFor: aSpotterStep [
 	| entity assocs pragmaValueAssociations |
 	entity := self.
@@ -126,7 +126,7 @@ MooseEntity >> mooseSpecificSpotterProcessorsFor: aSpotterStep [
 				order: 1 ]
 ]
 
-{ #category : #'*GToolkit4Famix3' }
+{ #category : '*GToolkit4Famix3' }
 MooseEntity >> spotterProcessorsFor: aSpotterStep [
 	super spotterProcessorsFor: aSpotterStep.
 	"self mooseSpecificSpotterProcessorsFor: aSpotterStep"

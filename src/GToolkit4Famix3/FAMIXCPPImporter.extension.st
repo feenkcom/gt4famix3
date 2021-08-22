@@ -1,6 +1,6 @@
-Extension { #name : #FAMIXCPPImporter }
+Extension { #name : 'FAMIXCPPImporter' }
 
-{ #category : #'*GToolkit4Famix3' }
+{ #category : '*GToolkit4Famix3' }
 FAMIXCPPImporter >> gtClassesFor: aView [
 	<gtView>
 	^ aView list
@@ -9,7 +9,7 @@ FAMIXCPPImporter >> gtClassesFor: aView [
 		items: [ classes values sorted: [ :a :b | a mooseName < b mooseName ] ]
 ]
 
-{ #category : #'*GToolkit4Famix3' }
+{ #category : '*GToolkit4Famix3' }
 FAMIXCPPImporter >> gtEnumsFor: aView [
 	<gtView>
 	^ aView list
@@ -18,7 +18,7 @@ FAMIXCPPImporter >> gtEnumsFor: aView [
 		items: [ enums values sorted: [ :a :b | a mooseName < b mooseName ] ]
 ]
 
-{ #category : #'*GToolkit4Famix3' }
+{ #category : '*GToolkit4Famix3' }
 FAMIXCPPImporter >> gtStructsFor: aView [
 	<gtView>
 	^ aView list
@@ -27,7 +27,7 @@ FAMIXCPPImporter >> gtStructsFor: aView [
 		items: [ structs values sorted: [ :a :b | a mooseName < b mooseName ] ]
 ]
 
-{ #category : #'*GToolkit4Famix3' }
+{ #category : '*GToolkit4Famix3' }
 FAMIXCPPImporter >> gtUnionsFor: aView [
 	<gtView>
 	^ aView list

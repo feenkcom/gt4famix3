@@ -1,11 +1,11 @@
-Extension { #name : #CPPParameterDeclarationNode }
+Extension { #name : 'CPPParameterDeclarationNode' }
 
-{ #category : #'*GToolkit4Famix3' }
+{ #category : '*GToolkit4Famix3' }
 CPPParameterDeclarationNode >> gtHasLinks [
 	^ true
 ]
 
-{ #category : #'*GToolkit4Famix3' }
+{ #category : '*GToolkit4Famix3' }
 CPPParameterDeclarationNode >> gtLinksFor: anEntity do: aBlock [
 	| var |
 	var := declarator ifNil: [ specifiers last ].

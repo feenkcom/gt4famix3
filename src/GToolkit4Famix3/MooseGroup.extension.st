@@ -1,6 +1,6 @@
-Extension { #name : #MooseGroup }
+Extension { #name : 'MooseGroup' }
 
-{ #category : #'*GToolkit4Famix3' }
+{ #category : '*GToolkit4Famix3' }
 MooseGroup >> gtDisplayOn: stream [
 	stream 
 			nextPutAll: self description; 
@@ -10,12 +10,12 @@ MooseGroup >> gtDisplayOn: stream [
 			nextPut: $)
 ]
 
-{ #category : #'*GToolkit4Famix3' }
+{ #category : '*GToolkit4Famix3' }
 MooseGroup >> gtIcon [
 	^ MooseIcons mooseMetamodelGroup
 ]
 
-{ #category : #'*GToolkit4Famix3' }
+{ #category : '*GToolkit4Famix3' }
 MooseGroup >> gtSpotterItemsFor: aStep [
 	<gtSearch>
 	^ aStep listProcessor
@@ -28,7 +28,7 @@ MooseGroup >> gtSpotterItemsFor: aStep [
 		wantsToDisplayOnEmptyQuery: true
 ]
 
-{ #category : #'*GToolkit4Famix3' }
+{ #category : '*GToolkit4Famix3' }
 MooseGroup >> spotterItemsFor: aStep [
 	<spotterOrder: 10>
 	^ aStep listProcessor
