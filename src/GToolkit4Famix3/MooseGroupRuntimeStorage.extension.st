@@ -6,7 +6,7 @@ MooseGroupRuntimeStorage >> gtByTypeFor: aView [
 	^ aView columnedList
 		title: 'By type';
 		items: [ byType associations collect: [:assoc | assoc key -> assoc value asMooseGroup ]];
-		column: 'Type' format: [:assoc | assoc key gtDisplayString];
-		column: 'Group' format: [:assoc | assoc value gtDisplayString];
+		column: 'Type' text: [:assoc | assoc key gtDisplayString];
+		column: 'Group' text: [:assoc | assoc value gtDisplayString];
 		send: #value
 ]

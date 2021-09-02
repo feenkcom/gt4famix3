@@ -38,8 +38,8 @@ FAMIXComponentDependency >> gtEntityDependenciesFor: aView [
 		title: 'Dependencies';
 		priority: 0;
 		items: [ self entityDependencies ];
-		column: 'Source' format: [:e | e source gtDisplayString];
-		column: 'Target' format: [:e | e target gtDisplayString]
+		column: 'Source' text: [:e | e source gtDisplayString];
+		column: 'Target' text: [:e | e target gtDisplayString]
 ]
 
 { #category : 'inititialize' }
