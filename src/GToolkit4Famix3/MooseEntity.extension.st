@@ -93,9 +93,9 @@ MooseEntity >> gtPropertiesFor: aView [
 		title: 'Properties';
 		items: [ self mooseDescription allPrimitiveAttributes
 				sorted: [ :x :y | x name < y name ] ];
-		column: 'Properties' item: [ :each | each name ];
+		column: 'Properties' text: [ :each | each name ];
 		column: 'Value'
-			item: [ :each | 
+			text: [ :each | 
 			[ (self mmGetProperty: each) asString ]
 				on: Error
 				do: [ :e | e printString ] ]

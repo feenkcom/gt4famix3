@@ -98,9 +98,9 @@ FAMIXComponentBuilder >> gtDependenciesFor: aView [
 	^ aView columnedList
 		title: 'Dependencies';
 		items: [ self dependencies ];
-		column: 'From' format: [:d | d source gtDisplayString];
-		column: 'To' format: [:d | d target gtDisplayString];
-		column: 'Amount' format: [:d | d entityDependencies size] width: 100
+		column: 'From' text: [:d | d source gtDisplayString];
+		column: 'To' text: [:d | d target gtDisplayString];
+		column: 'Amount' text: [:d | d entityDependencies size] width: 100
 ]
 
 { #category : 'accessing' }

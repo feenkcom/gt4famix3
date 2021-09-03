@@ -41,9 +41,9 @@ FAMIXComponent >> gtIncomingDependenciesFor: aView [
 		title: 'Incoming';
 		priority: 10;
 		items: [ self incomingDependencies ];
-		column: 'From' format: [ :each | each source gtDisplayString ];
-		column: 'To' format: [:each | each target gtDisplayString ];
-		column: 'Amount' format: [:each | each entityDependencies size] width: 100
+		column: 'From' text: [ :each | each source gtDisplayString ];
+		column: 'To' text: [:each | each target gtDisplayString ];
+		column: 'Amount' text: [:each | each entityDependencies size] width: 100
 ]
 
 { #category : 'accessing' }
@@ -53,9 +53,9 @@ FAMIXComponent >> gtOutgoingDependenciesFor: aView [
 		title: 'Outgoing';
 		priority: 20;
 		items: [ self outgoingDependencies ];
-		column: 'From' format: [ :each | each source gtDisplayString ];
-		column: 'To' format: [:each | each target gtDisplayString ];
-		column: 'Amount' format: [:each | each entityDependencies size] width: 100
+		column: 'From' text: [ :each | each source gtDisplayString ];
+		column: 'To' text: [:each | each target gtDisplayString ];
+		column: 'Amount' text: [:each | each entityDependencies size] width: 100
 ]
 
 { #category : 'accessing' }
