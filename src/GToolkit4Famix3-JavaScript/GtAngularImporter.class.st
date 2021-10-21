@@ -27,6 +27,20 @@ GtAngularImporter class >> annotation [
 ]
 
 { #category : #importing }
+GtAngularImporter >> contentsOfFile: aFileReference [
+	| encoding |
+	encoding := [ 
+	            aFileReference binaryReadStreamDo: [ :in | 
+		            (ZnCharacterEncoder detectEncoding: in upToEnd)
+			            identifier ] ]
+		            on: Error
+		            do: [ nil ].
+	^ aFileReference readStreamDo: [ :stream | 
+		  encoding ifNotNil: [ stream encoding: encoding ].
+		  stream upToEnd ]
+]
+
+{ #category : #importing }
 GtAngularImporter >> createSourceAnchorFor: anEntity file: aFileReference start: startPosition end: stopPosition [
 	| relativeFileName |
 	relativeFileName := (String streamContents: [:s | (aFileReference relativeTo: targetModel rootFolder asFileReference)
@@ -116,7 +130,7 @@ GtAngularImporter >> ensureTemplateForUrl: aString [
 GtAngularImporter >> importComponentFromNode: aNode withMapping: mapping inFile: aFileReference inModule: module [
 	| component |
 	component := (self 
-		ensureComponentNamed: (mapping at: 'arg1') value value pharoFromJSString 
+		ensureComponentNamed: (mapping at: 'arg1') source pharoFromJSString 
 		inModule: module)
 		ast: aNode;
 		isStub: false.
@@ -126,9 +140,9 @@ GtAngularImporter >> importComponentFromNode: aNode withMapping: mapping inFile:
 		start: aNode startPosition 
 		end: aNode stopPosition.
 	(mapping at: 'arg2') allNodesDo: [:node | 
-		(node class = JSPropertyAssignmentNode and: [ node key name value = 'templateUrl']) ifTrue: [ 
+		(node class = JSPropertyAssignmentNode and: [ node name name value = 'templateUrl' and: [node value isKindOf: JSLiteralNode]]) ifTrue: [ 
 			component templateUrl: node value asPharoString ].
-		(node class = JSPropertyAssignmentNode and: [ node key name value = 'template']) ifTrue: [ 
+		(node class = JSPropertyAssignmentNode and: [ node name name value = 'template']) ifTrue: [ 
 			self createTemplateFromEmbeddedAssignment: node value fromComponent: component ] ].
 	^ component
 ]
@@ -136,20 +150,20 @@ GtAngularImporter >> importComponentFromNode: aNode withMapping: mapping inFile:
 { #category : #importing }
 GtAngularImporter >> importComponentsInModule: module inFile: file [
 	module ast 
-		expressionsMatching: '`something`.component(`arg1`, `arg2`)' 
+		expressionsMatching: '``?something`.component(``?arg1`, ``?arg2`)' 
 		do: [ :each :mapping | self importComponentFromNode: each withMapping: mapping inFile: file inModule: module ].
 	module ast 
-		expressionsMatching: '`something`.directive(`arg1`, `arg2`)' 
+		expressionsMatching: '``?something`.directive(``?arg1`, ``?arg2`)' 
 		do: [ :each :mapping | self importComponentFromNode: each withMapping: mapping inFile: file inModule: module ].
 ]
 
 { #category : #importing }
 GtAngularImporter >> importConfigurationsOfModule: module inFile: aFileReference [
 	module ast 
-		expressionsMatching: '`something`.config(`arg`)' 
+		expressionsMatching: '``?something`.config(``?arg`)' 
 		do: [ :config :m | 
 			config 
-				expressionsMatching: '$routeProvider.when(`arg1`, `arg2`)' 
+				expressionsMatching: '$routeProvider.when(``?arg1`, ``?arg2`)' 
 				do: [ :each :mapping | 
 					self  
 						importRouteProviderFromNode: each 
@@ -183,16 +197,18 @@ GtAngularImporter >> importDirectory: aRootDirectory [
 { #category : #importing }
 GtAngularImporter >> importHtmlFile: aFileReference [
 	| template relativeFileName |
-	relativeFileName := (String streamContents: [:s | (aFileReference relativeTo: targetModel rootFolder asFileReference)
-				printOn: s
-				delimiter: $/ ]).
+	relativeFileName := String streamContents: [ :s | 
+		                    (aFileReference relativeTo:
+			                     targetModel rootFolder asFileReference)
+			                    printOn: s
+			                    delimiter: $/ ].
 	template := GtAngularTemplate new name: relativeFileName.
-	self 
+	self
 		createSourceAnchorFor: template
-		fileName: relativeFileName			
+		fileName: relativeFileName
 		start: 1
-		end: aFileReference contents size.
-	targetModel add: template.
+		end: (self contentsOfFile: aFileReference) size.
+	targetModel add: template
 ]
 
 { #category : #importing }
@@ -205,7 +221,7 @@ GtAngularImporter >> importInjectableWithOneArgFromNode: rootNode in: module def
 { #category : #importing }
 GtAngularImporter >> importInjectableWithTwoArgsFor: anAngularInjectionFunctionName fromNode: rootNode in: module definedInNode: moduleNode [
 	| factoryPattern mappings injectionVariable injectable |
-	factoryPattern := JSParser parse: '`something`.', anAngularInjectionFunctionName, '(`arg1`, `arg2`)' startingAt: JSParser startingStateForExpression. 
+	factoryPattern := JSParser parse: '``?something`.', anAngularInjectionFunctionName, '(``?arg1`, ``?arg2`)' startingAt: JSParser startingStateForExpression. 
 	rootNode allNodesDo: [ :node | 
 		mappings := Dictionary new.
 		factoryPattern match: node inContext: mappings.
@@ -233,26 +249,29 @@ GtAngularImporter >> importInjectableWithTwoArgsFromNode: rootNode in: module de
 
 { #category : #importing }
 GtAngularImporter >> importJSFile: file [
-	| rootNode  |
-	rootNode := JSParser parse: file contents.
-	^ rootNode 
-		expressionsMatching: 'angular.module(`arg1`, `arg2`)' 
-		do: [ :node :mapping | 
-			| module submodules parentModule |
-			parentModule := (mapping at: 'arg1') value value value pharoFromJSString.
-			submodules := (mapping at: 'arg2') value expressions collect: [:expr | 
-									expr value value pharoFromJSString ].
-			module := (self ensureModuleNamed: parentModule)
-						addDependencies: (submodules collect: [ :sub | self ensureModuleNamed: sub ]);
-						addDefiningFile: file;
-						ast: rootNode;
-						isStub: false.
-			self importComponentsInModule: module inFile: file.
-			self importConfigurationsOfModule: module inFile: file.
-			self
-				importInjectableWithTwoArgsFromNode: rootNode
-				in: module
-				definedInNode: node  ]
+	| rootNode |
+	rootNode := JSParser parseWithErrors: (self contentsOfFile: file).
+	^ rootNode
+		  expressionsMatching: 'angular.module(``?arg1`, ``?arg2`)'
+		  do: [ :node :mapping | 
+			  | module submodules parentModule |
+			  parentModule := (mapping at: 'arg1') value value value
+				                  pharoFromJSString.
+			  submodules := (mapping at: 'arg2') value expressions collect: [ 
+				                :expr | expr value value pharoFromJSString ].
+			  module := (self ensureModuleNamed: parentModule)
+				            addDependencies:
+					            (submodules collect: [ :sub | 
+							             self ensureModuleNamed: sub ]);
+				            addDefiningFile: file;
+				            ast: rootNode;
+				            isStub: false.
+			  self importComponentsInModule: module inFile: file.
+			  self importConfigurationsOfModule: module inFile: file.
+			  self
+				  importInjectableWithTwoArgsFromNode: rootNode
+				  in: module
+				  definedInNode: node ]
 ]
 
 { #category : #importing }
@@ -290,9 +309,9 @@ GtAngularImporter >> importRouteProviderFromVariableDefinitionNode: aNode withSt
 		start: aNode startPosition 
 		end: aNode stopPosition.
 	statements withAllNodesDo: [:node | 
-		(node class = JSPropertyAssignmentNode and: [ node key name value = 'templateUrl' and: [node value class = JSStringLiteralNode]]) ifTrue: [ 
+		(node class = JSPropertyAssignmentNode and: [ node name name value = 'templateUrl' and: [node value class = JSStringLiteralNode]]) ifTrue: [ 
 			component templateUrl: node value asPharoString ].
-		(node class = JSPropertyAssignmentNode and: [ node key name value = 'template']) ifTrue: [ 
+		(node class = JSPropertyAssignmentNode and: [ node name name value = 'template']) ifTrue: [ 
 			self createTemplateFromEmbeddedAssignment: node value fromComponent: component ] ].
 	^ component
 ]
@@ -334,7 +353,7 @@ GtAngularImporter >> resolveInjectables [
 		injectable fkJsAST arguments size = 2 ifTrue: [
 			possibleFunction := injectable fkJsAST arguments second.
 			(possibleFunction isKindOf: JSFunctionNode) ifTrue: [
-				possibleFunction arguments do: [ :possiblyInjectedArgument | 
+				possibleFunction parameters do: [ :possiblyInjectedArgument | 
 					self injectables 
 						at: possiblyInjectedArgument value
 						ifPresent: [ :usedInjectable | 
