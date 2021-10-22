@@ -33,10 +33,14 @@ GtAngularComponent >> hasTemplate [
 
 { #category : #accessing }
 GtAngularComponent >> htmlName [
-	| upper camelCase |
-	upper := ($A to: $Z) asParser.
-	camelCase := upper negate star flatten , (upper, upper negate star flatten  ==> [:t | t first asString, t second]) star ==> [:t | Array with: t first withAll: t second].
-	^ ('-' join: (camelCase end parse: self name)) asLowercase
+	| first |
+	first := false.
+	^ String streamContents: [ :stream | 
+		  self name do: [ :each | 
+			  (first not and: [ each isUppercase ]) ifTrue: [ 
+				  stream nextPut: $- ].
+			  stream nextPut: each asLowercase.
+			  first := false ] ]
 ]
 
 { #category : #queries }
