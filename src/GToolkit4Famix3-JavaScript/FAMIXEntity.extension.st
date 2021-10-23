@@ -2,12 +2,12 @@ Extension { #name : #FAMIXEntity }
 
 { #category : #'*GToolkit4Famix3-JavaScript' }
 FAMIXEntity >> fkJsAST [
-	^ self privateState attributeAt: #fkJsAST ifAbsent: [ nil ]
+	^ self propertyNamed: #ast
 ]
 
 { #category : #'*GToolkit4Famix3-JavaScript' }
 FAMIXEntity >> fkJsAST: anAST [
-	^ self privateState attributeAt: #fkJsAST put: anAST
+	^ self propertyNamed: #ast put: anAST
 ]
 
 { #category : #'*GToolkit4Famix3-JavaScript' }
