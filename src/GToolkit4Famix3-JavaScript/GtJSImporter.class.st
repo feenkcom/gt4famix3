@@ -20,7 +20,8 @@ Class {
 		'stringType',
 		'numberType',
 		'booleanType',
-		'includeASTNodes'
+		'includeASTNodes',
+		'shouldProcessInvocations'
 	],
 	#category : #'GToolkit4Famix3-JavaScript-Importer'
 }
@@ -71,6 +72,20 @@ GtJSImporter >> codeScope [
 			(self isCodeItem: each)
 				ifTrue: [ ^ each ] ].
 	^ nil
+]
+
+{ #category : #importing }
+GtJSImporter >> contentsOfFile: aFileReference [
+	| encoding |
+	encoding := [ 
+	            aFileReference binaryReadStreamDo: [ :in | 
+		            (ZnCharacterEncoder detectEncoding: in upToEnd)
+			            identifier ] ]
+		            on: Error
+		            do: [ nil ].
+	^ aFileReference readStreamDo: [ :stream | 
+		  encoding ifNotNil: [ stream encoding: encoding ].
+		  stream upToEnd ]
 ]
 
 { #category : #'private-model' }
@@ -313,13 +328,17 @@ GtJSImporter >> functionNameFor: aFunction [
 { #category : #private }
 GtJSImporter >> hookupPotentialInvocations [
 	| changed |
+	self shouldProcessInvocations ifFalse: [ ^ self ].
 	changed := true.
 	[ changed ]
-		whileTrue: [ changed := false.
+		whileTrue:
+			[ changed := false.
 			model allJSInvocations
-				do: [ :each | 
+				do:
+					[ :each | 
 					each receiver notNil
-						ifTrue: [ each receiver allPotentialJSFunctionsDo: [ :function | changed := changed | (self addCandidate: function to: each) ] ] ] ]
+						ifTrue:
+							[ each receiver allPotentialJSFunctionsDo: [ :function | changed := changed | (self addCandidate: function to: each) ] ] ] ]
 ]
 
 { #category : #importing }
@@ -338,10 +357,9 @@ GtJSImporter >> importDirectory: aDirectory excluding: patternCollection [
 GtJSImporter >> importJSFile: aFile [
 	| ast |
 	self startingImportingFile.
-	ast := self parserClass
-		parseWithErrors: aFile asFileReference contents.
+	ast := self parserClass parseWithErrors: (self contentsOfFile: aFile asFileReference).
 	ast filename: aFile.
-	self acceptNode: ast.
+	self processJSAst: ast.
 	self finishImportingFile
 ]
 
@@ -509,6 +527,11 @@ GtJSImporter >> processCallExpressions [
 				ifNotNil: [ :file | file addEntity: invocation ] ]
 ]
 
+{ #category : #importing }
+GtJSImporter >> processJSAst: ast [
+	self acceptNode: ast
+]
+
 { #category : #private }
 GtJSImporter >> processVariableReference: node in: entity [
 	| var access |
@@ -561,6 +584,16 @@ GtJSImporter >> relativeNameFor: anAstNode includeExtension: aBoolean [
 { #category : #accessing }
 GtJSImporter >> scriptNamed: aString [
 	^ scripts detect: [ :each | each name = aString ] ifNone: [  ]
+]
+
+{ #category : #accessing }
+GtJSImporter >> shouldProcessInvocations [
+	^ shouldProcessInvocations ifNil: [ true ]
+]
+
+{ #category : #accessing }
+GtJSImporter >> shouldProcessInvocations: aBoolean [
+	shouldProcessInvocations := aBoolean
 ]
 
 { #category : #'private-model' }
