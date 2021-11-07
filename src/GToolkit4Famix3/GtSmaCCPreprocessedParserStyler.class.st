@@ -1,6 +1,6 @@
 Class {
-	#name : 'GtSmaCCPreprocessedParserStyler',
-	#superclass : 'GtSmaCCParserStyler',
+	#name : #GtSmaCCPreprocessedParserStyler,
+	#superclass : #GtSmaCCParserStyler,
 	#instVars : [
 		'preprocessedSource',
 		'preprocessor'
@@ -8,7 +8,7 @@ Class {
 	#category : 'GToolkit4Famix3'
 }
 
-{ #category : 'private' }
+{ #category : #private }
 GtSmaCCPreprocessedParserStyler >> astForText: aText [
 	preprocessedSource := preprocessor copy
 		processSource: aText asString
@@ -20,12 +20,12 @@ GtSmaCCPreprocessedParserStyler >> astForText: aText [
 		startingAt: self startingState
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 GtSmaCCPreprocessedParserStyler >> preprocessor: anObject [
 	preprocessor := anObject
 ]
 
-{ #category : 'private' }
+{ #category : #private }
 GtSmaCCPreprocessedParserStyler >> privateStyle: aText [
 	[ | ast |
 	text := GtPreprocessedText new text: aText.

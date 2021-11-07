@@ -1,1 +1,1 @@
-Package { #name : 'GToolkit4Famix3' }
+Package { #name : #GToolkit4Famix3 }

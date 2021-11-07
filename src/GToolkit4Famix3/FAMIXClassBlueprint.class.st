@@ -1,6 +1,6 @@
 Class {
-	#name : 'FAMIXClassBlueprint',
-	#superclass : 'BrStencil',
+	#name : #FAMIXClassBlueprint,
+	#superclass : #BrStencil,
 	#instVars : [
 		'types',
 		'methodsToElements',
@@ -10,7 +10,7 @@ Class {
 	#category : 'GToolkit4Famix3'
 }
 
-{ #category : 'rendering' }
+{ #category : #rendering }
 FAMIXClassBlueprint >> colorForMethod: aMethod [
 	
 	aMethod isPureAccessor ifTrue: [ ^ Color orange alpha: 0.5].
@@ -28,7 +28,7 @@ FAMIXClassBlueprint >> colorForMethod: aMethod [
 	^ Color lightGray alpha: 0.2
 ]
 
-{ #category : 'rendering' }
+{ #category : #rendering }
 FAMIXClassBlueprint >> create [
 	| container |
 	container := BlElement new 
@@ -84,7 +84,7 @@ FAMIXClassBlueprint >> create [
 	^ container
 ]
 
-{ #category : 'rendering' }
+{ #category : #rendering }
 FAMIXClassBlueprint >> createLayerForAttributes: aCollection [
 	| attributesContainer layerLabel |
 	attributesContainer := BlElement new 
@@ -124,7 +124,7 @@ FAMIXClassBlueprint >> createLayerForAttributes: aCollection [
 		when: BlClickEvent do: [:e | e target phlow spawnObject: aCollection. e consumed: true ].
 ]
 
-{ #category : 'rendering' }
+{ #category : #rendering }
 FAMIXClassBlueprint >> createLayerForMethods: aCollection named: aString [
 	| methodsContainer layerLabel layerMethodsToElements |
 	layerMethodsToElements := IdentityDictionary new.
@@ -172,7 +172,7 @@ FAMIXClassBlueprint >> createLayerForMethods: aCollection named: aString [
 		when: BlClickEvent do: [:e | e target phlow spawnObject: aCollection. e consumed: true ].
 ]
 
-{ #category : 'rendering' }
+{ #category : #rendering }
 FAMIXClassBlueprint >> createType: aType [
 	| childrenContainer classLabel classElement |
 	childrenContainer := BlElement new
@@ -208,7 +208,7 @@ FAMIXClassBlueprint >> createType: aType [
 	^ classElement
 ]
 
-{ #category : 'initialization' }
+{ #category : #initialization }
 FAMIXClassBlueprint >> initialize [
 	super initialize.
 	methodsToElements := IdentityDictionary new.
@@ -217,12 +217,12 @@ FAMIXClassBlueprint >> initialize [
 	types := OrderedCollection new
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 FAMIXClassBlueprint >> type: aType [
 	types := { aType }
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 FAMIXClassBlueprint >> types: aCollection [
 	types := aCollection
 ]

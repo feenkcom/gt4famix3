@@ -1,6 +1,6 @@
-Extension { #name : 'MooseModel' }
+Extension { #name : #MooseModel }
 
-{ #category : '*GToolkit4Famix3' }
+{ #category : #'*GToolkit4Famix3' }
 MooseModel >> fileAnchorFor: aFileReference [
 	| encoding |
 	aFileReference exists
@@ -21,7 +21,7 @@ MooseModel >> fileAnchorFor: aFileReference [
 		model: self
 ]
 
-{ #category : '*GToolkit4Famix3' }
+{ #category : #'*GToolkit4Famix3' }
 MooseModel >> generateAstPositionsFor: each basedOn: item [
 	^ each sourceAnchor isNil
 		ifTrue: [ | start stop |
@@ -45,7 +45,7 @@ MooseModel >> generateAstPositionsFor: each basedOn: item [
 												yourself) ] ] ] ]
 ]
 
-{ #category : '*GToolkit4Famix3' }
+{ #category : #'*GToolkit4Famix3' }
 MooseModel >> generateFileEntities [
 	| files |
 	files := Dictionary new.
@@ -75,7 +75,7 @@ MooseModel >> generateFileEntities [
 						ifTrue: [ each sourceAnchor correspondingFile: file ] ] ]
 ]
 
-{ #category : '*GToolkit4Famix3' }
+{ #category : #'*GToolkit4Famix3' }
 MooseModel >> generateMisssingSourceAnchors [
 	(self allWithSubTypesOf: FAMIXAssociation)
 		do: [ :each | self generateAstPositionsFor: each basedOn: each from ].
@@ -86,30 +86,30 @@ MooseModel >> generateMisssingSourceAnchors [
 		do: [ :each | self generateAstPositionsFor: each basedOn: each belongsTo ]
 ]
 
-{ #category : '*GToolkit4Famix3' }
+{ #category : #'*GToolkit4Famix3' }
 MooseModel >> gtItemsFor: aView [
 	^ aView empty
 ]
 
-{ #category : '*GToolkit4Famix3' }
+{ #category : #'*GToolkit4Famix3' }
 MooseModel >> gtSpotterAnnotationTypesFor: aStep [
 	<gtSearch>
 	self spotter: 'Annotation types' on: [ self allAnnotationTypes ] for: aStep
 ]
 
-{ #category : '*GToolkit4Famix3' }
+{ #category : #'*GToolkit4Famix3' }
 MooseModel >> gtSpotterClassesFor: aStep [
 	<gtSearch>
 	self spotter: 'Classes' on: [ self allClasses ] for: aStep
 ]
 
-{ #category : '*GToolkit4Famix3' }
+{ #category : #'*GToolkit4Famix3' }
 MooseModel >> gtSpotterMethodsFor: aStep [
 	<gtSearch>
 	self spotter: 'Methods' on: [ self allMethods ] for: aStep
 ]
 
-{ #category : '*GToolkit4Famix3' }
+{ #category : #'*GToolkit4Famix3' }
 MooseModel >> spotter: aStringTitle on: aCandidatesBlock for: aStep [
 	aCandidatesBlock value isEmpty ifTrue: [ ^ self ].
 	^ aStep listProcessor
@@ -125,13 +125,13 @@ MooseModel >> spotter: aStringTitle on: aCandidatesBlock for: aStep [
 		wantsToDisplayOnEmptyQuery: true
 ]
 
-{ #category : '*GToolkit4Famix3' }
+{ #category : #'*GToolkit4Famix3' }
 MooseModel >> spotterClassesFor: aStep [
 	<spotterOrder: 20>
 	self spotter: 'All classes' on: [ self allClasses ] for: aStep
 ]
 
-{ #category : '*GToolkit4Famix3' }
+{ #category : #'*GToolkit4Famix3' }
 MooseModel >> spotterMethodsFor: aStep [
 	<spotterOrder: 30>
 	self spotter: 'All methods' on: [ self allMethods ] for: aStep

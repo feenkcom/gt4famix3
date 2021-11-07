@@ -1,6 +1,6 @@
-Extension { #name : 'FAMIXFolder' }
+Extension { #name : #FAMIXFolder }
 
-{ #category : '*GToolkit4Famix3' }
+{ #category : #'*GToolkit4Famix3' }
 FAMIXFolder >> gtFilesFor: aView [
 	<gtView>
 	^ aView list 
@@ -10,7 +10,7 @@ FAMIXFolder >> gtFilesFor: aView [
 		itemFormat: #name
 ]
 
-{ #category : '*GToolkit4Famix3' }
+{ #category : #'*GToolkit4Famix3' }
 FAMIXFolder >> gtNestingFor: aView [
 	<gtView>
 	^ aView pannable 

@@ -1,11 +1,11 @@
-Extension { #name : 'CPPFunctionDefinitionNode' }
+Extension { #name : #CPPFunctionDefinitionNode }
 
-{ #category : '*GToolkit4Famix3' }
+{ #category : #'*GToolkit4Famix3' }
 CPPFunctionDefinitionNode >> gtHasLinks [
 	^ true
 ]
 
-{ #category : '*GToolkit4Famix3' }
+{ #category : #'*GToolkit4Famix3' }
 CPPFunctionDefinitionNode >> gtLinksFor: anEntity do: aBlock [
 	| entity |
 	entity := ((anEntity isKindOf: FAMIXCPPMethodImplementation)

@@ -1,6 +1,6 @@
-Extension { #name : 'FAMIXPreprocessedCppSourceLanguage' }
+Extension { #name : #FAMIXPreprocessedCppSourceLanguage }
 
-{ #category : '*GToolkit4Famix3' }
+{ #category : #'*GToolkit4Famix3' }
 FAMIXPreprocessedCppSourceLanguage >> gtASTNodeFor: aString at: anInterval [
 	| ast preprocessedSource innerNode |
 	preprocessedSource := preprocessor copy
@@ -19,7 +19,7 @@ FAMIXPreprocessedCppSourceLanguage >> gtASTNodeFor: aString at: anInterval [
 	^ innerNode
 ]
 
-{ #category : '*GToolkit4Famix3' }
+{ #category : #'*GToolkit4Famix3' }
 FAMIXPreprocessedCppSourceLanguage >> gtStyler [
 	^ (GtSmaCCPreprocessedParserStyler cppStyler: CPPParser)
 		preprocessor: preprocessor copy

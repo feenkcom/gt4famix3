@@ -1,11 +1,11 @@
-Extension { #name : 'CPPClassSpecifierNode' }
+Extension { #name : #CPPClassSpecifierNode }
 
-{ #category : '*GToolkit4Famix3' }
+{ #category : #'*GToolkit4Famix3' }
 CPPClassSpecifierNode >> gtHasLinks [
 	^ true
 ]
 
-{ #category : '*GToolkit4Famix3' }
+{ #category : #'*GToolkit4Famix3' }
 CPPClassSpecifierNode >> gtLinksFor: anEntity do: aBlock [
 	| start stop token |
 	name notNil

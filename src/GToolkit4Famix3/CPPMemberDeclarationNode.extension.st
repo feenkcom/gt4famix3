@@ -1,11 +1,11 @@
-Extension { #name : 'CPPMemberDeclarationNode' }
+Extension { #name : #CPPMemberDeclarationNode }
 
-{ #category : '*GToolkit4Famix3' }
+{ #category : #'*GToolkit4Famix3' }
 CPPMemberDeclarationNode >> gtHasLinks [
 	^ true
 ]
 
-{ #category : '*GToolkit4Famix3' }
+{ #category : #'*GToolkit4Famix3' }
 CPPMemberDeclarationNode >> gtLinksFor: anEntity do: aBlock [
 	self declarators isEmpty
 		ifTrue: [ self specifiers isEmpty
