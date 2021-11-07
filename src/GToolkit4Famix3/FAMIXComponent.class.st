@@ -3,8 +3,8 @@ A generic component
 
 "
 Class {
-	#name : 'FAMIXComponent',
-	#superclass : 'FAMIXEntity',
+	#name : #FAMIXComponent,
+	#superclass : #FAMIXEntity,
 	#instVars : [
 		'name',
 		'outgoingDependencies',
@@ -14,18 +14,18 @@ Class {
 	#category : 'GToolkit4Famix3'
 }
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 FAMIXComponent >> entities [
 	<MSEProperty: #entities type: #FAMIXEntity>
 	^ entities
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 FAMIXComponent >> entities: anObject [
 	entities := anObject
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 FAMIXComponent >> gtEntitiesFor: aView [
 	<gtView>
 	^ aView list 
@@ -34,7 +34,7 @@ FAMIXComponent >> gtEntitiesFor: aView [
 		items: [ self entities sorted: [:a :b | a gtDisplayString < b gtDisplayString ]]
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 FAMIXComponent >> gtIncomingDependenciesFor: aView [
 	<gtView>
 	^ aView columnedList 
@@ -46,7 +46,7 @@ FAMIXComponent >> gtIncomingDependenciesFor: aView [
 		column: 'Amount' text: [:each | each entityDependencies size] width: 100
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 FAMIXComponent >> gtOutgoingDependenciesFor: aView [
 	<gtView>
 	^ aView columnedList 
@@ -58,18 +58,18 @@ FAMIXComponent >> gtOutgoingDependenciesFor: aView [
 		column: 'Amount' text: [:each | each entityDependencies size] width: 100
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 FAMIXComponent >> incomingDependencies [
 	<MSEProperty: #entities type: #FAMIXComponentDependency>
 	^ incomingDependencies
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 FAMIXComponent >> incomingDependencies: anObject [
 	incomingDependencies := anObject
 ]
 
-{ #category : 'initialization' }
+{ #category : #initialization }
 FAMIXComponent >> initialize [
 	super initialize.
 	entities := OrderedCollection new.
@@ -77,23 +77,23 @@ FAMIXComponent >> initialize [
 	incomingDependencies := FMNullMultivalueLink on: self opposite: #target: selector: #incomingDependencies.
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 FAMIXComponent >> name [
 	^ name
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 FAMIXComponent >> name: anObject [
 	name := anObject
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 FAMIXComponent >> outgoingDependencies [
 	<MSEProperty: #entities type: #FAMIXComponentDependency>
 	^ outgoingDependencies
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 FAMIXComponent >> outgoingDependencies: anObject [
 	outgoingDependencies := anObject
 ]

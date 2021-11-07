@@ -1,11 +1,11 @@
-Extension { #name : 'CPPLabeledStatementNode' }
+Extension { #name : #CPPLabeledStatementNode }
 
-{ #category : '*GToolkit4Famix3' }
+{ #category : #'*GToolkit4Famix3' }
 CPPLabeledStatementNode >> gtHasLinks [
 	^ true
 ]
 
-{ #category : '*GToolkit4Famix3' }
+{ #category : #'*GToolkit4Famix3' }
 CPPLabeledStatementNode >> gtLinksFor: anEntity do: aBlock [
 	aBlock
 		value: anEntity

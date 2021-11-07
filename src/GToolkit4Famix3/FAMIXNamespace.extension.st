@@ -1,6 +1,6 @@
-Extension { #name : 'FAMIXNamespace' }
+Extension { #name : #FAMIXNamespace }
 
-{ #category : '*GToolkit4Famix3' }
+{ #category : #'*GToolkit4Famix3' }
 FAMIXNamespace >> gtChildrenFor: aView [
 	<gtView>
 	^ aView tree
@@ -22,12 +22,12 @@ FAMIXNamespace >> gtChildrenFor: aView [
 				entity1 name < entity2 name] ]
 ]
 
-{ #category : '*GToolkit4Famix3' }
+{ #category : #'*GToolkit4Famix3' }
 FAMIXNamespace >> gtIcon [
 	^ MooseIcons famixNamespace
 ]
 
-{ #category : '*GToolkit4Famix3' }
+{ #category : #'*GToolkit4Famix3' }
 FAMIXNamespace >> gtNestingFor: aView [
 	<gtView>
 	^ aView pannable 

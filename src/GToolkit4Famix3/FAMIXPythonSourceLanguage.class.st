@@ -1,16 +1,16 @@
 Class {
-	#name : 'FAMIXPythonSourceLanguage',
-	#superclass : 'FAMIXSourceLanguage',
+	#name : #FAMIXPythonSourceLanguage,
+	#superclass : #FAMIXSourceLanguage,
 	#category : 'GToolkit4Famix3-Python'
 }
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 FAMIXPythonSourceLanguage class >> annotation [
 	<MSEClass: #PythonSourceLanguage super: #FAMIXSourceLanguage>
 	<package: #FAMIX>
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 FAMIXPythonSourceLanguage >> gtASTNodeFor: aString at: anInterval [
 	| ast |
 	ast := PythonParser parseWithErrors: aString.
@@ -22,12 +22,12 @@ FAMIXPythonSourceLanguage >> gtASTNodeFor: aString at: anInterval [
 	^ nil
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 FAMIXPythonSourceLanguage >> gtStyler [
 	^ PythonParser gtStyler
 ]
 
-{ #category : 'accessing' }
+{ #category : #accessing }
 FAMIXPythonSourceLanguage >> isPython [
 	^ true
 ]

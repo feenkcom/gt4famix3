@@ -1,11 +1,11 @@
-Extension { #name : 'CPPLambdaExpressionNode' }
+Extension { #name : #CPPLambdaExpressionNode }
 
-{ #category : '*GToolkit4Famix3' }
+{ #category : #'*GToolkit4Famix3' }
 CPPLambdaExpressionNode >> gtHasLinks [
 	^ true
 ]
 
-{ #category : '*GToolkit4Famix3' }
+{ #category : #'*GToolkit4Famix3' }
 CPPLambdaExpressionNode >> gtLinksFor: anEntity do: aBlock [
 	self arrow isNil
 		ifTrue: [ ^ self ].

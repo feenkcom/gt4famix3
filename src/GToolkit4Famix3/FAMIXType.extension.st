@@ -1,6 +1,6 @@
-Extension { #name : 'FAMIXType' }
+Extension { #name : #FAMIXType }
 
-{ #category : '*GToolkit4Famix3' }
+{ #category : #'*GToolkit4Famix3' }
 FAMIXType >> gtAttributesFor: aView [
 	<gtView>
 	^ aView columnedList
@@ -13,7 +13,7 @@ FAMIXType >> gtAttributesFor: aView [
 			text: [ :each | each declaredType gtDisplayString ]
 ]
 
-{ #category : '*GToolkit4Famix3' }
+{ #category : #'*GToolkit4Famix3' }
 FAMIXType >> gtBlueprintFor: aView [
 	<gtView>
 	^ aView explicit
@@ -21,7 +21,7 @@ FAMIXType >> gtBlueprintFor: aView [
 		stencil: [ (FAMIXClassBlueprint new type: self) asElement asPannableElement ]
 ]
 
-{ #category : '*GToolkit4Famix3' }
+{ #category : #'*GToolkit4Famix3' }
 FAMIXType >> gtMethodsFor: aView [
 	<gtView>
 	^ aView columnedList
@@ -34,7 +34,7 @@ FAMIXType >> gtMethodsFor: aView [
 			text: [ :each | each declaredType gtDisplayString ]
 ]
 
-{ #category : '*GToolkit4Famix3' }
+{ #category : #'*GToolkit4Famix3' }
 FAMIXType >> paintBlueprintWith: m [
 	m nodes 
 		stencil: [:method | 

@@ -1,6 +1,6 @@
-Extension { #name : 'MooseGroupRuntimeStorage' }
+Extension { #name : #MooseGroupRuntimeStorage }
 
-{ #category : '*GToolkit4Famix3' }
+{ #category : #'*GToolkit4Famix3' }
 MooseGroupRuntimeStorage >> gtByTypeFor: aView [
 	<gtView>
 	^ aView columnedList

@@ -1,6 +1,6 @@
-Extension { #name : 'CPPProgramNode' }
+Extension { #name : #CPPProgramNode }
 
-{ #category : '*GToolkit4Famix3' }
+{ #category : #'*GToolkit4Famix3' }
 CPPProgramNode >> typeLinksFor: specifiers to: anEntity do: aBlock [
 	| first last |
 	specifiers

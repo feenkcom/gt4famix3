@@ -1,6 +1,6 @@
-Extension { #name : 'FAMIXAnnotationType' }
+Extension { #name : #FAMIXAnnotationType }
 
-{ #category : '*GToolkit4Famix3' }
+{ #category : #'*GToolkit4Famix3' }
 FAMIXAnnotationType >> gtIcon [ 
 	^ MooseIcons famixAnnotationType
 ]

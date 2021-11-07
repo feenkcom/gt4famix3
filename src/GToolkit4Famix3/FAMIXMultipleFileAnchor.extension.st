@@ -1,6 +1,6 @@
-Extension { #name : 'FAMIXMultipleFileAnchor' }
+Extension { #name : #FAMIXMultipleFileAnchor }
 
-{ #category : '*GToolkit4Famix3' }
+{ #category : #'*GToolkit4Famix3' }
 FAMIXMultipleFileAnchor >> gtCompleteSourceFor: aView [
 	^ aView columnedList 
 		title: 'Sources';

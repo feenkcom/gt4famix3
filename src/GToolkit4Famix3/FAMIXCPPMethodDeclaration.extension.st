@@ -1,6 +1,6 @@
-Extension { #name : 'FAMIXCPPMethodDeclaration' }
+Extension { #name : #FAMIXCPPMethodDeclaration }
 
-{ #category : '*GToolkit4Famix3' }
+{ #category : #'*GToolkit4Famix3' }
 FAMIXCPPMethodDeclaration >> declaredType [
 	^ method declaredType
 ]
