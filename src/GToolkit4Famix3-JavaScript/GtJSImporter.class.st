@@ -158,10 +158,14 @@ GtJSImporter >> ensureFileNamed: aFileReference [
 			file name: aFileReference basename.
 			aFileReference exists
 				ifTrue: [ | encoding anchor |
-					encoding := [ aFileReference
+					encoding :=
+						aFileReference size isZero ifTrue: [
+							'utf-8' ]
+						ifFalse: [
+						[ aFileReference
 						binaryReadStreamDo: [ :in | (ZnCharacterEncoder detectEncoding: in upToEnd) identifier ] ]
 						on: ZnCharacterEncodingError
-						do: [ :ex | ex return: 'utf-8' ].
+						do: [ :ex | ex return: 'utf-8' ]].
 					anchor := FAMIXIndexedFileEntityAnchor
 						file: file
 						startPos: 1
