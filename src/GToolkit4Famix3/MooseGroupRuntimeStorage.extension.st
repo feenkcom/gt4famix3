@@ -2,11 +2,22 @@ Extension { #name : #MooseGroupRuntimeStorage }
 
 { #category : #'*GToolkit4Famix3' }
 MooseGroupRuntimeStorage >> gtByTypeFor: aView [
+
 	<gtView>
-	^ aView columnedList
-		title: 'By type';
-		items: [ byType associations collect: [:assoc | assoc key -> assoc value asMooseGroup ]];
-		column: 'Type' text: [:assoc | assoc key gtDisplayString];
-		column: 'Group' text: [:assoc | assoc value gtDisplayString];
-		send: #value
+	^ aView tree
+		  title: 'By type';
+		  items: [ 
+			  byType associations collect: [ :assoc | 
+					  assoc key -> assoc value asMooseGroup ] ];
+		  itemText: [ :assoc | 
+			  assoc isAssociation
+				  ifTrue: [ 
+					  assoc key gtDisplayString , '(' , assoc value size asString
+					  , ')' ]
+				  ifFalse: [ assoc gtDisplayString ] ];
+		  children: [ :assoc | 
+			  assoc isAssociation
+				  ifTrue: [ assoc value ]
+				  ifFalse: [ {  } ] ];
+		  send: #value
 ]

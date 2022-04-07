@@ -6,6 +6,15 @@ MooseGroup >> asBrItemsProvider [
 ]
 
 { #category : #'*GToolkit4Famix3' }
+MooseGroup >> gtByTypeFor: aView [
+	<gtView>
+	^ aView forward
+		title: 'By Type';
+		object: storage;
+		view: #gtByTypeFor:
+]
+
+{ #category : #'*GToolkit4Famix3' }
 MooseGroup >> gtDisplayOn: stream [
 	stream 
 			nextPutAll: self description; 
