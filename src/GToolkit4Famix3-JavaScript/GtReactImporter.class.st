@@ -9,6 +9,51 @@ Class {
 }
 
 { #category : #importing }
+GtReactImporter >> filterPotentialCandidates: aCollection for: aComponentReference [
+	| imports fileMap |
+	aCollection size < 2 ifTrue: [ ^ aCollection ].
+	imports := #().
+	aComponentReference gtASTNode
+		ifNotNil:
+			[ :node | 
+			(node parentOfType: JSModuleNode)
+				ifNotNil: [ :module | imports := module items select: [ :each | each isKindOf: JSImportDeclarationNode ] ] ].
+	fileMap := aCollection
+		inject: Dictionary new
+		into:
+			[ :sum :each | 
+			sum
+				at: (each gtASTNode topParent ifNotNil: [ :node | node filename asFileReference resolve withoutExtension ]) put: each;
+				yourself ].
+	imports
+		do:
+			[ :each | 
+			each
+				allNodesOfType: JSNameExpressionNode
+				do:
+					[ :nameNode | 
+					nameNode name source = aComponentReference name
+						ifTrue:
+							[ fileMap
+								at:
+									(self
+										lookupFile: (each from source copyFrom: 2 to: each from source size - 1)
+										from: aComponentReference gtASTNode topParent filename asFileReference parent) withoutExtension
+								ifPresent: [ :component | ^ {component} ] ] ] ].
+	(imports
+		collect:
+			[ :each | 
+			fileMap
+				at:
+					(self
+						lookupFile: (each from source copyFrom: 2 to: each from source size - 1)
+						from: aComponentReference gtASTNode topParent filename asFileReference parent) withoutExtension
+				ifAbsent: [  ] ]
+		thenSelect: #notNil) ifNotEmpty: [ :collection | ^ collection ].
+	^ aCollection
+]
+
+{ #category : #importing }
 GtReactImporter >> finishImport [
 	super finishImport.
 	self hookupComponentReferences
@@ -41,13 +86,11 @@ GtReactImporter >> hookupComponentParametersFor: componentReference [
 GtReactImporter >> hookupComponentReferences [
 	| components |
 	components := Dictionary new.
-	model allReactComponents
-		do: [ :each | 
-			(components at: each name ifAbsentPut: [ OrderedCollection new ])
-				add: each ].
+	model allReactComponents do: [ :each | (components at: each name ifAbsentPut: [ OrderedCollection new ]) add: each ].
 	model allReactComponentReferences
-		do: [ :each | 
-			each candidates addAll: (components at: each name ifAbsent: [ #() ]).
+		do:
+			[ :each | 
+			each candidates addAll: (self filterPotentialCandidates: (components at: each name ifAbsent: [ #() ]) for: each).
 			self hookupComponentParametersFor: each ]
 ]
 
@@ -72,6 +115,12 @@ GtReactImporter >> isReactComponent: aFunctionNode [
 						or: [ node isKindOf: JSXSelfClosingElementNode ])
 						ifTrue: [ ^ true ] ] ].
 	^ false
+]
+
+{ #category : #importing }
+GtReactImporter >> lookupFile: aString from: aDirectory [
+	(aString beginsWith: '../') ifTrue: [ ^ self lookupFile: (aString allButFirst: 3) from: aDirectory parent ].
+	^ aDirectory / aString
 ]
 
 { #category : #visiting }
