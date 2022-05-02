@@ -27,6 +27,19 @@ GtReactComponentReference >> from [
 	^ self sender
 ]
 
+{ #category : #accessing }
+GtReactComponentReference >> gtCandidatesFor: aView [
+
+	<gtView>
+	self candidates ifNil: [ ^ aView empty ].
+
+	^ aView columnedList
+		  title: 'Candidates';
+		  items: [ self candidates ];
+		  column: 'Index' text: [ :_ :anIndex | anIndex ] width: 60;
+		  column: 'Candidate' text: #yourself
+]
+
 { #category : #initialization }
 GtReactComponentReference >> initialize [
 	super initialize.
