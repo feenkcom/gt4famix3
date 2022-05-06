@@ -56,8 +56,8 @@ GtReactFunctionComponentGroup >> gtReactDependenciesFor: aView [
 										    width: 2;
 										    build)) ];
 				  connect: self
-				  from: #yourself
-				  toAll: [ :r | r incomingInvocations collect: #from ].
+				  fromAll: [ :r | r incomingInvocations collect: #from ]
+				  to: #yourself.
 
 			  m layout custom: GtGraphHorizontalDominanceTreeLayout new layered ]
 ]
