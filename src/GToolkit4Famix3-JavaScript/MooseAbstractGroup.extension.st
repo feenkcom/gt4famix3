@@ -11,3 +11,9 @@ MooseAbstractGroup >> allReactComponents [
 	<navigation: 'All React components'>
 	^ self allWithType: GtReactFunctionComponent
 ]
+
+{ #category : #'*GToolkit4Famix3-JavaScript' }
+MooseAbstractGroup >> gtReactDependenciesFor: aView [
+
+	^ aView empty
+]
