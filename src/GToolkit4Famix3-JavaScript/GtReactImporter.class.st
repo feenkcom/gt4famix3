@@ -141,14 +141,13 @@ GtReactImporter >> visitXAttribute: aNode [
 GtReactImporter >> visitXElement: aNode [
 	| reference |
 	reference := GtReactComponentReference new.
-	reference name: aNode openingElement name source.
+	reference name: (aNode openingElement name ifNil: [ '' ] ifNotNil: [ :node | node source ]).
 	reference sender: self codeScope.
 	model add: reference.
 	reference sourceAnchor: (self sourceAnchorFor: aNode).
 	self storeAST: aNode into: reference.
 	elementStack add: reference.
-	[ super visitXElement: aNode ]
-		ensure: [ elementStack removeLast ]
+	[ super visitXElement: aNode ] ensure: [ elementStack removeLast ]
 ]
 
 { #category : #visiting }
