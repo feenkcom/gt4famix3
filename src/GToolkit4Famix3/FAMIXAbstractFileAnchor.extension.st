@@ -6,30 +6,29 @@ FAMIXAbstractFileAnchor >> gtAddLinksTo: text [
 	self correspondingFile ifNil: [ ^ self ].
 	associations := OrderedCollection new.
 	self correspondingFile entities
-		do: [ :each | 
+		do:
+			[ :each | 
 			each
 				gtLinksForFile: self fileReference
-				do: [ :entity :start :stop | 
-					stop < start
-						ifFalse: [ associations add: (start to: stop) -> entity ] ] ].
+				do: [ :entity :start :stop | stop < start ifFalse: [ associations add: (start to: stop) -> entity ] ] ].
+	associations sort: [ :a :b | a key first < b key first or: [ a key first = b key first and: [ a key last > b key last ] ] ].
 	associations
-		sort: [ :a :b | 
-			a key first < b key first
-				or: [ a key first = b key first and: [ a key last > b key last ] ] ].
-	associations
-		do: [ :each | 
-			(text from: each key first to: each key last)
-				clearAttributes: [ :attr | 
-					attr class == BrTextHoverStylableAttribute
-						or: [ attr class == BrTextClickAttribute ] ];
+		do:
+			[ :each | 
+			text
+				clearAttributes: each key first
+				to: each key last
+				if: [ :attr | attr class == BrTextHoverStylableAttribute or: [ attr class == BrTextClickAttribute ] ].
+			text
 				attributes:
-					{(BrTextHoverStylableAttribute new
-						beNotOverwritableByStyler;
-						attribute: (BlTextUnderlineAttribute new color: BrGlamorousColors linkColor)).
-					(BrTextClickAttribute new
-						beNotOverwritableByStyler;
-						action:
-								[ :aText :aTarget :aTextEditor :anEvent | aTarget phlow selectObject: each value ])} ]
+					{(BrTextHoverStylableAttribute new)
+							beNotOverwritableByStyler;
+							attribute: (BlTextUnderlineAttribute new color: BrGlamorousColors linkColor).
+						(BrTextClickAttribute new)
+							beNotOverwritableByStyler;
+							action: [ :aText :aTarget :aTextEditor :anEvent | aTarget phlow selectObject: each value ]}
+				from: each key first
+				to: each key last ]
 ]
 
 { #category : #'*GToolkit4Famix3' }
