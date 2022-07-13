@@ -2,7 +2,7 @@ Extension { #name : #MooseGroup }
 
 { #category : #'*GToolkit4Famix3' }
 MooseGroup >> asBrItemsProvider [
-	^ BrListSequenceableCollectionItemsProvider forCollection: self
+	^ BrSequenceableCollectionItemsProvider forCollection: self
 ]
 
 { #category : #'*GToolkit4Famix3' }
