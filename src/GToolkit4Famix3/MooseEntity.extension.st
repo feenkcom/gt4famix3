@@ -40,30 +40,28 @@ MooseEntity >> gtNavigationFor: aView [
 		priority: 1;
 		items: [ self gtNavigationItems ];
 		column: 'Icon' icon: [ :assoc | assoc value gtIcon ];
-		column: 'Name'
-			do: [ :aColumn | 
-				aColumn
-					cellStencil: [ BrLabel new
-							addAptitude: (BrGlamorousWithContextMenuAptitude
-									content: [ BrGlamorousSimpleContextMenuContent new
-											items: {'Browse the method implementing the navigation'
-														-> [ :e | 
-															| navigationPragma |
-															navigationPragma := e userData at: #navigationPragma.
-															e phlow
-																spawnObject: (navigationPragma methodClass >> navigationPragma methodSelector)
-																		asRingDefinition ]};
-											yourself ]) ];
-					dataBinder: [ :eachLabel :assoc | 
-						| displayValue |
-						displayValue := ' '
-								join: ((assoc key argumentAt: 1) piecesCutWhereCamelCase collect: #capitalized).
-
-						eachLabel
-							in: [ :aLabel | aLabel userData at: #navigationPragma put: assoc key ];
-							text: displayValue ] ];
+		"column: 'Name' text: [ :assoc | assoc key ];"
+		column: 'Name' do: [ :aColumn | aColumn
+			cellStencil: [
+				BrLabel new
+					aptitude: (BrGlamorousLabelAptitude new );
+					addAptitude: (BrGlamorousWithContextMenuAptitude
+						content: [ BrGlamorousSimpleContextMenuContent new
+								items: {(
+									'Browse the method implementing the navigation' -> [ :e | 
+										|navigationPragma|
+										navigationPragma := e userData  at: #navigationPragma.
+										e phlow spawnObject: (navigationPragma  methodClass >> navigationPragma methodSelector) asRingDefinition ])};
+								yourself ]) ];
+			dataBinder: [ :eachLabel :assoc | 
+				|displayValue|
+				displayValue := (' ' join: ((assoc key argumentAt: 1) piecesCutWhereCamelCase collect: #capitalized)).
+				
+				eachLabel 
+					in: [ :aLabel | aLabel userData  at: #navigationPragma put: assoc key ];
+					text: displayValue ] ];
 		column: 'Value' text: [ :assoc | assoc value gtDisplayString ];
-		send: [ :assoc | assoc value ]	"column: 'Name' text: [ :assoc | assoc key ];"
+		send: [ :assoc | assoc value ]
 ]
 
 { #category : #'*GToolkit4Famix3' }
