@@ -827,30 +827,28 @@ GtJSImporter >> visitVariableDeclaration: aVariableDeclaration [
 	aVariableDeclaration variable notNil
 		ifTrue: [ (self isParameter: aVariableDeclaration)
 				ifTrue: [ var := (self parameterClassFor: aVariableDeclaration) new
-						name: aVariableDeclaration variable source;
-						sourceAnchor: (self sourceAnchorFor: aVariableDeclaration);
-						yourself.
+							name: aVariableDeclaration variable source;
+							sourceAnchor: (self sourceAnchorFor: aVariableDeclaration);
+							yourself.
 					model add: var.
 					self storeAST: aVariableDeclaration into: var.
 					currentFile addEntity: var.
 					self currentScope addParameter: var ]
 				ifFalse: [ name := aVariableDeclaration variable source.
 					var := (scopeStack size = 1
-						and:
-							[ (aVariableDeclaration parent isKindOf: JSLexicalDeclarationNode) not ])
-						ifTrue: [ self ensureGlobalNamed: name ]
-						ifFalse: [ self ensureLocalVariableNamed: name ].
+							and: [ (aVariableDeclaration parentOfType: JSLexicalDeclarationNode) isNil ])
+							ifTrue: [ self ensureGlobalNamed: name ]
+							ifFalse: [ self ensureLocalVariableNamed: name ].
 					var sourceAnchor: (self sourceAnchorFor: aVariableDeclaration).
 					self storeAST: aVariableDeclaration into: var ].
 			aVariableDeclaration equalToken notNil
-				ifTrue:
-					[ assignmentExpressions add: aVariableDeclaration -> self currentScope.
+				ifTrue: [ assignmentExpressions add: aVariableDeclaration -> self currentScope.
 					access := FAMIXAccess new
-						from: self currentScope;
-						to: var;
-						isWrite: true;
-						sourceAnchor: var sourceAnchor;
-						yourself.
+							from: self currentScope;
+							to: var;
+							isWrite: true;
+							sourceAnchor: var sourceAnchor;
+							yourself.
 					model add: access.
 					self storeAST: aVariableDeclaration into: access.
 					currentFile addEntity: access.
