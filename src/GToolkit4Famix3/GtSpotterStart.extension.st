@@ -1,13 +1,12 @@
 Extension { #name : #GtSpotterStart }
 
 { #category : #'*GToolkit4Famix3' }
-GtSpotterStart >> spotterMooseModelsFor: aStep [
+GtSpotterStart >> gtSearchMooseModelsFor: aSearch [
 	<gtSearch>
-	
-	aStep listProcessor
+	^ aSearch list
 		title: 'Moose Models';
+		items: [ MooseModel root allModels ];
 		itemName: [ :pragma | pragma name ];
-		filter: GtFilterSubstring item: [ :filter :context |
-			MooseModel root allModels do: filter ];
+		filterBySubstring;
 		wantsToDisplayOnEmptyQuery: true
 ]
