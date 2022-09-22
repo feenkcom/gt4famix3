@@ -6,7 +6,7 @@ GtSpotterStart >> gtSearchMooseModelsFor: aSearch [
 	^ aSearch list
 		title: 'Moose Models';
 		items: [ MooseModel root allModels ];
-		itemName: [ :pragma | pragma name ];
+		itemName: [ :eachModel | eachModel name ];
 		filterBySubstring;
 		wantsToDisplayOnEmptyQuery: true
 ]
