@@ -1,23 +1,23 @@
 Extension { #name : #FMMetaRepository }
 
 { #category : #'*GToolkit4Famix3' }
-FMMetaRepository >> gtGtSpotterClassesFor: aStep [
+FMMetaRepository >> gtGtSpotterClassesFor: aSearch [
 	<gtSearch>
-	aStep listProcessor
+	^ aSearch list
 		priority: 10;
 		title: 'Classes';
-		allCandidates: [ self classes ];
+		items: [ self classes ];
 		itemName: [ :class | class fullName ];
-		filter: GtFilterSubstring
+		filterBySubstring
 ]
 
 { #category : #'*GToolkit4Famix3' }
-FMMetaRepository >> gtGtSpotterPackagesFor: aStep [
+FMMetaRepository >> gtGtSpotterPackagesFor: aSearch [
 	<gtSearch>
-	aStep listProcessor
+	^ aSearch list
 		priority: 20;
 		title: 'Packages';
-		allCandidates: [ self packages ];
+		items: [ self packages ];
 		itemName: [ :example | example fullName ];
-		filter: GtFilterSubstring
+		filterBySubstring
 ]
