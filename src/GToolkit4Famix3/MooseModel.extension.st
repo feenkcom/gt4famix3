@@ -94,34 +94,34 @@ MooseModel >> gtItemsFor: aView [
 { #category : #'*GToolkit4Famix3' }
 MooseModel >> gtSpotterAnnotationTypesFor: aStep [
 	<gtSearch>
-	self spotter: 'Annotation types' on: [ self allAnnotationTypes ] for: aStep
+	^ self spotter: 'Annotation types' on: [ self allAnnotationTypes ] for: aStep
 ]
 
 { #category : #'*GToolkit4Famix3' }
 MooseModel >> gtSpotterClassesFor: aStep [
 	<gtSearch>
-	self spotter: 'Classes' on: [ self allClasses ] for: aStep
+	^ self spotter: 'Classes' on: [ self allClasses ] for: aStep
 ]
 
 { #category : #'*GToolkit4Famix3' }
 MooseModel >> gtSpotterMethodsFor: aStep [
 	<gtSearch>
-	self spotter: 'Methods' on: [ self allMethods ] for: aStep
+	^ self spotter: 'Methods' on: [ self allMethods ] for: aStep
 ]
 
 { #category : #'*GToolkit4Famix3' }
-MooseModel >> spotter: aStringTitle on: aCandidatesBlock for: aStep [
-	aCandidatesBlock value isEmpty ifTrue: [ ^ self ].
-	^ aStep listProcessor
+MooseModel >> spotter: aStringTitle on: aCandidatesBlock for: aSearch [
+	aCandidatesBlock value isEmpty ifTrue: [ ^ aSearch empty ].
+	^ aSearch list
 		title: aStringTitle;
-		candidatesLimit: 5;
-		allCandidates: aCandidatesBlock;
+		items: aCandidatesBlock;
+		itemsLimit: 5;
 		itemName: [ :each | each mooseName ];
 "		itemIcon: [ :each | each mooseIcon ];"
-		actLogic: [ :each :step |
+		"actLogic: [ :each :step |
 			step exit.
-			GtInspector openOn: each ];
-		filter: GtFilterSubstring;
+			GtInspector openOn: each ];"
+		filterBySubstring;
 		wantsToDisplayOnEmptyQuery: true
 ]
 
