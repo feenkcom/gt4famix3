@@ -102,31 +102,6 @@ MooseEntity >> gtPropertiesFor: aView [
 ]
 
 { #category : #'*GToolkit4Famix3' }
-MooseEntity >> mooseSpecificSpotterProcessorsFor: aSpotterStep [
-	| entity assocs pragmaValueAssociations |
-	entity := self.
-	pragmaValueAssociations := entity complexPropertyPragmas
-		collect: [ :pragma | 
-			pragma -> 	(self perform: pragma methodSelector) ].
-	assocs := (pragmaValueAssociations
-		reject: [ :association | 
-			association value isNil
-				or: [ association value isCollection and: [ association value isEmpty ] ] ])
-		sorted: [ :a :b | 
-			(a key argumentAt: 1) asLowercase asString
-				< (b key argumentAt: 1) asLowercase asString ].
-	assocs
-		do: [ :assoc | 
-			aSpotterStep listProcessor
-				allCandidates: [ assoc value asMooseGroup ];
-				title: (assoc key argumentAt: 1);
-				itemIcon: #gtIcon;
-				filter: GtFilterSubstring;
-				itemName: #gtDisplayString;
-				order: 1 ]
-]
-
-{ #category : #'*GToolkit4Famix3' }
 MooseEntity >> spotterProcessorsFor: aSpotterStep [
 	super spotterProcessorsFor: aSpotterStep.
 	"self mooseSpecificSpotterProcessorsFor: aSpotterStep"
