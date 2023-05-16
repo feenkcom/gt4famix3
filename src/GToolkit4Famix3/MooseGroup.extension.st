@@ -9,7 +9,7 @@ MooseGroup >> asBrItemsProvider [
 MooseGroup >> gtByTypeFor: aView [
 	<gtView>
 	^ aView forward
-		title: 'By Type';
+		title: 'By type';
 		object: storage;
 		view: #gtByTypeFor:
 ]
