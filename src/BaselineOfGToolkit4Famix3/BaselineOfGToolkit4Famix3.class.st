@@ -13,7 +13,7 @@ BaselineOfGToolkit4Famix3 >> baseline: spec [
 				spec repository: 'github://feenkcom/famix3:v0.8.19/src' ].
 		spec
 			baseline: 'GToolkit4XMLSupport' with: [
-				spec repository: 'github://feenkcom/gt4xmlsupport:v0.8.22/src' ].
+				spec repository: 'github://feenkcom/gt4xmlsupport:v0.8.23/src' ].
 
 		spec package: 'GToolkit4Famix3' with: [
 			spec requires: #('Famix3SmalltalkImporter') ].
