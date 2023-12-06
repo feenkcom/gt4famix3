@@ -1,14 +1,24 @@
 Extension { #name : #FAMIXSourcedEntity }
 
 { #category : #'*GToolkit4Famix3' }
-FAMIXSourcedEntity >> astStartPosition: aNumber [
+FAMIXSourcedEntity >> astStartPosition [
 	<MSEProperty: #astStartPosition type: #Number>
+	^ self privateState attributeAt: #astStartPosition ifAbsent: [  ]
+]
+
+{ #category : #'*GToolkit4Famix3' }
+FAMIXSourcedEntity >> astStartPosition: aNumber [
 	self privateState attributeAt: #astStartPosition put: aNumber 
 ]
 
 { #category : #'*GToolkit4Famix3' }
-FAMIXSourcedEntity >> astStopPosition: aNumber [
+FAMIXSourcedEntity >> astStopPosition [
 	<MSEProperty: #astStopPosition type: #Number>
+	^ self privateState attributeAt: #astStopPosition ifAbsent: [  ]
+]
+
+{ #category : #'*GToolkit4Famix3' }
+FAMIXSourcedEntity >> astStopPosition: aNumber [
 	self privateState attributeAt: #astStopPosition put: aNumber 
 ]
 

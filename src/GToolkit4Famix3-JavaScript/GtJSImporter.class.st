@@ -274,6 +274,32 @@ GtJSImporter >> ensurePropertyNamed: aString [
 ]
 
 { #category : #'private-model' }
+GtJSImporter >> ensureTSFunctionNamed: aString for: aNode around: aBlock [
+	| function implicitVar start stop isMethod |
+	isMethod := (self isCodeItem: self currentScope) not.
+	function := (self functionClassFor: aNode) new name: aString.
+	start := aNode signature startPosition.
+	stop := aNode signature stopPosition.
+	function signature: function name , aNode signature source.
+	model add: function.
+	self storeAST: aNode into: function.
+	currentFile addEntity: function.
+	aNode attributeNamed: #modelObject put: function.
+	function sourceAnchor: (self sourceAnchorFor: aNode).
+	implicitVar := FAMIXImplicitVariable new name: 'this'.
+	model add: implicitVar.
+	function addImplicitVariable: implicitVar.
+	implicitVar := FAMIXImplicitVariable new name: 'arguments'.
+	model add: implicitVar.
+	function addImplicitVariable: implicitVar.
+	isMethod
+		ifTrue: [ self currentScope addMethod: function ]
+		ifFalse: [ self currentScope addFunction: function ].
+	self assignScope: function around: aBlock.
+	^ function
+]
+
+{ #category : #'private-model' }
 GtJSImporter >> ensureVariableFor: node in: entity [
 	| currentScope name var |
 	name := node name source.
@@ -693,6 +719,14 @@ GtJSImporter >> visitClassExpression: aClassExpression [
 ]
 
 { #category : #visiting }
+GtJSImporter >> visitConstructorDeclaration: aMethodDefinition [
+	self
+		ensureTSFunctionNamed: 'constructor'
+		for: aMethodDefinition
+		around: [ super visitMemberFunctionDeclaration: aMethodDefinition ]
+]
+
+{ #category : #visiting }
 GtJSImporter >> visitFunction: aFunction [
 	| mooseFunction var |
 	var := nil.
@@ -727,6 +761,14 @@ GtJSImporter >> visitImportDeclaration: aNode [
 			self storeAST: aNode into: import.
 			import sourceAnchor: (self sourceAnchorFor: aNode) ].
 	^ super visitImportDeclaration: aNode
+]
+
+{ #category : #visiting }
+GtJSImporter >> visitMemberFunctionDeclaration: aMethodDefinition [
+	self
+		ensureTSFunctionNamed: aMethodDefinition name source
+		for: aMethodDefinition
+		around: [ super visitMemberFunctionDeclaration: aMethodDefinition ]
 ]
 
 { #category : #visiting }
@@ -804,6 +846,13 @@ GtJSImporter >> visitPropertyAssignment: aNode [
 				addPotentialJSFunction: (aNode value acceptVisitor: self) ].
 	self createPropertyFromDefinition: aNode.
 	super visitPropertyAssignment: aNode
+]
+
+{ #category : #visiting }
+GtJSImporter >> visitTSSourceFile: aNode [
+	self createScriptFrom: aNode.
+	self createCommentsFrom: aNode.
+	super visitTSSourceFile: aNode
 ]
 
 { #category : #visiting }
