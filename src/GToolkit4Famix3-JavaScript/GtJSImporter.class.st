@@ -21,7 +21,8 @@ Class {
 		'numberType',
 		'booleanType',
 		'includeASTNodes',
-		'shouldProcessInvocations'
+		'shouldProcessInvocations',
+		'enums'
 	],
 	#category : #'GToolkit4Famix3-JavaScript-Importer'
 }
@@ -143,6 +144,26 @@ GtJSImporter >> createScriptFrom: moduleNode [
 { #category : #private }
 GtJSImporter >> currentScope [
 	^ scopeStack last
+]
+
+{ #category : #'private-model' }
+GtJSImporter >> ensureEnumNamed: aString [
+	^ enums at: aString ifAbsentPut: [ model add: (GtJSEnum new name: aString) ]
+]
+
+{ #category : #'private-model' }
+GtJSImporter >> ensureEnumVariableNamed: aString [
+	| currentScope var |
+	currentScope := self codeScope.
+	(currentScope isKindOf: GtJSEnum)
+		ifTrue: [ var := currentScope attributes
+					detect: [ :each | each name = aString ]
+					ifNone: [  ] ].
+	var
+		ifNil: [ var := GtJSEnumValue new name: aString.
+			currentScope addAttribute: var.
+			model add: var ].
+	^ var
 ]
 
 { #category : #'private-model' }
@@ -318,6 +339,11 @@ GtJSImporter >> ensureVariableFor: node in: entity [
 	^ var
 ]
 
+{ #category : #accessing }
+GtJSImporter >> enumNamed: aString [
+	^ enums at: aString ifAbsent: [  ]
+]
+
 { #category : #private }
 GtJSImporter >> fileFor: aSourcedEntity [
 	aSourcedEntity containerFiles do: [ :each | ^ each ].
@@ -427,7 +453,8 @@ GtJSImporter >> initialize [
 	modules := Dictionary new.
 	classes := Dictionary new.
 	globals := Dictionary new.
-	properties := Dictionary new
+	properties := Dictionary new.
+	enums := Dictionary new
 ]
 
 { #category : #private }
@@ -724,6 +751,38 @@ GtJSImporter >> visitConstructorDeclaration: aMethodDefinition [
 		ensureTSFunctionNamed: 'constructor'
 		for: aMethodDefinition
 		around: [ super visitMemberFunctionDeclaration: aMethodDefinition ]
+]
+
+{ #category : #visiting }
+GtJSImporter >> visitEnumDeclaration: anEnumDeclaration [
+	| enum name |
+	name := anEnumDeclaration name source.
+	enum := self ensureEnumNamed: name.
+	self storeAST: anEnumDeclaration into: enum.
+	currentFile addEntity: enum.
+	anEnumDeclaration attributeNamed: #modelObject put: enum.
+	enum sourceAnchor: (self sourceAnchorFor: anEnumDeclaration).
+	self currentScope addType: enum.
+	self
+		assignScope: enum
+		around: [ super visitEnumDeclaration: anEnumDeclaration ]
+]
+
+{ #category : #visiting }
+GtJSImporter >> visitEnumMember: anEnumMember [
+	| name var |
+	name := anEnumMember name source.
+	var := self ensureEnumVariableNamed: name.
+	var sourceAnchor: (self sourceAnchorFor: anEnumMember).
+	self storeAST: anEnumMember into: var.
+	anEnumMember equalToken notNil
+		ifTrue: [ (anEnumMember value isKindOf: JSBooleanLiteralNode)
+				ifTrue: [ var declaredType: self booleanType ].
+			(anEnumMember value isKindOf: JSNumericLiteralNode)
+				ifTrue: [ var declaredType: self numberType ].
+			(anEnumMember value isKindOf: JSStringLiteralNode)
+				ifTrue: [ var declaredType: self stringType ] ].
+	super visitEnumMember: anEnumMember
 ]
 
 { #category : #visiting }
