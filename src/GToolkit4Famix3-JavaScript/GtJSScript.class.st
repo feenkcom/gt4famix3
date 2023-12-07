@@ -28,3 +28,8 @@ GtJSScript >> module [
 GtJSScript >> module: aJSModule [
 	module := aJSModule
 ]
+
+{ #category : #accessing }
+GtJSScript >> parentScope [
+	^ nil
+]

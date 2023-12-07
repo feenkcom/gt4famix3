@@ -152,18 +152,18 @@ GtJSImporter >> ensureEnumNamed: aString [
 ]
 
 { #category : #'private-model' }
-GtJSImporter >> ensureEnumVariableNamed: aString [
-	| currentScope var |
-	currentScope := self codeScope.
+GtJSImporter >> ensureEnumValueNamed: aString [
+	| currentScope value |
+	currentScope := self currentScope.
 	(currentScope isKindOf: GtJSEnum)
-		ifTrue: [ var := currentScope attributes
+		ifTrue: [ value := currentScope attributes
 					detect: [ :each | each name = aString ]
 					ifNone: [  ] ].
-	var
-		ifNil: [ var := GtJSEnumValue new name: aString.
-			currentScope addAttribute: var.
-			model add: var ].
-	^ var
+	value
+		ifNil: [ value := GtJSEnumValue new name: aString.
+			value parentEnum: currentScope.
+			model add: value ].
+	^ value
 ]
 
 { #category : #'private-model' }
@@ -770,19 +770,18 @@ GtJSImporter >> visitEnumDeclaration: anEnumDeclaration [
 
 { #category : #visiting }
 GtJSImporter >> visitEnumMember: anEnumMember [
-	| name var |
+	| name value |
 	name := anEnumMember name source.
-	var := self ensureEnumVariableNamed: name.
-	var sourceAnchor: (self sourceAnchorFor: anEnumMember).
-	self storeAST: anEnumMember into: var.
+	value := self ensureEnumValueNamed: name.
+	value sourceAnchor: (self sourceAnchorFor: anEnumMember).
+	self storeAST: anEnumMember into: value.
 	anEnumMember equalToken notNil
 		ifTrue: [ (anEnumMember value isKindOf: JSBooleanLiteralNode)
-				ifTrue: [ var declaredType: self booleanType ].
+				ifTrue: [ value declaredType: self booleanType ].
 			(anEnumMember value isKindOf: JSNumericLiteralNode)
-				ifTrue: [ var declaredType: self numberType ].
+				ifTrue: [ value declaredType: self numberType ].
 			(anEnumMember value isKindOf: JSStringLiteralNode)
-				ifTrue: [ var declaredType: self stringType ] ].
-	super visitEnumMember: anEnumMember
+				ifTrue: [ value declaredType: self stringType ] ]
 ]
 
 { #category : #visiting }
