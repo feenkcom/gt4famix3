@@ -6,7 +6,7 @@ FAMIXType >> gtAttributesFor: aView [
 	^ aView columnedList
 		title: 'Attributes';
 		priority: 15;
-		items: [ self attributes ];
+		items: [ self attributes asOrderedCollection ];
 		column: 'Icon' icon: [ :each | each gtIcon ];
 		column: 'Name' translated text: [ :each | each name ];
 		column: 'Declared type' translated
