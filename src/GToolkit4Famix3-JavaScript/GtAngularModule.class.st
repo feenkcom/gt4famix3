@@ -95,32 +95,6 @@ GtAngularModule >> gtInspectorDefiningFileContentsIn: composite [
 	self definingFile gtInspectorContentsIn: composite
 ]
 
-{ #category : #ui }
-GtAngularModule >> gtInspectorDependenciesModulesIn: composite [
-	<gtInspectorPresentationOrder: 40>
-	composite roassal2
-		title: 'Dependencies';
-		initializeView: [ RTMondrian new ];
-		painting: [ :view |
-			view shape label text: #name; if: [ :each | each = self  ] color: Color blue twiceLighter.
-			view nodes: (self withDeepCollect: #dependencies).
-			view edges connectToAll: #dependencies.
-			view layout horizontalDominanceTree layered ]
-]
-
-{ #category : #ui }
-GtAngularModule >> gtInspectorDependentModulesIn: composite [
-	<gtInspectorPresentationOrder: 40>
-	composite roassal2
-		title: 'Dependents';
-		initializeView: [ RTMondrian new ];
-		painting: [ :view |
-			view shape label text: #name; if: [ :each | each = self  ] color: Color blue twiceLighter.
-			view nodes: (self withDeepCollect: #dependentModules).
-			view edges connectFromAll: #dependentModules.
-			view layout horizontalDominanceTree layered ]
-]
-
 { #category : #initialize }
 GtAngularModule >> initialize [
 	super initialize.

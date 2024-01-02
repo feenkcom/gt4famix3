@@ -11,16 +11,6 @@ GtAngularComponentGroup class >> annotation [
 ]
 
 { #category : #'as yet unclassified' }
-GtAngularComponentGroup >> mooseFinderInclusionFromMcsAndVvnIn: composite [
-	<moosePresentationOrder: 40>
-	composite roassal2
-		title: 'Inclusion from Mvs and Vvn';
-		titleIcon: MooseIcons mooseDependencies;
-		initializeView: [ RTMondrian new ];
-		painting: [ :view | self viewInclusionFromMcsAndVvnOn: view ]
-]
-
-{ #category : #'as yet unclassified' }
 GtAngularComponentGroup >> viewInclusionFromMcsAndVvnOn: view [
 	view shape rectangle 
 		color: Color black;
