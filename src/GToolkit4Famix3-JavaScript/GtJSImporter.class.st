@@ -16,13 +16,14 @@ Class {
 		'variableReferences',
 		'callExpressions',
 		'assignmentExpressions',
-		'parserClass',
 		'stringType',
 		'numberType',
 		'booleanType',
 		'includeASTNodes',
 		'shouldProcessInvocations',
-		'enums'
+		'enums',
+		'parserClasses',
+		'currentSourceLanguage'
 	],
 	#category : #'GToolkit4Famix3-JavaScript-Importer'
 }
@@ -179,23 +180,22 @@ GtJSImporter >> ensureFileNamed: aFileReference [
 			file name: aFileReference basename.
 			aFileReference exists
 				ifTrue: [ | encoding anchor |
-					encoding :=
-						aFileReference size isZero ifTrue: [
-							'utf-8' ]
-						ifFalse: [
-						[ aFileReference
-						binaryReadStreamDo: [ :in | (ZnCharacterEncoder detectEncoding: in upToEnd) identifier ] ]
-						on: ZnCharacterEncodingError
-						do: [ :ex | ex return: 'utf-8' ]].
+					encoding := aFileReference size isZero
+							ifTrue: [ 'utf-8' ]
+							ifFalse: [ [ aFileReference
+									binaryReadStreamDo: [ :in | (ZnCharacterEncoder detectEncoding: in upToEnd) identifier ] ]
+									on: ZnCharacterEncodingError
+									do: [ :ex | ex return: 'utf-8' ] ].
 					anchor := FAMIXIndexedFileEntityAnchor
-						file: file
-						startPos: 1
-						endPos:
-							(aFileReference
-								readStreamEncoded: encoding
-								do: [ :stream | stream contents size ])
-						model: model.
-					file sourceAnchor: anchor ]
+							file: file
+							startPos: 1
+							endPos: (aFileReference
+									readStreamEncoded: encoding
+									do: [ :stream | stream contents size ])
+							model: model.
+					file sourceAnchor: anchor.
+					currentSourceLanguage
+						ifNotNil: [ file declaredSourceLanguage: currentSourceLanguage ] ]
 				ifFalse: [ file isStub: true ].
 			(self ensureFolderNamed: aFileReference parent)
 				ifNotNil: [ :folder | folder addChildFileSystemEntity: file ].
@@ -410,10 +410,10 @@ GtJSImporter >> importDirectory: aDirectory excluding: patternCollection [
 ]
 
 { #category : #importing }
-GtJSImporter >> importJSFile: aFile [
+GtJSImporter >> importJSFile: aFile using: aParserClass [
 	| ast |
 	self startingImportingFile.
-	ast := self parserClass parseWithErrors: (self contentsOfFile: aFile asFileReference).
+	ast := aParserClass parseWithErrors: (self contentsOfFile: aFile asFileReference).
 	ast filename: aFile.
 	self processJSAst: ast.
 	self finishImportingFile
@@ -424,10 +424,13 @@ GtJSImporter >> importSourceDirectory: aDirectory excluding: patternCollection [
 	directory := aDirectory asFileReference.
 	directory fileSystem store isMemoryFileSystem
 		ifFalse: [ directory := directory absolutePath ].
-	(self parserClass sourceFilesIn: directory)
-		do: [ :each | 
-			(self filename: each matchesAny: patternCollection)
-				ifFalse: [ self importJSFile: each ] ]
+	self parserClasses
+		do: [ :class | 
+			currentSourceLanguage := FAMIXJSSourceLanguage new parserClass: class.
+			(class sourceFilesIn: directory)
+				do: [ :each | 
+					(self filename: each matchesAny: patternCollection)
+						ifFalse: [ self importJSFile: each using: class ] ] ]
 		displayingProgress: 'Importing JS Files'
 ]
 
@@ -532,14 +535,20 @@ GtJSImporter >> parameterClassFor: aVariableDeclaration [
 ]
 
 { #category : #accessing }
-GtJSImporter >> parserClass [
-	^ parserClass ifNil: [ JSParser ]
+GtJSImporter >> parserClass: aClass [
+	self parserClass: {aClass}
 ]
 
 { #category : #accessing }
-GtJSImporter >> parserClass: aClass [
-	parserClass := aClass.
-	model sourceLanguage parserClass: aClass
+GtJSImporter >> parserClasses [
+	^ parserClasses ifNil: [ {JSParser} ]
+]
+
+{ #category : #accessing }
+GtJSImporter >> parserClasses: aCollection [
+	parserClasses := aCollection.
+	aCollection notEmpty
+		ifTrue: [ model sourceLanguage parserClass: aCollection any ]
 ]
 
 { #category : #private }
