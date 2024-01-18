@@ -95,7 +95,9 @@ MooseEntity class >> gtNavigationMethodsFor: aView [
 				to: MooseEntity) sort: [ :a :b | (a argumentAt: 1) < (b argumentAt: 1) ] ];
 		column: 'Name' text: [ :aPragma | aPragma argumentAt: 1 ];
 		column: 'Method' text: [ :aPragma | aPragma methodSelector ];
-		sendTool: [ :aPragma | GtMethodCoderTool compiledMethod: aPragma method  ]
+		sendTool: [ :aPragma | GtMethodCoderTool compiledMethod: aPragma method ];
+		contextItemLabel: 'Copy method name'
+			action: [ :anElement :aPragma | Clipboard clipboardText: aPragma methodSelector ]
 ]
 
 { #category : #'*GToolkit4Famix3' }
