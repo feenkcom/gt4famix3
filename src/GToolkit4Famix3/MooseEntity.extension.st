@@ -84,6 +84,23 @@ MooseEntity >> gtNavigationItems [
 ]
 
 { #category : #'*GToolkit4Famix3' }
+MooseEntity class >> gtNavigationMethodsFor: aView [
+	<gtClassView>
+	<gtView>
+	^ aView columnedList
+		title: 'Moose navigation';
+		items: [ (Pragma
+				allNamed: #navigation:
+				from: self instanceSide
+				to: MooseEntity) sort: [ :a :b | (a argumentAt: 1) < (b argumentAt: 1) ] ];
+		column: 'Name' text: [ :aPragma | aPragma argumentAt: 1 ];
+		column: 'Method' text: [ :aPragma | aPragma methodSelector ];
+		sendTool: [ :aPragma | GtMethodCoderTool compiledMethod: aPragma method ];
+		contextItemLabel: 'Copy method name'
+			action: [ :anElement :aPragma | Clipboard clipboardText: aPragma methodSelector ]
+]
+
+{ #category : #'*GToolkit4Famix3' }
 MooseEntity >> gtPropertiesFor: aView [
 	<gtView>
 	(self mooseDescription notNil
