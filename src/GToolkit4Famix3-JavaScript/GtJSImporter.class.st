@@ -796,7 +796,7 @@ GtJSImporter >> visitConstructorDeclaration: aMethodDefinition [
 		around: [ super visitMemberFunctionDeclaration: aMethodDefinition ]
 ]
 
-{ #category : #accessing }
+{ #category : #visiting }
 GtJSImporter >> visitDecoratorExpression: aDecoratorExpression [
 	self createAnnotationFrom: aDecoratorExpression for: self currentScope.
 	^ super visitDecoratorExpression: aDecoratorExpression
@@ -878,7 +878,7 @@ GtJSImporter >> visitMemberFunctionDeclaration: aMethodDefinition [
 		around: [ super visitMemberFunctionDeclaration: aMethodDefinition ]
 ]
 
-{ #category : #accessing }
+{ #category : #visiting }
 GtJSImporter >> visitMemberVariableDeclaration: aMemberVariableDeclaration [
 	| name var access |
 	name := aMemberVariableDeclaration name source.
@@ -986,6 +986,21 @@ GtJSImporter >> visitPropertyAssignment: aNode [
 				addPotentialJSFunction: (aNode value acceptVisitor: self) ].
 	self createPropertyFromDefinition: aNode.
 	super visitPropertyAssignment: aNode
+]
+
+{ #category : #visiting }
+GtJSImporter >> visitTSExport: anExportDeclaration [
+	((anExportDeclaration respondsTo: #decorators)
+		and: [ (anExportDeclaration perform: #decorators) notEmpty
+				and: [ anExportDeclaration respondsTo: #declaration ] ])
+		ifTrue: [ self accept: (anExportDeclaration perform: #declaration).
+			(anExportDeclaration perform: #decorators)
+				do: [ :each | 
+					self
+						createAnnotationFrom: each
+						for: (((anExportDeclaration perform: #declaration) attributeNamed: #modelObject)
+								ifNil: [ self currentScope ]) ] ]
+		ifFalse: [ super visitTSExport: anExportDeclaration ]
 ]
 
 { #category : #visiting }
