@@ -29,7 +29,7 @@ GtAngularConfigWithVarsTest >> testModuleA [
 	moduleA := importer targetModel allAngularModules entityNamed: 'moduleA'.
 	self assert: moduleA components notEmpty.
 	self assert: moduleA components anyOne name = '$routeProvider1'.
-	self assert: moduleA components anyOne template name = 'template.html'
+	self assert: moduleA components anyOne templateUrl = 'template.html'
 ]
 
 { #category : #testing }
