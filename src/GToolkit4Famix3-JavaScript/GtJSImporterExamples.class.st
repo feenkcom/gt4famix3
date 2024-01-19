@@ -54,7 +54,11 @@ GtJSImporterExamples >> exampleImporter [
 	<gtExample>
 	| source |
 	source := self exampleProject.
-	^ GtJSImporter new importDirectory: source
+	^ GtJSImporter new
+		rootFolder: source;
+		importDirectory: source;
+		finishImport;
+		yourself
 ]
 
 { #category : #files }

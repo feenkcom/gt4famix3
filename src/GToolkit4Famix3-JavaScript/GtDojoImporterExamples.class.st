@@ -166,7 +166,10 @@ GtDojoImporterExamples >> exampleImporter [
 	<gtExample>
 	| source |
 	source := self exampleProject.
-	^ GtDojoImporter new importDirectory: source
+	^ GtDojoImporter new
+		rootFolder: source;
+		importDirectory: source;
+		finishImport
 ]
 
 { #category : #samples }

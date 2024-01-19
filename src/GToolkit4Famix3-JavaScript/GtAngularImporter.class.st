@@ -101,6 +101,14 @@ GtAngularImporter >> ensureTemplateForUrl: aString [
 ]
 
 { #category : #importing }
+GtAngularImporter >> finishImport [
+	super finishImport.
+	self populateModel.
+	self resolveTemplateAndComponentsInclusion.
+	self resolveInjectables
+]
+
+{ #category : #importing }
 GtAngularImporter >> importComponentFromNode: aNode withMapping: mapping inFile: aFileReference inModule: module [
 	| component |
 	component := (self ensureComponentNamed: (mapping at: 'arg1') source pharoFromJSString inModule: module)
@@ -172,12 +180,9 @@ GtAngularImporter >> importConfigurationsOfModule: module inFile: aFileReference
 { #category : #importing }
 GtAngularImporter >> importDirectory: aDirectory excluding: patternCollection [
 	super importDirectory: aDirectory excluding: patternCollection.
-	(aDirectory allFiles select: [ :each | each extension = 'html' ])	
+	(aDirectory allFiles select: [ :each | each extension = 'html' ])
 		do: [ :file | self importHtmlFile: file ]
-		displayingProgress: 'Html Files'.
-	self populateModel.
-	self resolveTemplateAndComponentsInclusion.
-	self resolveInjectables
+		displayingProgress: 'Html Files'
 ]
 
 { #category : #importing }

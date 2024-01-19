@@ -23,7 +23,8 @@ Class {
 		'shouldProcessInvocations',
 		'enums',
 		'parserClasses',
-		'currentSourceLanguage'
+		'currentSourceLanguage',
+		'annotationTypes'
 	],
 	#category : #'GToolkit4Famix3-JavaScript-Importer'
 }
@@ -90,6 +91,28 @@ GtJSImporter >> contentsOfFile: aFileReference [
 		  stream upToEnd ]
 ]
 
+{ #category : #accessing }
+GtJSImporter >> createAnnotationFrom: aDecoratorExpression for: anEntity [
+	| annotationType type |
+	(aDecoratorExpression isKindOf: JSDecoratorExpressionNode) ifFalse: [ ^ self ].
+	aDecoratorExpression
+		attributeNamed: #modelObject
+		ifAbsent: [ type := aDecoratorExpression expression.
+			(type isKindOf: JSCallExpressionNode) ifTrue: [ type := type expression ].
+			((type isKindOf: JSNameExpressionNode)
+				or: [ type isKindOf: JSNamedPropertyExpressionNode ])
+				ifTrue: [ annotationType := self ensureAnnotationNamed: type name source.
+					aDecoratorExpression
+						attributeNamed: #modelObject
+						put: (FAMIXAnnotationInstance new
+								annotationType: annotationType;
+								annotatedEntity: anEntity;
+								sourceAnchor: (self sourceAnchorFor: aDecoratorExpression);
+								mooseModel: model;
+								propertyNamed: #ast put: aDecoratorExpression;
+								yourself) ] ]
+]
+
 { #category : #'private-model' }
 GtJSImporter >> createCommentsFrom: aModule [
 	aModule comments
@@ -145,6 +168,16 @@ GtJSImporter >> createScriptFrom: moduleNode [
 { #category : #private }
 GtJSImporter >> currentScope [
 	^ scopeStack last
+]
+
+{ #category : #accessing }
+GtJSImporter >> ensureAnnotationNamed: aString [
+	^ annotationTypes
+		at: aString
+		ifAbsentPut: [ FAMIXAnnotationType new
+				name: aString;
+				mooseModel: model;
+				yourself ]
 ]
 
 { #category : #'private-model' }
@@ -404,9 +437,7 @@ GtJSImporter >> importDirectory: aDirectory [
 
 { #category : #importing }
 GtJSImporter >> importDirectory: aDirectory excluding: patternCollection [
-	model rootFolder: aDirectory asFileReference.
-	self importSourceDirectory: aDirectory excluding: patternCollection.
-	self finishImport
+	self importSourceDirectory: aDirectory excluding: patternCollection
 ]
 
 { #category : #importing }
@@ -453,11 +484,8 @@ GtJSImporter >> initialize [
 	folders := Dictionary new.
 	files := Dictionary new.
 	scripts := OrderedCollection new.
-	modules := Dictionary new.
-	classes := Dictionary new.
-	globals := Dictionary new.
-	properties := Dictionary new.
-	enums := Dictionary new
+	annotationTypes := Dictionary new.
+	self resetForNewPackage
 ]
 
 { #category : #private }
@@ -647,6 +675,20 @@ GtJSImporter >> relativeNameFor: anAstNode includeExtension: aBoolean [
 	^ (fileReference relativeTo: directory) printWithDelimiter: $/
 ]
 
+{ #category : #initialization }
+GtJSImporter >> resetForNewPackage [
+	modules := Dictionary new.
+	classes := Dictionary new.
+	globals := Dictionary new.
+	properties := Dictionary new.
+	enums := Dictionary new
+]
+
+{ #category : #importing }
+GtJSImporter >> rootFolder: aDirectory [
+	model rootFolder: aDirectory asFileReference
+]
+
 { #category : #accessing }
 GtJSImporter >> scriptNamed: aString [
 	^ scripts detect: [ :each | each name = aString ] ifNone: [  ]
@@ -763,6 +805,12 @@ GtJSImporter >> visitConstructorDeclaration: aMethodDefinition [
 ]
 
 { #category : #visiting }
+GtJSImporter >> visitDecoratorExpression: aDecoratorExpression [
+	self createAnnotationFrom: aDecoratorExpression for: self currentScope.
+	^ super visitDecoratorExpression: aDecoratorExpression
+]
+
+{ #category : #visiting }
 GtJSImporter >> visitEnumDeclaration: anEnumDeclaration [
 	| enum name |
 	name := anEnumDeclaration name source.
@@ -836,6 +884,39 @@ GtJSImporter >> visitMemberFunctionDeclaration: aMethodDefinition [
 		ensureTSFunctionNamed: aMethodDefinition name source
 		for: aMethodDefinition
 		around: [ super visitMemberFunctionDeclaration: aMethodDefinition ]
+]
+
+{ #category : #visiting }
+GtJSImporter >> visitMemberVariableDeclaration: aMemberVariableDeclaration [
+	| name var access |
+	name := aMemberVariableDeclaration name source.
+	var := (scopeStack size = 1
+			and: [ (aMemberVariableDeclaration parentOfType: JSLexicalDeclarationNode) isNil ])
+			ifTrue: [ self ensureGlobalNamed: name ]
+			ifFalse: [ self ensureLocalVariableNamed: name ].
+	var sourceAnchor: (self sourceAnchorFor: aMemberVariableDeclaration).
+	self storeAST: aMemberVariableDeclaration into: var.
+	aMemberVariableDeclaration equalToken notNil
+		ifTrue: [ assignmentExpressions add: aMemberVariableDeclaration -> self currentScope.
+			access := FAMIXAccess new
+					from: (self currentScope
+							ifNotNil: [ :ent | (ent isKindOf: FAMIXBehaviouralEntity) ifTrue: [ ent ] ]);
+					to: var;
+					isWrite: true;
+					sourceAnchor: var sourceAnchor;
+					yourself.
+			model add: access.
+			self storeAST: aMemberVariableDeclaration into: access.
+			currentFile addEntity: access.
+			(aMemberVariableDeclaration value isKindOf: JSBooleanLiteralNode)
+				ifTrue: [ var declaredType: self booleanType ].
+			(aMemberVariableDeclaration value isKindOf: JSNumericLiteralNode)
+				ifTrue: [ var declaredType: self numberType ].
+			(aMemberVariableDeclaration value isKindOf: JSStringLiteralNode)
+				ifTrue: [ var declaredType: self stringType ] ].
+	aMemberVariableDeclaration decorators
+		do: [ :each | self createAnnotationFrom: each for: var ].
+	super visitMemberVariableDeclaration: aMemberVariableDeclaration
 ]
 
 { #category : #visiting }
@@ -916,6 +997,21 @@ GtJSImporter >> visitPropertyAssignment: aNode [
 ]
 
 { #category : #visiting }
+GtJSImporter >> visitTSExport: anExportDeclaration [
+	((anExportDeclaration respondsTo: #decorators)
+		and: [ (anExportDeclaration perform: #decorators) notEmpty
+				and: [ anExportDeclaration respondsTo: #declaration ] ])
+		ifTrue: [ self accept: (anExportDeclaration perform: #declaration).
+			(anExportDeclaration perform: #decorators)
+				do: [ :each | 
+					self
+						createAnnotationFrom: each
+						for: (((anExportDeclaration perform: #declaration) attributeNamed: #modelObject)
+								ifNil: [ self currentScope ]) ] ]
+		ifFalse: [ super visitTSExport: anExportDeclaration ]
+]
+
+{ #category : #visiting }
 GtJSImporter >> visitTSSourceFile: aNode [
 	self createScriptFrom: aNode.
 	self createCommentsFrom: aNode.
@@ -973,6 +1069,8 @@ GtJSImporter >> visitVariableDeclaration: aVariableDeclaration [
 					(aVariableDeclaration value isKindOf: JSNumericLiteralNode)
 						ifTrue: [ var declaredType: self numberType ].
 					(aVariableDeclaration value isKindOf: JSStringLiteralNode)
-						ifTrue: [ var declaredType: self stringType ] ] ].
+						ifTrue: [ var declaredType: self stringType ] ].
+			aVariableDeclaration decorators
+				do: [ :each | self createAnnotationFrom: each for: var ] ].
 	super visitVariableDeclaration: aVariableDeclaration
 ]
