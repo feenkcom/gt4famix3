@@ -62,7 +62,7 @@ GtAngularConfigWithVars2Test >> testModuleA [
 	| moduleA |
 	moduleA := importer targetModel allAngularModules entityNamed: 'moduleA'.
 	self assert: moduleA components size equals: 4.
-	self assert: (moduleA components anySatisfy: [ :c | c template name = 'template1.html' ]).
+	self assert: (moduleA components anySatisfy: [ :c | c templateUrl = 'template1.html' ]).
 ]
 
 { #category : #testing }

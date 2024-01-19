@@ -29,7 +29,9 @@ GtAngularImporterTest >> setUp [
 	importer := GtAngularImporter new.
 	root := FileSystem memory workingDirectory / 'root'.
 	root ensureCreateDirectory.
-	self samples do: [ :each |
-		((root / each), 'js') writeStreamDo: [ :s | s nextPutAll: (self perform: each) ] ].
-	importer importDirectory: root
+	self samples
+		do: [ :each | root / each , 'js' writeStreamDo: [ :s | s nextPutAll: (self perform: each) ] ].
+	importer rootFolder: root.
+	importer importDirectory: root.
+	importer finishImport
 ]

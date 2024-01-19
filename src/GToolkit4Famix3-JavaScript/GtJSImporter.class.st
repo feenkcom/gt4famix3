@@ -437,9 +437,7 @@ GtJSImporter >> importDirectory: aDirectory [
 
 { #category : #importing }
 GtJSImporter >> importDirectory: aDirectory excluding: patternCollection [
-	model rootFolder: aDirectory asFileReference.
-	self importSourceDirectory: aDirectory excluding: patternCollection.
-	self finishImport
+	self importSourceDirectory: aDirectory excluding: patternCollection
 ]
 
 { #category : #importing }
@@ -486,12 +484,8 @@ GtJSImporter >> initialize [
 	folders := Dictionary new.
 	files := Dictionary new.
 	scripts := OrderedCollection new.
-	modules := Dictionary new.
-	classes := Dictionary new.
-	globals := Dictionary new.
-	properties := Dictionary new.
-	enums := Dictionary new.
-	annotationTypes := Dictionary new
+	annotationTypes := Dictionary new.
+	self resetForNewPackage
 ]
 
 { #category : #private }
@@ -679,6 +673,20 @@ GtJSImporter >> relativeNameFor: anAstNode includeExtension: aBoolean [
 	aBoolean
 		ifFalse: [ fileReference := fileReference withoutExtension ].
 	^ (fileReference relativeTo: directory) printWithDelimiter: $/
+]
+
+{ #category : #initialization }
+GtJSImporter >> resetForNewPackage [
+	modules := Dictionary new.
+	classes := Dictionary new.
+	globals := Dictionary new.
+	properties := Dictionary new.
+	enums := Dictionary new
+]
+
+{ #category : #importing }
+GtJSImporter >> rootFolder: aDirectory [
+	model rootFolder: aDirectory asFileReference
 ]
 
 { #category : #accessing }

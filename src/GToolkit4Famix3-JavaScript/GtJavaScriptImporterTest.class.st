@@ -34,5 +34,7 @@ GtJavaScriptImporterTest >> setUp [
 			filename := dir / ('sample' , i printString , '.js').
 			filename writeStreamDo: [ :stream | stream nextPutAll: each ] ].
 	importer := GtJSImporter new.
-	importer importDirectory: dir
+	importer rootFolder: dir.
+	importer importDirectory: dir.
+	importer finishImport
 ]
