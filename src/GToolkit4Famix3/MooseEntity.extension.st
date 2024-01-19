@@ -40,28 +40,19 @@ MooseEntity >> gtNavigationFor: aView [
 		priority: 1;
 		items: [ self gtNavigationItems ];
 		column: 'Icon' icon: [ :assoc | assoc value gtIcon ];
-		"column: 'Name' text: [ :assoc | assoc key ];"
-		column: 'Name' do: [ :aColumn | aColumn
-			cellStencil: [
-				BrLabel new
-					aptitude: (BrGlamorousLabelAptitude new );
-					addAptitude: (BrGlamorousWithContextMenuAptitude
-						content: [ BrGlamorousSimpleContextMenuContent new
-								items: {(
-									'Browse the method implementing the navigation' -> [ :e | 
-										|navigationPragma|
-										navigationPragma := e userData  at: #navigationPragma.
-										e phlow spawnObject: (navigationPragma  methodClass >> navigationPragma methodSelector) asRingDefinition ])};
-								yourself ]) ];
-			dataBinder: [ :eachLabel :assoc | 
-				|displayValue|
-				displayValue := (' ' join: ((assoc key argumentAt: 1) piecesCutWhereCamelCase collect: #capitalized)).
-				
-				eachLabel 
-					in: [ :aLabel | aLabel userData  at: #navigationPragma put: assoc key ];
-					text: displayValue ] ];
+		column: 'Name'
+			text: [ :assoc | 
+				' '
+					join: ((assoc key argumentAt: 1) piecesCutWhereCamelCase collect: #capitalized) ];
 		column: 'Value' text: [ :assoc | assoc value gtDisplayString ];
-		send: [ :assoc | assoc value ]
+		send: [ :assoc | assoc value ];
+		contextItemLabel: 'Browse the method implementing the navigation'
+			action: [ :element :assoc | 
+				element phlow
+					spawnTool: (GtMethodCoderTool
+							compiledMethod: assoc key methodClass >> assoc key methodSelector) ];
+		contextItemLabel: 'Copy method name'
+			action: [ :anElement :assoc | Clipboard clipboardText: assoc key methodSelector ]
 ]
 
 { #category : #'*GToolkit4Famix3' }
