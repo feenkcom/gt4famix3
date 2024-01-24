@@ -92,6 +92,13 @@ MooseModel >> gtItemsFor: aView [
 ]
 
 { #category : #'*GToolkit4Famix3' }
+MooseModel >> gtRootFolderFor: aView [
+	<gtView>
+	self rootFolder isNil ifTrue: [ ^ aView empty].
+	^ (self rootFolder gtTreeFor: aView) title: 'Root folder'
+]
+
+{ #category : #'*GToolkit4Famix3' }
 MooseModel >> gtSpotterAnnotationTypesFor: aStep [
 	<gtSearch>
 	^ self spotter: 'Annotation types' on: [ self allAnnotationTypes ] for: aStep
