@@ -452,6 +452,7 @@ GtJSImporter >> importJSFile: aFile using: aParserClass [
 
 { #category : #importing }
 GtJSImporter >> importSourceDirectory: aDirectory excluding: patternCollection [
+	model propertyNamed: #rootFolder ifAbsent: [ model rootFolder: aDirectory ].
 	directory := aDirectory asFileReference.
 	directory fileSystem store isMemoryFileSystem
 		ifFalse: [ directory := directory absolutePath ].
@@ -564,7 +565,7 @@ GtJSImporter >> parameterClassFor: aVariableDeclaration [
 
 { #category : #accessing }
 GtJSImporter >> parserClass: aClass [
-	self parserClass: {aClass}
+	self parserClasses: {aClass}
 ]
 
 { #category : #accessing }
