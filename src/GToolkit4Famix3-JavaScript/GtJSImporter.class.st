@@ -452,7 +452,9 @@ GtJSImporter >> importJSFile: aFile using: aParserClass [
 
 { #category : #importing }
 GtJSImporter >> importSourceDirectory: aDirectory excluding: patternCollection [
-	model privateState attributeAt: #rootFolder ifAbsent: [ model rootFolder: aDirectory ].
+	model privateState
+		attributeAt: #rootFolder
+		ifAbsent: [ model rootFolder: aDirectory ].
 	directory := aDirectory asFileReference.
 	directory fileSystem store isMemoryFileSystem
 		ifFalse: [ directory := directory absolutePath ].
@@ -463,7 +465,6 @@ GtJSImporter >> importSourceDirectory: aDirectory excluding: patternCollection [
 				do: [ :each | 
 					(self filename: each matchesAny: patternCollection)
 						ifFalse: [ self importJSFile: each using: class ] ] ]
-		displayingProgress: 'Importing JS Files'
 ]
 
 { #category : #accessing }
