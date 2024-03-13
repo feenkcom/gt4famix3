@@ -452,7 +452,7 @@ GtJSImporter >> importJSFile: aFile using: aParserClass [
 
 { #category : #importing }
 GtJSImporter >> importSourceDirectory: aDirectory excluding: patternCollection [
-	model propertyNamed: #rootFolder ifAbsent: [ model rootFolder: aDirectory ].
+	model privateState attributeAt: #rootFolder ifAbsent: [ model rootFolder: aDirectory ].
 	directory := aDirectory asFileReference.
 	directory fileSystem store isMemoryFileSystem
 		ifFalse: [ directory := directory absolutePath ].
@@ -673,7 +673,7 @@ GtJSImporter >> relativeNameFor: anAstNode includeExtension: aBoolean [
 	fileReference := anAstNode topParent filename asFileReference.
 	aBoolean
 		ifFalse: [ fileReference := fileReference withoutExtension ].
-	^ (fileReference relativeTo: directory) printWithDelimiter: $/
+	^ (fileReference relativeTo: model rootFolder) printWithDelimiter: $/
 ]
 
 { #category : #initialization }
