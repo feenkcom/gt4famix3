@@ -33,13 +33,18 @@ MooseEntity >> gtIcon [
 ]
 
 { #category : #'*GToolkit4Famix3' }
+MooseEntity >> gtIconName [
+	^ #mooseMetamodelEntity
+]
+
+{ #category : #'*GToolkit4Famix3' }
 MooseEntity >> gtNavigationFor: aView [
 	<gtView>
 	^ aView columnedList
 		title: 'Navigation';
 		priority: 1;
 		items: [ self gtNavigationItems ];
-		column: 'Icon' icon: [ :assoc | assoc value gtIcon ];
+		column: 'Icon' iconName: [ :assoc | assoc value gtIconName ] width: 36;
 		column: 'Name'
 			text: [ :assoc | 
 				' '

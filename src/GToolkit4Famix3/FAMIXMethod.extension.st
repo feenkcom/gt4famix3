@@ -6,6 +6,11 @@ FAMIXMethod >> gtIcon [
 ]
 
 { #category : #'*GToolkit4Famix3' }
+FAMIXMethod >> gtIconName [
+	^ #famixMethod
+]
+
+{ #category : #'*GToolkit4Famix3' }
 FAMIXMethod >> mavenDirectory [
 	^ self sourceAnchor ifNotNil: [ :anchor | 
 		anchor fileReference mavenDirectory ]

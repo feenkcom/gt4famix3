@@ -7,7 +7,9 @@ FAMIXType >> gtAttributesFor: aView [
 		title: 'Attributes';
 		priority: 15;
 		items: [ self attributes asOrderedCollection ];
-		column: 'Icon' icon: [ :each | each gtIcon ];
+		column: 'Icon'
+			iconName: [ :each | each gtIconName ]
+			width: 36;
 		column: 'Name' translated text: [ :each | each name ];
 		column: 'Declared type' translated
 			text: [ :each | each declaredType gtDisplayString ]
@@ -28,7 +30,9 @@ FAMIXType >> gtMethodsFor: aView [
 		title: 'Methods';
 		priority: 10;
 		items: [ self methods sorted: [ :a :b | a signature < b signature ] ];
-		column: 'Icon' icon: [ :each | each gtIcon ];
+		column: 'Icon'
+			iconName: [ :each | each gtIconName ]
+			width: 36;
 		column: 'Name' translated text: [ :each | each signature ];
 		column: 'Declared type' translated
 			text: [ :each | each declaredType gtDisplayString ]
