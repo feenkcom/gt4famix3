@@ -30,6 +30,11 @@ MooseGroup >> gtIcon [
 ]
 
 { #category : #'*GToolkit4Famix3' }
+MooseGroup >> gtIconName [
+	^ #mooseMetamodelGroup
+]
+
+{ #category : #'*GToolkit4Famix3' }
 MooseGroup >> gtSpotterItemsFor: aSearch [
 	<gtSearch>
 	^ aSearch list

@@ -6,6 +6,11 @@ FAMIXEntity >> gtIcon [
 ]
 
 { #category : #'*GToolkit4Famix3' }
+FAMIXEntity >> gtIconName [
+	^ #mooseMetamodelEntity
+]
+
+{ #category : #'*GToolkit4Famix3' }
 FAMIXEntity >> gtLinksForFile: aFileReference do: aBlock [
 	
 ]

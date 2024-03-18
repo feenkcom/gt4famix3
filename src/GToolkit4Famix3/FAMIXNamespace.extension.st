@@ -28,6 +28,11 @@ FAMIXNamespace >> gtIcon [
 ]
 
 { #category : #'*GToolkit4Famix3' }
+FAMIXNamespace >> gtIconName [
+	^ #famixNamespace
+]
+
+{ #category : #'*GToolkit4Famix3' }
 FAMIXNamespace >> gtNestingFor: aView [
 	<gtView>
 	^ aView pannable 

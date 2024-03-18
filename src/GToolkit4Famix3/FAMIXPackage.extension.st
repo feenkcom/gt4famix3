@@ -4,3 +4,8 @@ Extension { #name : #FAMIXPackage }
 FAMIXPackage >> gtIcon [
 	^ MooseIcons famixPackage
 ]
+
+{ #category : #'*GToolkit4Famix3' }
+FAMIXPackage >> gtIconName [
+	^ #famixPackage
+]
