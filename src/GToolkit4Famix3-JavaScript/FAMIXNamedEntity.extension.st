@@ -21,6 +21,16 @@ FAMIXNamedEntity >> jsInvocation: anInvocation [
 ]
 
 { #category : #'*GToolkit4Famix3-JavaScript' }
+FAMIXNamedEntity >> outgoingGtJSSwaggerCalls [
+	<MSEProperty: #outgoingGtJSSwaggerCalls type: #GtJSSwaggerCall opposite: #caller>
+	<multivalued>
+	<derived>
+	^ self
+		propertyNamed: #outgoingGtJSSwaggerCalls
+		ifAbsentPut: [ GtJSSwaggerCallGroup new ]
+]
+
+{ #category : #'*GToolkit4Famix3-JavaScript' }
 FAMIXNamedEntity >> potentialJSFunctions [
 	<MSEProperty: #potentialJSFunctions type: #FAMIXFunction opposite: #potentialJSEntities>
 	<multivalued>

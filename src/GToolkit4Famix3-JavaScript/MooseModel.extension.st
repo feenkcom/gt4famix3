@@ -24,6 +24,18 @@ MooseModel >> allAngularTemplates [
 ]
 
 { #category : #'*GToolkit4Famix3-JavaScript' }
+MooseModel >> allGtJSSwaggerCalls [
+	<navigation: 'All Swagger Calls'>
+	^ GtJSSwaggerCallGroup withAll: (self allWithType: GtJSSwaggerCall)
+]
+
+{ #category : #'*GToolkit4Famix3-JavaScript' }
+MooseModel >> allGtJSSwaggerHandlers [
+	<navigation: 'All Swagger Handlers'>
+	^ self allWithType: GtJSSwaggerHandler
+]
+
+{ #category : #'*GToolkit4Famix3-JavaScript' }
 MooseModel >> allJSInvocations [
 	^ self allWithType: GtJSInvocation
 ]
