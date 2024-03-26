@@ -33,22 +33,18 @@ FAMIXAbstractFileAnchor >> gtAddLinksTo: text [
 
 { #category : #'*GToolkit4Famix3' }
 FAMIXAbstractFileAnchor >> gtCompleteSourceFor: aView [
-	<gtView> 
-	self completeText isEmpty
-		ifTrue: [ ^ aView empty ].
-	^ aView explicit
-		title: 'Complete source';
-		priority: 5;
-		stencil: [ | e text |
-			text := self gtText.
-			e := BrEditor new
-				text: text;
-				aptitude: BrGlamorousCodeEditorAptitude new.
-			element notNil
-				ifTrue: [ element gtStyler ifNotNil: [ :styler | e styler: styler ] ].
-			e
-				scrollToPosition: (self completeText lineNumberCorrespondingToIndex: self startPos).
-			e ]
+	<gtView>
+	| view |
+	self completeText isEmpty ifTrue: [ ^ aView empty ].
+	view := aView textEditor
+			title: 'Complete source';
+			priority: 5;
+			aptitude: BrGlamorousCodeEditorAptitude;
+			text: [ self gtText ];
+			scrollAndHighlight: [ GtPhlowTextHighlight from: self startPos to: self endPos ].
+	element
+		ifNotNil: [ element gtStyler ifNotNil: [ :styler | view styler: styler ] ].
+	^ view
 ]
 
 { #category : #'*GToolkit4Famix3' }
