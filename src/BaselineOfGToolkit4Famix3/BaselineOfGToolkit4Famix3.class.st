@@ -18,6 +18,8 @@ BaselineOfGToolkit4Famix3 >> baseline: spec [
 				spec requires: #('Famix3SmalltalkImporter' ). ];
 			package: 'GToolkit4Famix3-JavaScript' with: [
 				spec requires: #('Famix3SmalltalkImporter' ). ];
+			package: 'GToolkit4Famix3-Java' with: [
+				spec requires: #('Famix3SmalltalkImporter' ). ];
 			package: 'GToolkit4Famix3-VisualStudio' with: [
 				spec requires: #('GToolkit4XMLSupport' ). ]. ].
 
