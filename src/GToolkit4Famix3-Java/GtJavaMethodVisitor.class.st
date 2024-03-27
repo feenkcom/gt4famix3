@@ -1,8 +1,6 @@
 Class {
 	#name : #GtJavaMethodVisitor,
-	#superclass : #Object,
-	#traits : 'TJavaProgramNodeVisitor',
-	#classTraits : 'TJavaProgramNodeVisitor classTrait',
+	#superclass : #JavaProgramNodeVisitor,
 	#instVars : [
 		'importer',
 		'insideMethod'
@@ -19,7 +17,7 @@ GtJavaMethodVisitor >> acceptNode: aSmaCCParseNode [
 		ifFalse: [ (importer methodNodeFor: aSmaCCParseNode)
 				ifNil: [ ^ self visitSmaCCParseNode: aSmaCCParseNode ].
 			insideMethod := true ].
-	^ [ aSmaCCParseNode acceptVisitor: self ] ensure: [ insideMethod := previous ]
+	^ [ super acceptNode: aSmaCCParseNode ] ensure: [ insideMethod := previous ]
 ]
 
 { #category : #accessing }
