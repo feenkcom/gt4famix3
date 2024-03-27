@@ -142,6 +142,7 @@ GtSmaCCJavaImporter >> buildJavaModel [
 	self importNamespaces.
 	self importInterfaces.
 	self importClasses.
+	self importRecords.
 	self importEnums.
 	self addInheritedTypes.
 	self addAnnotationTypes.
@@ -541,6 +542,37 @@ GtSmaCCJavaImporter >> ensureNamespaceFrom: aNode [
 ]
 
 { #category : #accessing }
+GtSmaCCJavaImporter >> ensureRecordMethodAndVariableFrom: parm [
+	| attr famixFile method |
+	famixFile := parm topParent attributeNamed: #famixFile.
+	parm
+		attributeNamed: #entities
+		put: ({parm variable}
+				collect: [ :each | 
+					attr := FAMIXAttribute new
+							name: each name source;
+							sourceAnchor: (self sourceAnchorFor: parm);
+							parentType: (self containerIn: parm parent);
+							declaredType: (self typeFrom: parm type);
+							mooseModel: model;
+							propertyNamed: #ast put: each;
+							yourself.
+					famixFile addEntity: attr.
+					attr ]).
+	method := FAMIXMethod new
+			name: parm variable name source;
+			sourceAnchor: (self sourceAnchorFor: parm);
+			parentType: (self containerIn: parm parent);
+			declaredType: (self typeFrom: parm type);
+			mooseModel: model;
+			propertyNamed: #ast put: parm;
+			yourself.
+	famixFile addEntity: method.
+	self addMethodSignature: method.
+	^ attr
+]
+
+{ #category : #accessing }
 GtSmaCCJavaImporter >> ensureRootNamespace: aString [
 	rootNamespaces ifNil: [ rootNamespaces := Dictionary new ].
 	^ rootNamespaces
@@ -643,7 +675,9 @@ GtSmaCCJavaImporter >> importClassParts [
 					(each isKindOf: JavaTryStatementNode)
 						ifTrue: [ self ensureTryVariables: each ].
 					(each isKindOf: JavaCatchClauseNode)
-						ifTrue: [ self ensureCatchVariables: each ] ]
+						ifTrue: [ self ensureCatchVariables: each ].
+					(each isKindOf: JavaRecordDeclarationNode)
+						ifTrue: [ each parameters do: [ :parm | self ensureRecordMethodAndVariableFrom: parm ] ] ]
 						on: Error
 						do: [ :ex | ex return ] ] ]
 ]
@@ -701,6 +735,15 @@ GtSmaCCJavaImporter >> importNamespaces [
 		javaAstsDo: [ :each | 
 			each packageDeclaration
 				ifNotNil: [ :decl | each attributeNamed: #container put: (self ensureNamespaceFrom: decl name) ] ]
+]
+
+{ #category : #accessing }
+GtSmaCCJavaImporter >> importRecords [
+	self
+		javaAstsDo: [ :node | 
+			node
+				withAllNodesOfType: JavaRecordDeclarationNode
+				do: [ :each | self createClassOrInterfaceFrom: each ] ]
 ]
 
 { #category : #accessing }
