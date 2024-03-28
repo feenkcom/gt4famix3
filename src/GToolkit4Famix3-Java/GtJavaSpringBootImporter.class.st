@@ -1,5 +1,5 @@
 Class {
-	#name : #GtJavaSwingImporter,
+	#name : #GtJavaSpringBootImporter,
 	#superclass : #Object,
 	#instVars : [
 		'model'
@@ -8,7 +8,7 @@ Class {
 }
 
 { #category : #importing }
-GtJavaSwingImporter >> addJavaCallsTo: allMappings [
+GtJavaSpringBootImporter >> addJavaCallsTo: allMappings [
 	model allInvocations
 		do: [ :each | 
 			each gtASTNode
@@ -49,7 +49,7 @@ GtJavaSwingImporter >> addJavaCallsTo: allMappings [
 ]
 
 { #category : #importing }
-GtJavaSwingImporter >> addSpringEntities [
+GtJavaSpringBootImporter >> addSpringEntities [
 	| restController |
 	restController := model
 			entityNamed: #'org::springframework::web::bind::annotation::RestController'.
@@ -109,7 +109,7 @@ GtJavaSwingImporter >> addSpringEntities [
 ]
 
 { #category : #importing }
-GtJavaSwingImporter >> buildSpringModel [
+GtJavaSpringBootImporter >> buildSpringModel [
 	| allMappings |
 	self addSpringEntities.
 	allMappings := model allWithType: GtJavaSpringMapping.
@@ -117,7 +117,7 @@ GtJavaSwingImporter >> buildSpringModel [
 ]
 
 { #category : #testing }
-GtJavaSwingImporter >> doesName: aNode include: aString [
+GtJavaSpringBootImporter >> doesName: aNode include: aString [
 	(aNode isKindOf: JavaNameNode)
 		ifTrue: [ aNode name value = aString ifTrue: [ ^ true ].
 			(aNode isKindOf: JavaQualifiedNameNode)
@@ -126,7 +126,7 @@ GtJavaSwingImporter >> doesName: aNode include: aString [
 ]
 
 { #category : #importing }
-GtJavaSwingImporter >> doesRequest: aMapping matchCall: call [
+GtJavaSpringBootImporter >> doesRequest: aMapping matchCall: call [
 	aMapping
 		fullPathsDo: [ :url :type | 
 			((type isNil
@@ -136,7 +136,7 @@ GtJavaSwingImporter >> doesRequest: aMapping matchCall: call [
 ]
 
 { #category : #importing }
-GtJavaSwingImporter >> doesRequestUrl: reqString matchCallUrl: callString [
+GtJavaSpringBootImporter >> doesRequestUrl: reqString matchCallUrl: callString [
 	| regexString call |
 	regexString := self regexStringForRequest: reqString.
 	regexString = '.*[^/]+' ifTrue: [ ^ false ].
@@ -146,14 +146,14 @@ GtJavaSwingImporter >> doesRequestUrl: reqString matchCallUrl: callString [
 ]
 
 { #category : #importing }
-GtJavaSwingImporter >> fullNameOf: aNode [
+GtJavaSpringBootImporter >> fullNameOf: aNode [
 	^ (aNode isKindOf: JavaQualifiedNameNode)
 		ifTrue: [ (self fullNameOf: aNode nspace) , '::' , aNode name source ]
 		ifFalse: [ aNode name source ]
 ]
 
 { #category : #importing }
-GtJavaSwingImporter >> isRequest: aReq handledBy: bReq [
+GtJavaSpringBootImporter >> isRequest: aReq handledBy: bReq [
 	aReq type = bReq type ifFalse: [ ^ false ].
 	bReq
 		fullPathsDo: [ :bUrl | 
@@ -166,17 +166,17 @@ GtJavaSwingImporter >> isRequest: aReq handledBy: bReq [
 ]
 
 { #category : #accessing }
-GtJavaSwingImporter >> model [
+GtJavaSpringBootImporter >> model [
 	^ model
 ]
 
 { #category : #accessing }
-GtJavaSwingImporter >> model: anObject [
+GtJavaSpringBootImporter >> model: anObject [
 	model := anObject
 ]
 
 { #category : #importing }
-GtJavaSwingImporter >> possibleCandidatesFrom: allMappings forCall: call [
+GtJavaSpringBootImporter >> possibleCandidatesFrom: allMappings forCall: call [
 	| possible |
 	possible := allMappings
 			select: [ :mapping | self doesRequest: mapping matchCall: call ].
@@ -190,7 +190,7 @@ GtJavaSwingImporter >> possibleCandidatesFrom: allMappings forCall: call [
 ]
 
 { #category : #importing }
-GtJavaSwingImporter >> regexStringForRequest: reqString [
+GtJavaSpringBootImporter >> regexStringForRequest: reqString [
 	^ String
 		streamContents: [ :stream | 
 			| inStream |
@@ -210,14 +210,14 @@ GtJavaSwingImporter >> regexStringForRequest: reqString [
 ]
 
 { #category : #importing }
-GtJavaSwingImporter >> requestTypeFrom: aNode [
+GtJavaSpringBootImporter >> requestTypeFrom: aNode [
 	| source |
 	source := aNode source.
 	^ (source beginsWith: 'HttpMethod.') ifTrue: [ source allButFirst: 11 ]
 ]
 
 { #category : #importing }
-GtJavaSwingImporter >> sourceAnchorFor: aNode [
+GtJavaSpringBootImporter >> sourceAnchorFor: aNode [
 	^ FAMIXIndexedFileEntityAnchor
 		file: (aNode topParent attributeNamed: #famixFile)
 		startPos: aNode startPosition
@@ -226,7 +226,7 @@ GtJavaSwingImporter >> sourceAnchorFor: aNode [
 ]
 
 { #category : #importing }
-GtJavaSwingImporter >> urlFrom: aNode [
+GtJavaSpringBootImporter >> urlFrom: aNode [
 	(aNode isKindOf: JavaStringLiteralNode)
 		ifTrue: [ ^ aNode token source allButFirst allButLast ].
 	(aNode isKindOf: JavaBinaryExpressionNode)
@@ -239,7 +239,7 @@ GtJavaSwingImporter >> urlFrom: aNode [
 ]
 
 { #category : #importing }
-GtJavaSwingImporter >> urlValueOf: aString from: aNode [
+GtJavaSpringBootImporter >> urlValueOf: aString from: aNode [
 	| current container |
 	current := aNode.
 	[ current notNil ]
@@ -296,6 +296,6 @@ GtJavaSwingImporter >> urlValueOf: aString from: aNode [
 ]
 
 { #category : #importing }
-GtJavaSwingImporter >> urlValueOfQualifiedName: aNode [
+GtJavaSpringBootImporter >> urlValueOfQualifiedName: aNode [
 	^ '{' , aNode source , '}'
 ]
