@@ -51,9 +51,9 @@ GtJavaSpringCallGroup >> gtItemsFor: aView [
 	^ aView columnedList
 		title: 'Items';
 		priority: 0;
-		items: [ self entities ];
-		column: 'Url'
-			text: [ :each | (each to flatCollect: #paths) ifEmpty: [ '' ] ifNotEmpty: #first ];
+		items: [ self entities
+				asSortedCollection: [ :a :b | (a url ifNil: [ '' ]) < (b url ifNil: [ '' ]) ] ];
+		column: 'Url' text: [ :each | each url ifNil: [ '' ] ];
 		column: 'Type'
 			text: [ :each | 
 				(each to collect: #type)
