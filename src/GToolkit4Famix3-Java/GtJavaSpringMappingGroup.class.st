@@ -12,9 +12,10 @@ GtJavaSpringMappingGroup >> gtCoveredFor: aView [
 		priority: 0.5;
 		items: [ self entities
 				sorted: [ :a :b | 
-					(a paths ifEmpty: [ '' ] ifNotEmpty: #first)
-						< (b paths ifEmpty: [ '' ] ifNotEmpty: #first) ] ];
-		column: 'Url' text: [ :each | each paths ifEmpty: [ '' ] ifNotEmpty: #first ];
+					(a fullPaths ifEmpty: [ '' ] ifNotEmpty: #first)
+						< (b fullPaths ifEmpty: [ '' ] ifNotEmpty: #first) ] ];
+		column: 'Url'
+			text: [ :each | each fullPaths ifEmpty: [ '' ] ifNotEmpty: #first ];
 		column: 'Type'
 			text: [ :each | each type ifNil: [ '' ] ]
 			width: 50;
@@ -37,9 +38,9 @@ GtJavaSpringMappingGroup >> gtItemsFor: aView [
 		priority: 0;
 		items: [ self entities
 				sorted: [ :a :b | 
-					(a paths ifEmpty: [ '' ] ifNotEmpty: #first)
-						< (b paths ifEmpty: [ '' ] ifNotEmpty: #first) ] ];
-		column: 'Url' text: [ :each | each paths ifEmpty: [ '' ] ifNotEmpty: #first ];
+					(a fullPaths ifEmpty: [ '' ] ifNotEmpty: #first)
+						< (b fullPaths ifEmpty: [ '' ] ifNotEmpty: #first) ] ];
+		column: 'Url' text: [ :each | each fullPaths ifEmpty: [ '' ] ifNotEmpty: #first ];
 		column: 'Type'
 			text: [ :each | each type ifNil: [ '' ] ]
 			width: 50;

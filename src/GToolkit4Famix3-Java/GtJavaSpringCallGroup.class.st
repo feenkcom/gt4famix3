@@ -53,7 +53,7 @@ GtJavaSpringCallGroup >> gtItemsFor: aView [
 		priority: 0;
 		items: [ self entities ];
 		column: 'Url'
-			text: [ :each | (each to flatCollect: #paths) ifEmpty: [ '' ] ifNotEmpty: #first ];
+			text: [ :each | (each to flatCollect: #fullPaths) ifEmpty: [ '' ] ifNotEmpty: #first ];
 		column: 'Type'
 			text: [ :each | 
 				(each to collect: #type)

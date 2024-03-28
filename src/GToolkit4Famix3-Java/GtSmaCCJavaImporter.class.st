@@ -433,6 +433,29 @@ GtSmaCCJavaImporter >> ensureInnerClassFrom: aNode [
 ]
 
 { #category : #accessing }
+GtSmaCCJavaImporter >> ensureInstanceofPatternVariable: aNode [
+	| var famixFile type methodNodeVars |
+	famixFile := aNode topParent attributeNamed: #famixFile.
+	type := self typeFrom: aNode type.
+	methodNodeVars := (aNode
+			parentOfType: {JavaStatementNode.
+					JavaConditionalExpressionNode.
+					JavaSwitchExpressionNode})
+			attributeNamed: #locals
+			ifAbsentPut: [ Dictionary new ].
+	var := FAMIXLocalVariable new
+			name: aNode variable name source;
+			sourceAnchor: (self sourceAnchorFor: aNode);
+			parentBehaviouralEntity: (self containerIn: aNode parent);
+			declaredType: type;
+			mooseModel: model;
+			propertyNamed: #ast put: aNode;
+			yourself.
+	methodNodeVars at: var name put: var.
+	famixFile addEntity: var
+]
+
+{ #category : #accessing }
 GtSmaCCJavaImporter >> ensureLambdaFrom: aNode [
 	| method famixFile |
 	famixFile := aNode topParent attributeNamed: #famixFile.
@@ -676,6 +699,8 @@ GtSmaCCJavaImporter >> importClassParts [
 						ifTrue: [ self ensureTryVariables: each ].
 					(each isKindOf: JavaCatchClauseNode)
 						ifTrue: [ self ensureCatchVariables: each ].
+					(each isKindOf: JavaInstanceofPatternExpressionNode)
+						ifTrue: [ self ensureInstanceofPatternVariable: each ].
 					(each isKindOf: JavaRecordDeclarationNode)
 						ifTrue: [ each parameters do: [ :parm | self ensureRecordMethodAndVariableFrom: parm ] ] ]
 						on: Error

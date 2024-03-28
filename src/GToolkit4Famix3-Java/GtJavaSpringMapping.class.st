@@ -88,6 +88,14 @@ GtJavaSpringMapping >> fullNameOf: aNode [
 ]
 
 { #category : #accessing }
+GtJavaSpringMapping >> fullPaths [
+	| fullPaths |
+	fullPaths := OrderedCollection new.
+	self fullPathsDo: [ :each | fullPaths add: each ].
+	^ fullPaths
+]
+
+{ #category : #accessing }
 GtJavaSpringMapping >> fullPathsDo: aBlock [
 	self gtJavaSpringEntity owner
 		ifNotNil: [ :owner | 
@@ -95,9 +103,9 @@ GtJavaSpringMapping >> fullPathsDo: aBlock [
 				ifNotEmpty: [ :reqs | 
 					reqs
 						do: [ :req | 
-							req paths
-								ifNotEmpty: [ :outerPaths | ^ outerPaths do: [ :o | paths do: [ :e | aBlock cull: o , e cull: type ] ] ] ] ] ].
-	paths do: [ :each | aBlock cull: each cull: type ]
+							req fullPaths
+								ifNotEmpty: [ :outerPaths | ^ outerPaths do: [ :o | self paths do: [ :e | aBlock cull: o , e cull: type ] ] ] ] ] ].
+	self paths do: [ :each | aBlock cull: each cull: type ]
 ]
 
 { #category : #accessing }
@@ -130,7 +138,7 @@ GtJavaSpringMapping >> gtPathsFor: aView [
 	<gtView>
 	^ aView list 
 		title: 'Paths';
-		items: [ self paths ]
+		items: [ self fullPaths ]
 ]
 
 { #category : #accessing }
@@ -269,7 +277,7 @@ GtJavaSpringMapping >> lookupValueOfQualifiedName: aNode [
 { #category : #accessing }
 GtJavaSpringMapping >> mooseNameOn: aStream [
 	aStream << (type ifNil: [ '' ]) << ':'
-		<< (self paths ifEmpty: [ '' ] ifNotEmpty: [ :c | c first ]) << '->'.
+		<< (self fullPaths ifEmpty: [ '' ] ifNotEmpty: [ :c | c first ]) << '->'.
 	springEntity ifNotNil: [ springEntity mooseNameOn: aStream ]
 ]
 
