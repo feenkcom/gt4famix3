@@ -9,43 +9,19 @@ Class {
 
 { #category : #importing }
 GtJavaSpringBootImporter >> addJavaCallsTo: allMappings [
-	model allInvocations
-		do: [ :each | 
-			each gtASTNode
-				ifNotNil: [ :ast | 
-					| name |
-					name := each signature.
-					((#('delete' 'get' 'patch' 'post' 'put') includes: name)
-						and: [ ast expressions size = 1
-								and: [ (self doesName: ast receiver include: 'MockMvcRequestBuilders')
-										or: [ ast receiver isNil
-												and: [ ast topParent imports
-														anySatisfy: [ :imp | 
-															imp staticToken notNil
-																and: [ self doesName: imp name include: 'MockMvcRequestBuilders' ] ] ] ] ] ])
-						ifTrue: [ | call |
-							call := GtJavaSpringCall new
-									from: each from;
-									requestType: name;
-									url: (self urlFrom: ast expressions first);
-									mooseModel: model;
-									sourceAnchor: (self sourceAnchorFor: ast);
-									propertyNamed: #ast put: ast;
-									yourself.
-							call candidates: (self possibleCandidatesFrom: allMappings forCall: call).
-							each containerFiles first addEntity: call ].
-					(name = 'exchange' and: [ ast expressions size > 2 ])
-						ifTrue: [ | call |
-							call := GtJavaSpringCall new
-									from: each from;
-									requestType: (self requestTypeFrom: ast expressions second);
-									url: (self urlFrom: ast expressions first);
-									mooseModel: model;
-									sourceAnchor: (self sourceAnchorFor: ast);
-									propertyNamed: #ast put: ast;
-									yourself.
-							call candidates: (self possibleCandidatesFrom: allMappings forCall: call).
-							each containerFiles first addEntity: call ] ] ]
+	self
+		springBootCallsDo: [ :invocation :url :type | 
+			| call |
+			call := GtJavaSpringCall new
+					from: invocation from;
+					requestType: type;
+					url: url;
+					mooseModel: model;
+					sourceAnchor: (self sourceAnchorFor: invocation gtASTNode);
+					propertyNamed: #ast put: invocation gtASTNode;
+					yourself.
+			call candidates: (self possibleCandidatesFrom: allMappings forCall: call).
+			invocation containerFiles first addEntity: call ]
 ]
 
 { #category : #importing }
@@ -223,6 +199,33 @@ GtJavaSpringBootImporter >> sourceAnchorFor: aNode [
 		startPos: aNode startPosition
 		endPos: aNode stopPosition
 		model: model
+]
+
+{ #category : #importing }
+GtJavaSpringBootImporter >> springBootCallsDo: aBlock [
+	model allInvocations
+		do: [ :each | 
+			each gtASTNode
+				ifNotNil: [ :ast | 
+					| name |
+					name := each signature.
+					((#('delete' 'get' 'patch' 'post' 'put') includes: name)
+						and: [ ast expressions size = 1
+								and: [ (self doesName: ast receiver include: 'MockMvcRequestBuilders')
+										or: [ ast receiver isNil
+												and: [ ast topParent imports
+														anySatisfy: [ :imp | 
+															imp staticToken notNil
+																and: [ self doesName: imp name include: 'MockMvcRequestBuilders' ] ] ] ] ] ])
+						ifTrue: [ aBlock
+								value: each
+								value: (self urlFrom: ast expressions first)
+								value: name ].
+					(name = 'exchange' and: [ ast expressions size > 2 ])
+						ifTrue: [ aBlock
+								value: each
+								value: (self urlFrom: ast expressions first)
+								value: (self requestTypeFrom: ast expressions second) ] ] ]
 ]
 
 { #category : #importing }
