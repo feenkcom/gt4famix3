@@ -1,6 +1,12 @@
 Extension { #name : #MooseModel }
 
 { #category : #'*GToolkit4Famix3' }
+MooseModel >> allGtOpenApiPaths [
+	<navigation: 'All OpenApi Paths'>
+	^ GtOpenApiPathGroup withAll: (self allWithType: GtOpenApiPath)
+]
+
+{ #category : #'*GToolkit4Famix3' }
 MooseModel >> fileAnchorFor: aFileReference [
 	| encoding |
 	aFileReference exists
