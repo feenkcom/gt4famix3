@@ -67,16 +67,16 @@ GtJavaSpringMapping >> buildFrom: annotationInst [
 		do: [ :each | 
 			(each isKindOf: JavaElementValuePairNode)
 				ifTrue: [ (#('path' 'value') includes: each name source)
-						ifTrue: [ paths := self urlsIn: each value ].
+						ifTrue: [ paths := self valuesIn: each value ].
 					each name source = 'produces'
-						ifTrue: [ produces := self valueOf: each value ].
+						ifTrue: [ produces := self valuesIn: each value ].
 					each name source = 'consumes'
-						ifTrue: [ consumes := self valueOf: each value ] ] ].
+						ifTrue: [ consumes := self valuesIn: each value ] ] ].
 	paths
 		ifNil: [ node values
 				do: [ :each | 
 					(paths isNil and: [ each isKindOf: JavaElementValuePairNode ])
-						ifFalse: [ paths := self urlsIn: each ] ] ].
+						ifFalse: [ paths := self valuesIn: each ] ] ].
 	paths ifNil: [ paths := #('') ]
 ]
 
@@ -302,13 +302,6 @@ GtJavaSpringMapping >> type: anObject [
 ]
 
 { #category : #private }
-GtJavaSpringMapping >> urlsIn: aNode [
-	^ (aNode isKindOf: JavaElementArrayInitializerNode)
-		ifTrue: [ aNode values collect: [ :each | self valueOf: each ] ]
-		ifFalse: [ {self valueOf: aNode} ]
-]
-
-{ #category : #private }
 GtJavaSpringMapping >> valueOf: aNode [
 	(aNode isKindOf: JavaStringLiteralNode)
 		ifTrue: [ ^ aNode token source allButFirst allButLast ].
@@ -319,4 +312,11 @@ GtJavaSpringMapping >> valueOf: aNode [
 	(aNode isKindOf: JavaNameNode)
 		ifTrue: [ ^ self lookupValueOf: aNode name source from: aNode ].
 	^ aNode source
+]
+
+{ #category : #private }
+GtJavaSpringMapping >> valuesIn: aNode [
+	^ (aNode isKindOf: JavaElementArrayInitializerNode)
+		ifTrue: [ aNode values collect: [ :each | self valueOf: each ] ]
+		ifFalse: [ {self valueOf: aNode} ]
 ]

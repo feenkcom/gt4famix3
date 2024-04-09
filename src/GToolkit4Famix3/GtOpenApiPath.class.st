@@ -4,7 +4,9 @@ Class {
 	#instVars : [
 		'basePaths',
 		'implementers',
-		'pathItem'
+		'pathItem',
+		'consumes',
+		'produces'
 	],
 	#category : #'GToolkit4Famix3-OpenApi'
 }
@@ -26,6 +28,16 @@ GtOpenApiPath >> combine: aString with: bString [
 	^ ((aString last = $/ and: [ bString first = $/ ])
 		ifTrue: [ aString allButLast ]
 		ifFalse: [ aString ]) , bString
+]
+
+{ #category : #accessing }
+GtOpenApiPath >> consumes [
+	^ consumes ifNil: [ #() ]
+]
+
+{ #category : #accessing }
+GtOpenApiPath >> consumes: anObject [
+	consumes := anObject
 ]
 
 { #category : #accessing }
@@ -71,4 +83,14 @@ GtOpenApiPath >> pathItem [
 { #category : #accessing }
 GtOpenApiPath >> pathItem: anObject [
 	pathItem := anObject
+]
+
+{ #category : #accessing }
+GtOpenApiPath >> produces [
+	^ produces ifNil: [ #() ]
+]
+
+{ #category : #accessing }
+GtOpenApiPath >> produces: anObject [
+	produces := anObject
 ]
