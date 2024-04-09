@@ -4,10 +4,22 @@ Class {
 	#instVars : [
 		'incomingCalls',
 		'type',
-		'urls'
+		'urls',
+		'produces',
+		'consumes'
 	],
 	#category : #'GToolkit4Famix3-JavaScript'
 }
+
+{ #category : #accessing }
+GtJSSwaggerHandler >> consumes [
+	^ consumes ifNil: [ #() ]
+]
+
+{ #category : #accessing }
+GtJSSwaggerHandler >> consumes: anObject [
+	consumes := anObject
+]
 
 { #category : #accessing }
 GtJSSwaggerHandler >> fullPathsDo: aBlock [
@@ -44,6 +56,16 @@ GtJSSwaggerHandler >> mooseNameOn: aStream [
 { #category : #accessing }
 GtJSSwaggerHandler >> parentPackage [
 	^ self annotationInstance annotatedEntity parentPackage
+]
+
+{ #category : #accessing }
+GtJSSwaggerHandler >> produces [
+	^ produces ifNil: [ #() ]
+]
+
+{ #category : #accessing }
+GtJSSwaggerHandler >> produces: anObject [
+	produces := anObject
 ]
 
 { #category : #accessing }

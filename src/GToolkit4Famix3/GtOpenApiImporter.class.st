@@ -76,6 +76,8 @@ GtOpenApiImporter >> importJson: aString fromFile: aFileReference andLanguage: s
 			modelPath := GtOpenApiPath new
 					mooseModel: model;
 					basePaths: parentPaths;
+					consumes: (openapi consumes ifNil: [#()]);
+					produces: (openapi produces ifNil: [#()]);
 					pathItem: each;
 					yourself.
 			file := self ensureFileFrom: aFileReference.
@@ -140,10 +142,27 @@ GtOpenApiImporter >> matchPathsToImplementers: aCollection [
 			each implementers
 				addAll: (each fullPaths
 						flatCollect: [ :url | 
-							implementers
-								at: {self normalizeUrl: url.
-										each method}
-								ifAbsent: [ #() ] ]) ]
+							| impls |
+							impls := implementers
+									at: {self normalizeUrl: url.
+											each method}
+									ifAbsent: [ #() ].
+							(impls
+								select: [ :mapping | self matchesProducersAndConsumersInPath: each toMapping: mapping ])
+								ifEmpty: [ impls ] ]) ]
+]
+
+{ #category : #importing }
+GtOpenApiImporter >> matchesProducersAndConsumersInPath: openApiPath toMapping: mapping [
+	(openApiPath consumes notEmpty and: [ mapping consumes notEmpty ])
+		ifTrue: [ (openApiPath consumes
+				anySatisfy: [ :each | mapping consumes anySatisfy: [ :e | e sameAs: each ] ])
+				ifFalse: [ ^ false ] ].
+	(openApiPath produces notEmpty and: [ mapping produces notEmpty ])
+		ifTrue: [ (openApiPath produces
+				anySatisfy: [ :each | mapping produces anySatisfy: [ :e | e sameAs: each ] ])
+				ifFalse: [ ^ false ] ].
+	^ true
 ]
 
 { #category : #accessing }
