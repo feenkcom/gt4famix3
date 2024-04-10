@@ -105,7 +105,7 @@ GtOpenApiImporter >> importYamlIn: aDirectory [
 		do: [ :each | 
 			([ | obj |
 			ast := YAMLParser parseFile: each.
-			obj := ast createObject.
+			obj := ast object.
 			((obj includesKey: 'swagger') or: [ obj includesKey: 'openapi' ])
 				ifTrue: [ obj ] ] on: Error do: [ :ex | ex return: nil ])
 				ifNotNil: [ :dict | 
@@ -120,7 +120,7 @@ GtOpenApiImporter >> importYamlIn: aDirectory [
 							paths
 								detect: [ :node | 
 									| obj |
-									obj := node createObject.
+									obj := node object.
 									obj key = path and: [ obj value includesKey: type ] ]
 								ifNone: [  ] ] ] ]
 ]
