@@ -80,6 +80,16 @@ GtJavaSpringMapping >> buildFrom: annotationInst [
 	paths ifNil: [ paths := #('') ]
 ]
 
+{ #category : #accessing }
+GtJavaSpringMapping >> consumes [
+	^ consumes ifNil: [ #() ]
+]
+
+{ #category : #accessing }
+GtJavaSpringMapping >> consumes: anObject [
+	^ consumes := anObject
+]
+
 { #category : #private }
 GtJavaSpringMapping >> fullNameOf: aNode [
 	^ (aNode isKindOf: JavaQualifiedNameNode)
@@ -289,6 +299,16 @@ GtJavaSpringMapping >> parentPackage [
 { #category : #accessing }
 GtJavaSpringMapping >> paths [
 	^ paths ifNil: [ #() ]
+]
+
+{ #category : #accessing }
+GtJavaSpringMapping >> produces [
+	^ produces ifNil: [ #() ]
+]
+
+{ #category : #accessing }
+GtJavaSpringMapping >> produces: anObject [
+	produces := anObject
 ]
 
 { #category : #accessing }
