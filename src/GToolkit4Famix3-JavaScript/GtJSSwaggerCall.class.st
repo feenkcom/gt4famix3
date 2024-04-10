@@ -55,6 +55,11 @@ GtJSSwaggerCall >> fromProject [
 	^ self from ifNotNil: #parentPackage
 ]
 
+{ #category : #accessing }
+GtJSSwaggerCall >> fullPathsDo: aBlock [
+	aBlock cull: url cull: requestType
+]
+
 { #category : #testing }
 GtJSSwaggerCall >> isInsideOfSameProject [
 	^ self toProjects size = 1 and: [ self toProjects includes: self fromProject ]
