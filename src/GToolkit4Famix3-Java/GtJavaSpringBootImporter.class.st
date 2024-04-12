@@ -10,11 +10,13 @@ Class {
 { #category : #importing }
 GtJavaSpringBootImporter >> addJavaCallsTo: allMappings [
 	self
-		springBootCallsDo: [ :invocation :url :type | 
+		springBootCallsDo: [ :invocation :url :type :accept :contentType | 
 			| call |
 			call := GtJavaSpringCall new
 					from: invocation from;
 					requestType: type;
+					accepts: accept;
+					contentType: contentType;
 					url: url;
 					mooseModel: model;
 					sourceAnchor: (self sourceAnchorFor: invocation gtASTNode);
@@ -129,6 +131,77 @@ GtJavaSpringBootImporter >> fullNameOf: aNode [
 ]
 
 { #category : #importing }
+GtJavaSpringBootImporter >> getAcceptFromBuilder: ast [
+	| current |
+	current := ast.
+	[ current isKindOf: JavaMethodInvocationNode ]
+		whileTrue: [ (current name value = 'accept' and: [ current expressions size = 1 ])
+				ifTrue: [ ^ self valueOf: current expressions first ].
+			(current name value = 'header'
+				and: [ current expressions size = 2
+						and: [ (GtSmaCCJavaImporter valueOf: current expressions first in: model) = 'Accept' ] ])
+				ifTrue: [ ^ self valueOf: current expressions second ].
+			((current parent isKindOf: JavaMethodInvocationNode)
+				and: [ current parent receiver == current ])
+				ifTrue: [ current := current parent ]
+				ifFalse: [ current := nil ] ].
+	^ nil
+]
+
+{ #category : #importing }
+GtJavaSpringBootImporter >> getAcceptFromExchange: ast [
+	(ast parentOfType: JavaMethodDeclarationNode)
+		ifNotNil: [ :method | 
+			| accept |
+			method
+				allNodesOfType: JavaMethodInvocationNode
+				do: [ :inv | 
+					inv name value = 'setAccept'
+						ifTrue: [ accept ifNil: [ accept := inv ] ifNotNil: [ ^ nil ] ] ].
+			accept
+				ifNotNil: [ accept
+						allNodesOfType: JavaMethodInvocationNode
+						do: [ :inv | inv name value = 'valueOf' ifTrue: [ ^ self valueOf: inv ] ] ] ].
+	^ nil
+]
+
+{ #category : #importing }
+GtJavaSpringBootImporter >> getContentTypeFromBuilder: ast [
+	| current |
+	current := ast.
+	[ current isKindOf: JavaMethodInvocationNode ]
+		whileTrue: [ (current name value = 'contentType' and: [ current expressions size = 1 ])
+				ifTrue: [ ^ self valueOf: current expressions first ].
+			(current name value = 'header'
+				and: [ current expressions size = 2
+						and: [ (GtSmaCCJavaImporter valueOf: current expressions first in: model)
+								= 'ContentType' ] ])
+				ifTrue: [ ^ self valueOf: current expressions second ].
+			((current parent isKindOf: JavaMethodInvocationNode)
+				and: [ current parent receiver == current ])
+				ifTrue: [ current := current parent ]
+				ifFalse: [ current := nil ] ].
+	^ nil
+]
+
+{ #category : #importing }
+GtJavaSpringBootImporter >> getContentTypeFromExchange: ast [
+	(ast parentOfType: JavaMethodDeclarationNode)
+		ifNotNil: [ :method | 
+			| contentType |
+			method
+				allNodesOfType: JavaMethodInvocationNode
+				do: [ :inv | 
+					inv name value = 'setContentType'
+						ifTrue: [ contentType ifNil: [ contentType := inv ] ifNotNil: [ ^ nil ] ] ].
+			contentType
+				ifNotNil: [ contentType
+						allNodesOfType: JavaMethodInvocationNode
+						do: [ :inv | inv name value = 'valueOf' ifTrue: [ ^ self valueOf: inv ] ] ] ].
+	^ nil
+]
+
+{ #category : #importing }
 GtJavaSpringBootImporter >> isRequest: aReq handledBy: bReq [
 	aReq type = bReq type ifFalse: [ ^ false ].
 	bReq
@@ -162,7 +235,15 @@ GtJavaSpringBootImporter >> possibleCandidatesFrom: allMappings forCall: call [
 					possible
 						anySatisfy: [ :other | other ~~ req and: [ self isRequest: other handledBy: req ] ] ])
 				ifNotEmpty: [ :c | ^ c ] ].
-	^ possible
+	^ (possible
+		select: [ :each | 
+			(call contentType isNil
+				or: [ each consumes isEmpty
+						or: [ each consumes anySatisfy: [ :e | e sameAs: call contentType ] ] ])
+				and: [ call accepts isNil
+						or: [ each produces isEmpty
+								or: [ each produces anySatisfy: [ :e | e sameAs: call accepts ] ] ] ] ])
+		ifEmpty: [ possible ]
 ]
 
 { #category : #importing }
@@ -218,14 +299,18 @@ GtJavaSpringBootImporter >> springBootCallsDo: aBlock [
 															imp staticToken notNil
 																and: [ self doesName: imp name include: 'MockMvcRequestBuilders' ] ] ] ] ] ])
 						ifTrue: [ aBlock
-								value: each
-								value: (self urlFrom: ast expressions first)
-								value: name ].
+								valueWithPossibleArgs: {each.
+										self urlFrom: ast expressions first.
+										name.
+										self getAcceptFromBuilder: ast.
+										self getContentTypeFromBuilder: ast} ].
 					(name = 'exchange' and: [ ast expressions size > 2 ])
 						ifTrue: [ aBlock
-								value: each
-								value: (self urlFrom: ast expressions first)
-								value: (self requestTypeFrom: ast expressions second) ] ] ]
+								valueWithPossibleArgs: {each.
+										self urlFrom: ast expressions first.
+										self requestTypeFrom: ast expressions second.
+										self getAcceptFromExchange: ast.
+										self getContentTypeFromExchange: ast} ] ] ]
 ]
 
 { #category : #importing }
@@ -301,4 +386,12 @@ GtJavaSpringBootImporter >> urlValueOf: aString from: aNode [
 { #category : #importing }
 GtJavaSpringBootImporter >> urlValueOfQualifiedName: aNode [
 	^ '{' , aNode source , '}'
+]
+
+{ #category : #importing }
+GtJavaSpringBootImporter >> valueOf: aNode [
+	((aNode isKindOf: JavaMethodInvocationNode)
+		and: [ aNode name source = 'valueOf' and: [ aNode expressions size = 1 ] ])
+		ifTrue: [ ^ GtSmaCCJavaImporter valueOf: aNode expressions first in: model ].
+	^ GtSmaCCJavaImporter valueOf: aNode in: model
 ]

@@ -16,6 +16,115 @@ Class {
 }
 
 { #category : #accessing }
+GtSmaCCJavaImporter class >> fullNameOf: aNode [
+	^ (aNode isKindOf: JavaQualifiedNameNode)
+		ifTrue: [ (self fullNameOf: aNode nspace) , '::' , aNode name source ]
+		ifFalse: [ aNode name source ]
+]
+
+{ #category : #accessing }
+GtSmaCCJavaImporter class >> lookupTypeFor: aNode in: model [
+	(aNode isKindOf: JavaQualifiedNameNode)
+		ifTrue: [ (model entityNamed: (self fullNameOf: aNode)) ifNotNil: [ :t | ^ t ] ].
+	aNode class = JavaNameNode
+		ifTrue: [ aNode topParent imports
+				do: [ :each | 
+					(each staticToken isNil and: [ each name name source = aNode name source ])
+						ifTrue: [ (model entityNamed: (self fullNameOf: each name)) ifNotNil: [ :t | ^ t ] ] ].
+			aNode topParent packageDeclaration
+				ifNotNil: [ :decl | 
+					(model entityNamed: (self fullNameOf: decl name) , '::' , aNode name source)
+						ifNotNil: [ :e | ^ e ] ].
+			aNode topParent imports
+				do: [ :each | 
+					(each staticToken isNil
+						and: [ each isKindOf: JavaTypeImportOnDemandDeclarationNode ])
+						ifTrue: [ (model entityNamed: (self fullNameOf: each name) , '::' , aNode name source)
+								ifNotNil: [ :e | ^ e ] ] ] ].
+	^ nil
+]
+
+{ #category : #accessing }
+GtSmaCCJavaImporter class >> lookupValueOf: aString from: aNode in: model [
+	| current container |
+	current := aNode.
+	[ current notNil ]
+		whileTrue: [ container := current attributeNamed: #container ifAbsent: [  ].
+			container
+				ifNotNil: [ (container isKindOf: FAMIXType)
+						ifTrue: [ container
+								withSuperclassesDo: [ :each | 
+									each attributes
+										detect: [ :attr | attr name = aString ]
+										ifFound: [ :attr | 
+											attr gtASTNode
+												ifNotNil: [ :node | 
+													^ (node isKindOf: JavaInitializedVariableDeclarationNode)
+														ifTrue: [ self valueOf: node initializer in: model ]
+														ifFalse: [ aString ] ] ] ] ] ].
+			current := current parent ].
+	aNode topParent imports
+		detect: [ :each | each staticToken notNil and: [ each name name source = aString ] ]
+		ifFound: [ :each | 
+			(model entityNamed: (self fullNameOf: each name nspace))
+				ifNotNil: [ :t | 
+					t attributes
+						detect: [ :attr | attr name = aString ]
+						ifFound: [ :attr | 
+							attr gtASTNode
+								ifNotNil: [ :node | 
+									^ (node isKindOf: JavaInitializedVariableDeclarationNode)
+										ifTrue: [ self valueOf: node initializer in: model ]
+										ifFalse: [ aString ] ] ] ] ].
+	aNode topParent imports
+		do: [ :each | 
+			(each staticToken notNil
+				and: [ each isKindOf: JavaTypeImportOnDemandDeclarationNode ])
+				ifTrue: [ (model entityNamed: (self fullNameOf: each name))
+						ifNotNil: [ :t | 
+							t attributes
+								detect: [ :attr | attr name = aString ]
+								ifFound: [ :attr | 
+									attr gtASTNode
+										ifNotNil: [ :node | 
+											^ (node isKindOf: JavaInitializedVariableDeclarationNode)
+												ifTrue: [ self valueOf: node initializer in: model ]
+												ifFalse: [ aString ] ] ] ] ] ].
+	^ aString
+]
+
+{ #category : #accessing }
+GtSmaCCJavaImporter class >> lookupValueOfQualifiedName: aNode in: model [
+	(self lookupTypeFor: aNode nspace in: model)
+		ifNotNil: [ :class | 
+			class attributes
+				detect: [ :attr | attr name = aNode name source ]
+				ifFound: [ :attr | 
+					attr gtASTNode
+						ifNotNil: [ :node | 
+							(node isKindOf: JavaInitializedVariableDeclarationNode)
+								ifTrue: [ ^ self valueOf: node initializer in: model ] ] ] ].
+	^ aNode source
+]
+
+{ #category : #accessing }
+GtSmaCCJavaImporter class >> valueOf: aNode in: model [
+	(aNode isKindOf: JavaStringLiteralNode)
+		ifTrue: [ ^ aNode token source allButFirst allButLast ].
+	(aNode isKindOf: JavaBinaryExpressionNode)
+		ifTrue: [ ^ (self valueOf: aNode leftExpression in: model)
+				, (self valueOf: aNode rightExpression in: model) ].
+	(aNode isKindOf: JavaQualifiedNameNode)
+		ifTrue: [ ^ self lookupValueOfQualifiedName: aNode in: model ].
+	(aNode isKindOf: JavaNameNode)
+		ifTrue: [ ^ self
+				lookupValueOf: aNode name source
+				from: aNode
+				in: model ].
+	^ aNode source
+]
+
+{ #category : #accessing }
 GtSmaCCJavaImporter >> addAnnotationTypes [
 	self
 		javaAstsDo: [ :node | 
