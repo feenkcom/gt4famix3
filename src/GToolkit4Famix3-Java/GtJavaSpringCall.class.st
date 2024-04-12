@@ -5,10 +5,22 @@ Class {
 		'candidates',
 		'caller',
 		'requestType',
-		'url'
+		'url',
+		'contentType',
+		'accepts'
 	],
 	#category : #'GToolkit4Famix3-Java'
 }
+
+{ #category : #accessing }
+GtJavaSpringCall >> accepts [
+	^ accepts
+]
+
+{ #category : #accessing }
+GtJavaSpringCall >> accepts: anObject [
+	accepts := anObject
+]
 
 { #category : #accessing }
 GtJavaSpringCall >> caller [
@@ -37,6 +49,16 @@ GtJavaSpringCall >> candidates [
 { #category : #accessing }
 GtJavaSpringCall >> candidates: aCollection [
 	self candidates nocheckValue: aCollection
+]
+
+{ #category : #accessing }
+GtJavaSpringCall >> contentType [
+	^ contentType
+]
+
+{ #category : #accessing }
+GtJavaSpringCall >> contentType: anObject [
+	contentType := anObject
 ]
 
 { #category : #accessing }

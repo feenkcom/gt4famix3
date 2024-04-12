@@ -90,13 +90,6 @@ GtJavaSpringMapping >> consumes: anObject [
 	^ consumes := anObject
 ]
 
-{ #category : #private }
-GtJavaSpringMapping >> fullNameOf: aNode [
-	^ (aNode isKindOf: JavaQualifiedNameNode)
-		ifTrue: [ (self fullNameOf: aNode nspace) , '::' , aNode name source ]
-		ifFalse: [ aNode name source ]
-]
-
 { #category : #accessing }
 GtJavaSpringMapping >> fullPaths [
 	| fullPaths |
@@ -196,94 +189,6 @@ GtJavaSpringMapping >> isSpringCalledFromRegularCode [
 	^ self hasRegularSpringCalls
 ]
 
-{ #category : #private }
-GtJavaSpringMapping >> lookupTypeFor: aNode [
-	(aNode isKindOf: JavaQualifiedNameNode)
-		ifTrue: [ (self mooseModel entityNamed: (self fullNameOf: aNode)) ifNotNil: [ :t | ^ t ] ].
-	aNode class = JavaNameNode
-		ifTrue: [ aNode topParent imports
-				do: [ :each | 
-					(each staticToken isNil and: [ each name name source = aNode name source ])
-						ifTrue: [ (self mooseModel entityNamed: (self fullNameOf: each name))
-								ifNotNil: [ :t | ^ t ] ] ].
-			aNode topParent packageDeclaration
-				ifNotNil: [ :decl | 
-					(self mooseModel
-						entityNamed: (self fullNameOf: decl name) , '::' , aNode name source)
-						ifNotNil: [ :e | ^ e ] ].
-			aNode topParent imports
-				do: [ :each | 
-					(each staticToken isNil
-						and: [ each isKindOf: JavaTypeImportOnDemandDeclarationNode ])
-						ifTrue: [ (self mooseModel
-								entityNamed: (self fullNameOf: each name) , '::' , aNode name source)
-								ifNotNil: [ :e | ^ e ] ] ] ].
-	^ nil
-]
-
-{ #category : #private }
-GtJavaSpringMapping >> lookupValueOf: aString from: aNode [
-	| current container |
-	current := aNode.
-	[ current notNil ]
-		whileTrue: [ container := current attributeNamed: #container ifAbsent: [  ].
-			container
-				ifNotNil: [ (container isKindOf: FAMIXType)
-						ifTrue: [ container
-								withSuperclassesDo: [ :each | 
-									each attributes
-										detect: [ :attr | attr name = aString ]
-										ifFound: [ :attr | 
-											attr gtASTNode
-												ifNotNil: [ :node | 
-													^ (node isKindOf: JavaInitializedVariableDeclarationNode)
-														ifTrue: [ self valueOf: node initializer ]
-														ifFalse: [ aString ] ] ] ] ] ].
-			current := current parent ].
-	aNode topParent imports
-		detect: [ :each | each staticToken notNil and: [ each name name source = aString ] ]
-		ifFound: [ :each | 
-			(self mooseModel entityNamed: (self fullNameOf: each name nspace))
-				ifNotNil: [ :t | 
-					t attributes
-						detect: [ :attr | attr name = aString ]
-						ifFound: [ :attr | 
-							attr gtASTNode
-								ifNotNil: [ :node | 
-									^ (node isKindOf: JavaInitializedVariableDeclarationNode)
-										ifTrue: [ self valueOf: node initializer ]
-										ifFalse: [ aString ] ] ] ] ].
-	aNode topParent imports
-		do: [ :each | 
-			(each staticToken notNil
-				and: [ each isKindOf: JavaTypeImportOnDemandDeclarationNode ])
-				ifTrue: [ (self mooseModel entityNamed: (self fullNameOf: each name))
-						ifNotNil: [ :t | 
-							t attributes
-								detect: [ :attr | attr name = aString ]
-								ifFound: [ :attr | 
-									attr gtASTNode
-										ifNotNil: [ :node | 
-											^ (node isKindOf: JavaInitializedVariableDeclarationNode)
-												ifTrue: [ self valueOf: node initializer ]
-												ifFalse: [ aString ] ] ] ] ] ].
-	^ aString
-]
-
-{ #category : #private }
-GtJavaSpringMapping >> lookupValueOfQualifiedName: aNode [
-	(self lookupTypeFor: aNode nspace)
-		ifNotNil: [ :class | 
-			class attributes
-				detect: [ :attr | attr name = aNode name source ]
-				ifFound: [ :attr | 
-					attr gtASTNode
-						ifNotNil: [ :node | 
-							(node isKindOf: JavaInitializedVariableDeclarationNode)
-								ifTrue: [ ^ self valueOf: node initializer ] ] ] ].
-	^ aNode source
-]
-
 { #category : #accessing }
 GtJavaSpringMapping >> mooseNameOn: aStream [
 	aStream << (type ifNil: [ '' ]) << ':'
@@ -323,15 +228,7 @@ GtJavaSpringMapping >> type: anObject [
 
 { #category : #private }
 GtJavaSpringMapping >> valueOf: aNode [
-	(aNode isKindOf: JavaStringLiteralNode)
-		ifTrue: [ ^ aNode token source allButFirst allButLast ].
-	(aNode isKindOf: JavaBinaryExpressionNode)
-		ifTrue: [ ^ (self valueOf: aNode leftExpression) , (self valueOf: aNode rightExpression) ].
-	(aNode isKindOf: JavaQualifiedNameNode)
-		ifTrue: [ ^ self lookupValueOfQualifiedName: aNode ].
-	(aNode isKindOf: JavaNameNode)
-		ifTrue: [ ^ self lookupValueOf: aNode name source from: aNode ].
-	^ aNode source
+	^ GtSmaCCJavaImporter valueOf: aNode in: self mooseModel
 ]
 
 { #category : #private }
