@@ -342,6 +342,7 @@ GtJSImporter >> importJSFile: aFile [
 		parseWithErrors: aFile asFileReference contents.
 	ast filename: aFile.
 	self acceptNode: ast.
+	scopeStack := OrderedCollection with: ast.
 	self finishImportingFile
 ]
 
@@ -413,9 +414,11 @@ GtJSImporter >> localFilename: aString from: aNode [
 				ifFalse: [ sum / each ] ].
 	name exists
 		ifTrue: [ ^ name ].
-	name := name parent / (name basename , '.js').
-	name exists
-		ifTrue: [ ^ name ].
+	name := name parent / name basename.
+	self parserClass fileExtensions
+		do: [ :each |
+			(name , each) exists
+				ifTrue: [ ^ name , each ] ].
 	^ nil
 ]
 
