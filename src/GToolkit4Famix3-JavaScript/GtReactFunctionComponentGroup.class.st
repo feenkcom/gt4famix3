@@ -16,7 +16,8 @@ GtReactFunctionComponentGroup >> gtReactDependenciesFor: aView [
 				  stencil: [ :c | 
 					  BrLabel new
 						  when: BlClickEvent do: [ :e | e target phlow spawnObject: c ];
-						  aptitude: BrGlamorousLabelAptitude;
+						  aptitude: BrGlamorousLabelAptitude + (BrStyleCommonAptitude new
+										hovered: [ :aStyle | aStyle background: (BrGlamorousColors selectedListItemColor) ]);
 						  text: c name ];
 				  with: self.
 
@@ -29,10 +30,10 @@ GtReactFunctionComponentGroup >> gtReactDependenciesFor: aView [
 						  when: BlClickEvent do: [ :e | e target phlow spawnObject: r ];
 						  zIndex: -1;
 						  curvatureFraction: 0.3;
-						  border: (BlBorder paint: (Color orange alpha: 0.5) width: 2);
+						  border: (BlBorder paint: (Color orange alpha: 0.5) width: 1);
 						  toHead: (BlArrowheadSimpleArrow new border: (BlBorder builder
 										    paint: (Color orange alpha: 0.5);
-										    width: 2;
+										    width: 1;
 										    build)) ];
 				  connect: self mooseModel allReactComponentReferences
 				  from: #sender
