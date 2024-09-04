@@ -867,8 +867,11 @@ GtSmaCCJavaImporter >> importMethodSource [
 GtSmaCCJavaImporter >> importNamespaces [
 	self
 		javaAstsDo: [ :each | 
-			each packageDeclaration
-				ifNotNil: [ :decl | each attributeNamed: #container put: (self ensureNamespaceFrom: decl name) ] ]
+			each isErrorNode
+				ifFalse: [ each packageDeclaration
+						ifNotNil: [ :decl | 
+							decl isErrorNode
+								ifFalse: [ each attributeNamed: #container put: (self ensureNamespaceFrom: decl name) ] ] ] ]
 ]
 
 { #category : #accessing }
