@@ -266,7 +266,8 @@ GtSmaCCJavaImporter >> buildSpecificImports [
 	specificImports := Dictionary new.
 	self
 		javaAstsDo: [ :node | 
-			node imports
+			node
+				withAllNodesOfType: JavaSingleTypeImportDeclarationNode
 				do: [ :each | 
 					(each class = JavaSingleTypeImportDeclarationNode
 						and: [ each staticToken isNil ])
@@ -867,11 +868,9 @@ GtSmaCCJavaImporter >> importMethodSource [
 GtSmaCCJavaImporter >> importNamespaces [
 	self
 		javaAstsDo: [ :each | 
-			each isErrorNode
-				ifFalse: [ each packageDeclaration
-						ifNotNil: [ :decl | 
-							decl isErrorNode
-								ifFalse: [ each attributeNamed: #container put: (self ensureNamespaceFrom: decl name) ] ] ] ]
+			each
+				withAllNodesOfType: JavaPackageDeclarationNode
+				do: [ :decl | each attributeNamed: #container put: (self ensureNamespaceFrom: decl name) ] ]
 ]
 
 { #category : #accessing }
