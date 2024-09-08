@@ -89,7 +89,7 @@ GtJavaSpringCall >> gtCandidatesFor: aView [
 { #category : #accessing }
 GtJavaSpringCall >> isFromJUnit4Test [
 	^ (self from isKindOf: FAMIXFunction)
-		ifTrue: [ self from container typeScope isJUnit4TestCase ]
+		ifTrue: [ self from typeScope isJUnit4TestCase ]
 		ifFalse: [ (self from isKindOf: FAMIXMethod)
 				ifTrue: [ self from typeScope isJUnit4TestCase ]
 				ifFalse: [ false ] ]
