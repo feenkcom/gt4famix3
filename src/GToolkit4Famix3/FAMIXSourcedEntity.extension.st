@@ -61,7 +61,7 @@ FAMIXSourcedEntity >> gtSourceFor: aView [
 
 { #category : #'*GToolkit4Famix3' }
 FAMIXSourcedEntity >> gtStyler [
-	^ self sourceLanguage ifNotNil: [ :lang | lang gtStyler ]
+	^ self sourceLanguage ifNotNil: [ :lang | lang gtStylerFor: self ]
 ]
 
 { #category : #'*GToolkit4Famix3' }

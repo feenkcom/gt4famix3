@@ -15,3 +15,8 @@ FAMIXSourceLanguage >> gtParserClass [
 FAMIXSourceLanguage >> gtStyler [
 	^ self gtParserClass ifNotNil: [ :class | class gtStyler ]
 ]
+
+{ #category : #'*GToolkit4Famix3' }
+FAMIXSourceLanguage >> gtStylerFor: anEntity [
+	^ self gtStyler
+]
