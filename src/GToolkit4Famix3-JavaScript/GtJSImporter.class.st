@@ -329,11 +329,9 @@ GtJSImporter >> ensurePropertyNamed: aString [
 
 { #category : #'private-model' }
 GtJSImporter >> ensureTSFunctionNamed: aString for: aNode around: aBlock [
-	| function implicitVar start stop isMethod |
+	| function implicitVar isMethod |
 	isMethod := (self isCodeItem: self currentScope) not.
 	function := (self functionClassFor: aNode) new name: aString.
-	start := aNode signature startPosition.
-	stop := aNode signature stopPosition.
 	function signature: function name , aNode signature source.
 	model add: function.
 	self storeAST: aNode into: function.
@@ -457,7 +455,7 @@ GtJSImporter >> importSourceDirectory: aDirectory excluding: patternCollection [
 		ifAbsent: [ model rootFolder: aDirectory ].
 	directory := aDirectory asFileReference.
 	directory fileSystem store isMemoryFileSystem
-		ifFalse: [ directory := directory absolutePath ].
+		ifFalse: [ directory := directory absolutePath asFileReference ].
 	self parserClasses
 		do: [ :class | 
 			currentSourceLanguage := FAMIXJSSourceLanguage new parserClass: class.
@@ -927,6 +925,14 @@ GtJSImporter >> visitMethodDefinition: aMethodDefinition [
 		ensureFunctionNamed: aMethodDefinition name source
 		for: aMethodDefinition
 		around: [ super visitMethodDefinition: aMethodDefinition ]
+]
+
+{ #category : #visiting }
+GtJSImporter >> visitMethodSignature: aMethodSignature [
+	self
+		ensureTSFunctionNamed: aMethodSignature name source
+		for: aMethodSignature
+		around: [ super visitMethodSignature: aMethodSignature ]
 ]
 
 { #category : #visiting }
