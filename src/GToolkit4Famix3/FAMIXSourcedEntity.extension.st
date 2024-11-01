@@ -39,6 +39,23 @@ FAMIXSourcedEntity >> gtASTNode [
 ]
 
 { #category : #'*GToolkit4Famix3' }
+FAMIXSourcedEntity >> gtFamixExpanderView [
+	^ self gtSourceFor: GtPhlowProtoView new
+]
+
+{ #category : #'*GToolkit4Famix3' }
+FAMIXSourcedEntity >> gtInspectButtonPosition [
+	^ self privateState
+		attributeAt: #inspectButtonPosition
+		ifAbsent: [ self sourceAnchor ifNotNil: [ :anchor | anchor endPos ] ]
+]
+
+{ #category : #'*GToolkit4Famix3' }
+FAMIXSourcedEntity >> gtInspectButtonPosition: anInteger [
+	^ self privateState attributeAt: #inspectButtonPosition put: anInteger
+]
+
+{ #category : #'*GToolkit4Famix3' }
 FAMIXSourcedEntity >> gtLinksForFile: aFileReference do: aBlock [
 	(self propertyNamed: #ast)
 		ifNotNil: [ :ast | 
