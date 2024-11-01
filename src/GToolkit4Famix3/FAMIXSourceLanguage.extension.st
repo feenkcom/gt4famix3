@@ -23,7 +23,7 @@ FAMIXSourceLanguage >> addExpanderFor: association in: text [
 									constraintsDo: [ :c | 
 										c textFlow pushLine.
 										c horizontal matchParent ].
-							view := to gtCobolExpanderView.
+							view := to gtFamixExpanderView.
 							((to isKindOf: FAMIXSourcedEntity) and: [ to containerFiles notEmpty ])
 								ifTrue: [ pane
 										addChild: (BrButton new
