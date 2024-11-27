@@ -2,12 +2,13 @@ Extension { #name : #FAMIXSourceLanguage }
 
 { #category : #'*GToolkit4Famix3' }
 FAMIXSourceLanguage >> addExpanderFor: association in: text [
-	| to |
+	| to pos |
 	(association isKindOf: FAMIXAssociation) ifFalse: [ ^ self ].
 	to := association expandTo.
 	((to isKindOf: Collection) and: [ to size = 1 ]) ifTrue: [ to := to anyOne ].
 	(to isNil or: [ association sourceAnchor isNil ]) ifTrue: [ ^ self ].
-	(text from: association sourceAnchor endPos to: association sourceAnchor endPos)
+	pos := association gtInspectButtonPosition.
+	(text from: pos to: pos)
 		attribute: (BrGlamorousTriangleExpanderTextAttribute new
 				attributesCreatingBlock: [ BrTextAdornmentDynamicAttribute new
 						beAppend;
