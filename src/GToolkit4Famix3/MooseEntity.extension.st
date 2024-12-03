@@ -4,9 +4,7 @@ Extension { #name : #MooseEntity }
 MooseEntity >> complexPropertyPragmas [
 	| navProps definedProps |
 	self mooseDescription
-		ifNil: [ Error
-				signal:
-					'Moose description are not initialized. Have you refreshed the meta-model? (e.g., MooseModel resetMeta)' ].
+		ifNil: [ MooseDescriptionNotInitializedError signal ].
 	navProps := (Pragma
 		allNamed: #navigation:
 		from: self class
