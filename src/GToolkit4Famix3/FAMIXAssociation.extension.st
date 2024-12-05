@@ -1,6 +1,11 @@
 Extension { #name : #FAMIXAssociation }
 
 { #category : #'*GToolkit4Famix3' }
+FAMIXAssociation >> expandTo [
+	^ self to
+]
+
+{ #category : #'*GToolkit4Famix3' }
 FAMIXAssociation >> findASTNode [
 	^ super findASTNode
 		ifNil: [ | start stop innerNode |
