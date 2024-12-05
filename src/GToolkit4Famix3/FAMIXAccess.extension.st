@@ -1,7 +1,7 @@
 Extension { #name : #FAMIXAccess }
 
 { #category : #'*GToolkit4Famix3' }
-FAMIXAccess >> gtSourceFor: aView [
+FAMIXAccess >> gtDefinitionSourceFor: aView [
 	<gtView>
 	^ aView forward
 		title: 'Definition source';

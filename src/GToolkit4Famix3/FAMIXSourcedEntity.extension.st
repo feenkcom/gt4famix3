@@ -40,7 +40,7 @@ FAMIXSourcedEntity >> gtASTNode [
 
 { #category : #'*GToolkit4Famix3' }
 FAMIXSourcedEntity >> gtFamixExpanderView [
-	^ self gtSourceFor: GtPhlowProtoView new
+	^ self gtSourceFor: GtPhlowView new
 ]
 
 { #category : #'*GToolkit4Famix3' }
@@ -71,9 +71,12 @@ FAMIXSourcedEntity >> gtLinksForFile: aFileReference do: aBlock [
 { #category : #'*GToolkit4Famix3' }
 FAMIXSourcedEntity >> gtSourceFor: aView [
 	<gtView>
-	^ self hasSourceAnchor 
-		ifFalse: [ aView empty ]
-		ifTrue: [ self sourceAnchor gtCompleteSourceFor: aView ]
+	self hasSourceAnchor ifFalse: [ ^ aView empty ].
+	^ aView forward
+		title: 'Source';
+		priority: 5;
+		object: [ self sourceAnchor ];
+		view: #gtCompleteSourceFor:
 ]
 
 { #category : #'*GToolkit4Famix3' }
