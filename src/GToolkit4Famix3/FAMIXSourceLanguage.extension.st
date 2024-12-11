@@ -64,7 +64,7 @@ FAMIXSourceLanguage >> addInspectButtonFor: anEntity in: text [
 
 { #category : #'*GToolkit4Famix3' }
 FAMIXSourceLanguage >> addInspectButtonWithHighlightFor: anEntity in: text [
-	| pos hoverAttribute interval |
+	| pos hoverAttribute interval existingHighlights |
 	((anEntity isKindOf: FAMIXSourcedEntity) and: [ anEntity sourceAnchor notNil ])
 		ifFalse: [ ^ self ].
 	interval := anEntity sourceAnchor startPos to: anEntity sourceAnchor endPos.
@@ -89,6 +89,12 @@ FAMIXSourceLanguage >> addInspectButtonWithHighlightFor: anEntity in: text [
 								button
 									allParentsDetect: [ :each | each isKindOf: BrEditorElement ]
 									ifFound: [ :anEditorElement | 
+										interval last <= anEditorElement text size
+											ifTrue: [ existingHighlights := (interval first to: interval last)
+														collect: [ :each | 
+															(anEditorElement text attributesAt: each)
+																detect: [ :attr | attr isKindOf: BlTextHighlightAttribute ]
+																ifNone: [  ] ] ].
 										(anEditorElement text
 											from: (interval first min: anEditorElement text size)
 											to: (interval last min: anEditorElement text size))
@@ -98,7 +104,19 @@ FAMIXSourceLanguage >> addInspectButtonWithHighlightFor: anEntity in: text [
 							do: [ :anEvent | 
 								button
 									allParentsDetect: [ :each | each isKindOf: BrEditorElement ]
-									ifFound: [ :anEditorElement | anEditorElement text clearAttributes: [ :each | each == hoverAttribute ] ]
+									ifFound: [ :anEditorElement | 
+										anEditorElement text clearAttributes: [ :each | each == hoverAttribute ].
+										(existingHighlights notNil
+											and: [ interval last <= anEditorElement text size ])
+											ifTrue: [ (interval first to: interval last)
+													with: existingHighlights
+													do: [ :i :attr | 
+														attr
+															ifNotNil: [ anEditorElement text
+																	attribute: attr
+																	from: i
+																	to: i ] ] ].
+										existingHighlights := nil ]
 									ifNone: [  ] ];
 						yourself ])
 ]
