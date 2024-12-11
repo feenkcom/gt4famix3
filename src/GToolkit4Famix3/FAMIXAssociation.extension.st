@@ -21,3 +21,13 @@ FAMIXAssociation >> findASTNode [
 								ifTrue: [ innerNode := each ] ] ].
 			innerNode ]
 ]
+
+{ #category : #'*GToolkit4Famix3' }
+FAMIXAssociation >> fromDisplayString [
+	^ self from gtDisplayString
+]
+
+{ #category : #'*GToolkit4Famix3' }
+FAMIXAssociation >> toDisplayString [
+	^ self to gtDisplayString
+]
