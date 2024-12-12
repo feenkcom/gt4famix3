@@ -63,6 +63,65 @@ FAMIXSourceLanguage >> addInspectButtonFor: anEntity in: text [
 ]
 
 { #category : #'*GToolkit4Famix3' }
+FAMIXSourceLanguage >> addInspectButtonWithHighlightFor: anEntity in: text [
+	| pos hoverAttribute interval existingHighlights |
+	((anEntity isKindOf: FAMIXSourcedEntity) and: [ anEntity sourceAnchor notNil ])
+		ifFalse: [ ^ self ].
+	interval := anEntity sourceAnchor startPos to: anEntity sourceAnchor endPos.
+	hoverAttribute := BlTextHighlightAttribute
+			paint: BrGlamorousColors textHighlightColor.
+	pos := anEntity gtInspectButtonPosition.
+	(text from: pos to: pos)
+		attribute: (GtButtonAttribute new
+				beAppend;
+				stencil: [ | button |
+					button := BrButton new.
+					button
+						aptitude: (BrLazyStyleCommonAptitude new
+								default: [ :aStyle | aStyle background: BrGlamorousColors defaultButtonBorderColor ];
+								hovered: [ :aStyle | aStyle background: BrGlamorousColors hoveredButtonBorderColor ]);
+						size: 8 @ 8;
+						geometry: BlEllipseGeometry new;
+						margin: (BlInsets left: 2 right: 2);
+						action: [ :aButtonElement :aButtonModel :anEvent | button phlow spawnObject: anEntity ];
+						when: BlMouseEnterEvent
+							do: [ :anEvent | 
+								button
+									allParentsDetect: [ :each | each isKindOf: BrEditorElement ]
+									ifFound: [ :anEditorElement | 
+										interval last <= anEditorElement text size
+											ifTrue: [ existingHighlights := (interval first to: interval last)
+														collect: [ :each | 
+															(anEditorElement text attributesAt: each)
+																detect: [ :attr | attr isKindOf: BlTextHighlightAttribute ]
+																ifNone: [  ] ] ].
+										(anEditorElement text
+											from: (interval first min: anEditorElement text size)
+											to: (interval last min: anEditorElement text size))
+											attribute: hoverAttribute ]
+									ifNone: [  ] ];
+						when: BlMouseLeaveEvent
+							do: [ :anEvent | 
+								button
+									allParentsDetect: [ :each | each isKindOf: BrEditorElement ]
+									ifFound: [ :anEditorElement | 
+										anEditorElement text clearAttributes: [ :each | each == hoverAttribute ].
+										(existingHighlights notNil
+											and: [ interval last <= anEditorElement text size ])
+											ifTrue: [ (interval first to: interval last)
+													with: existingHighlights
+													do: [ :i :attr | 
+														attr
+															ifNotNil: [ anEditorElement text
+																	attribute: attr
+																	from: i
+																	to: i ] ] ].
+										existingHighlights := nil ]
+									ifNone: [  ] ];
+						yourself ])
+]
+
+{ #category : #'*GToolkit4Famix3' }
 FAMIXSourceLanguage >> gtASTNodeFor: aString at: anInterval [
 	^ self gtParserClass
 		ifNotNil: [ :class | (class parseWithErrors: aString) nodeForInterval: anInterval ]

@@ -1,11 +1,18 @@
 Class {
 	#name : #GtJavaSpringCallGroup,
-	#superclass : #MooseGroup,
+	#superclass : #FAMIXAssociationGroup,
 	#instVars : [
 		'projectCache'
 	],
 	#category : #'GToolkit4Famix3-Java'
 }
+
+{ #category : #meta }
+GtJavaSpringCallGroup class >> annotation [
+	<MSEClass: #JavaSpringCallGroup super: #FAMIXAssociationGroup>
+	<package: #FAMIX>
+
+]
 
 { #category : #accessing }
 GtJavaSpringCallGroup >> callsFrom: fromProject to: toProject [
