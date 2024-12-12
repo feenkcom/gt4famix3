@@ -1,6 +1,6 @@
 {
 	"repositories" : {
 		"github://feenkcom/gt4xmlsupport/src" : "v0.8.30",
-		"github://feenkcom/famix3/src" : "v0.8.26"
+		"github://feenkcom/famix3/src" : "v0.8.27"
 	}
 }
