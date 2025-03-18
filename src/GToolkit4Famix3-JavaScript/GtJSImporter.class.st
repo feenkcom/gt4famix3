@@ -517,8 +517,10 @@ GtJSImporter >> localFilename: aString from: aNode [
 			each = '..'
 				ifTrue: [ sum parent ]
 				ifFalse: [ sum / each ] ].
-	name exists
+	(name exists and: [ name isFile ])
 		ifTrue: [ ^ name ].
+	(name exists and: [ name isDirectory ])
+		ifTrue: [ name := name / #index ].
 	name := name parent / (name basename , '.js').
 	name exists
 		ifTrue: [ ^ name ].
