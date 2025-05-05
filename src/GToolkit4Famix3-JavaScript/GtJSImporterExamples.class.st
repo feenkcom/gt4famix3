@@ -52,6 +52,7 @@ module.exports = SubClass;
 { #category : #samples }
 GtJSImporterExamples >> exampleImporter [
 	<gtExample>
+	<return: #GtJSImporter>
 	| source |
 	source := self exampleProject.
 	^ GtJSImporter new

@@ -7,6 +7,7 @@ Class {
 { #category : #'example-tests' }
 GtDojoImporterExamples >> comments [
 	<gtExample>
+	<return: #FMMultivalueLink>
 	| importer script |
 	importer := self exampleImporter.
 	script := importer scriptNamed: 'demo/noModule.js'.
@@ -132,17 +133,20 @@ GtDojoImporterExamples >> demo_variables_js [
 { #category : #'example-tests' }
 GtDojoImporterExamples >> dojoClassWithSuperclass [
 	<gtExample>
+	<return: #GtDojoClass>
 	| importer class |
 	importer := self exampleImporter.
 	class := importer classNamed: 'demo.dojoClassWithSuperclass'.
 	self assert: class superInheritances notEmpty.
-	self assert: class anySuperclass == (importer classNamed: 'demo.dojoClassWithoutSuperclass').
+	self
+		assert: class anySuperclass == (importer classNamed: 'demo.dojoClassWithoutSuperclass').
 	^ class
 ]
 
 { #category : #'example-tests' }
 GtDojoImporterExamples >> dojoClassWithoutSuperclass [
 	<gtExample>
+	<return: #GtDojoClass>
 	| importer class |
 	importer := self exampleImporter.
 	class := importer classNamed: 'demo.dojoClassWithoutSuperclass'.
@@ -153,17 +157,20 @@ GtDojoImporterExamples >> dojoClassWithoutSuperclass [
 { #category : #'example-tests' }
 GtDojoImporterExamples >> dojoNamedClass [
 	<gtExample>
+	<return: #GtDojoClass>
 	| importer class |
 	importer := self exampleImporter.
 	class := importer classNamed: 'demo.dojoNamedClass'.
 	self assert: class superInheritances notEmpty.
-	self assert: class anySuperclass == (importer classNamed: 'demo.dojoClassWithSuperclass').
+	self
+		assert: class anySuperclass == (importer classNamed: 'demo.dojoClassWithSuperclass').
 	^ class
 ]
 
 { #category : #samples }
 GtDojoImporterExamples >> exampleImporter [
 	<gtExample>
+	<return: #GtDojoImporter>
 	| source |
 	source := self exampleProject.
 	^ GtDojoImporter new
@@ -175,6 +182,7 @@ GtDojoImporterExamples >> exampleImporter [
 { #category : #samples }
 GtDojoImporterExamples >> exampleInvocationScript [
 	<gtExample>
+	<return: #GtJSScript>
 	| importer |
 	importer := self exampleImporter.
 	^ importer scriptNamed: 'demo/invocations.js'
@@ -183,58 +191,73 @@ GtDojoImporterExamples >> exampleInvocationScript [
 { #category : #samples }
 GtDojoImporterExamples >> exampleModel [
 	<gtExample>
+	<return: #MooseModel>
 	^ self exampleImporter model
 ]
 
 { #category : #'example-tests' }
 GtDojoImporterExamples >> functionNames [
 	<gtExample>
+	<return: #FMMultivalueLink>
 	| importer script |
 	importer := self exampleImporter.
 	script := importer scriptNamed: 'demo/variables.js'.
 	script functions detect: [ :each | each name = 'functionVar' ].
 	script functions detect: [ :each | each name = 'yetAnotherFunction' ].
-	self assert: (script functions select: [ :each | each name = 'anotherFunction' ]) size = 2.
+	self
+		assert: (script functions select: [ :each | each name = 'anotherFunction' ]) size = 2.
 	^ script functions
 ]
 
 { #category : #'example-tests' }
 GtDojoImporterExamples >> invocations [
 	<gtExample>
+	<return: #MooseGroup>
 	| script invocations |
 	script := self exampleInvocationScript.
-	invocations := script mooseModel allJSInvocations select: [ :each | each sender == script ].
+	invocations := script mooseModel allJSInvocations
+			select: [ :each | each sender == script ].
 	self assert: invocations size = 5.
-	self assert: (invocations anySatisfy: [ :inv | inv candidates anySatisfy: [ :each | each name = 'a' ] ]).
-	self assert: (invocations anySatisfy: [ :inv | inv candidates anySatisfy: [ :each | each name = 'f' ] ]).
-	self assert: (invocations anySatisfy: [ :inv | inv candidates anySatisfy: [ :each | each name = 'foo' ] ]).
+	self
+		assert: (invocations
+				anySatisfy: [ :inv | inv candidates anySatisfy: [ :each | each name = 'a' ] ]).
+	self
+		assert: (invocations
+				anySatisfy: [ :inv | inv candidates anySatisfy: [ :each | each name = 'f' ] ]).
+	self
+		assert: (invocations
+				anySatisfy: [ :inv | inv candidates anySatisfy: [ :each | each name = 'foo' ] ]).
 	^ invocations
 ]
 
 { #category : #'example-tests' }
 GtDojoImporterExamples >> methodNames [
 	<gtExample>
+	<return: #FMMultivalueLink>
 	| importer script |
 	importer := self exampleImporter.
 	script := importer scriptNamed: 'demo/variables.js'.
-	script types first methods
-		detect: [ :each | each name = 'objectFunction' ].
+	script types first methods detect: [ :each | each name = 'objectFunction' ].
 	^ script types first methods
 ]
 
 { #category : #'example-tests' }
 GtDojoImporterExamples >> noModuleScript [
 	<gtExample>
+	<return: #GtJSScript>
 	| importer script portVariable logProperty |
 	importer := self exampleImporter.
 	script := importer scriptNamed: 'demo/noModule.js'.
 	self assert: script functions size = 2.
 	self assert: script localVariables size = 4.
-	self assert: (script functions collect: [ :each | each parameters size ]) asSortedCollection asArray = #(1 2).
+	self
+		assert: (script functions collect: [ :each | each parameters size ]) asSortedCollection
+				asArray = #(1 2).
 	portVariable := self variableNamed: 'port' in: script localVariables.
 	self assert: (self countOfWriters: portVariable) = 1.
 	logProperty := importer propertyNamed: 'log'.
-	self assert: (self countOf: (logProperty readAccesses collect: #from) inside: script) = 3.
+	self
+		assert: (self countOf: (logProperty readAccesses collect: #from) inside: script) = 3.
 	^ script
 ]
 
@@ -257,6 +280,7 @@ GtDojoImporterExamples >> projectFiles [
 { #category : #'example-tests' }
 GtDojoImporterExamples >> properties [
 	<gtExample>
+	<return: #FAMIXAttribute>
 	| importer property |
 	importer := self exampleImporter.
 	property := importer propertyNamed: 'module'.
@@ -268,6 +292,7 @@ GtDojoImporterExamples >> properties [
 { #category : #'example-tests' }
 GtDojoImporterExamples >> simpleModule [
 	<gtExample>
+	<return: #GtJSScript>
 	| importer script |
 	importer := self exampleImporter.
 	script := importer scriptNamed: 'demo/simpleModule.js'.
@@ -278,6 +303,7 @@ GtDojoImporterExamples >> simpleModule [
 { #category : #'example-tests' }
 GtDojoImporterExamples >> simplePrereqModule [
 	<gtExample>
+	<return: #GtDojoModule>
 	| importer module prereq |
 	importer := self exampleImporter.
 	module := importer moduleNamed: 'demo/simplePrereqModule'.
@@ -295,28 +321,39 @@ GtDojoImporterExamples >> variableNamed: aString in: aCollection [
 { #category : #'example-tests' }
 GtDojoImporterExamples >> variables [
 	<gtExample>
+	<return: #GtJSScript>
 	| importer script function functionVariable globalVariable functionParameter localVarVariable localLetVariable localConstVariable catchVariable |
 	importer := self exampleImporter.
 	script := importer scriptNamed: 'demo/variables.js'.
 	functionVariable := self variableNamed: 'functionVar' in: script localVariables.
 	self assert: (self countOfWriters: functionVariable) = 1.
 	self assert: (self countOfReaders: functionVariable) = 1.
-	globalVariable := self variableNamed: 'globalVar' in: importer model allGlobalVariables.
+	globalVariable := self
+			variableNamed: 'globalVar'
+			in: importer model allGlobalVariables.
 	self assert: (self countOfWriters: globalVariable) = 1.
 	self assert: (self countOfReaders: globalVariable) = 1.
 	function := script functions first.
 	functionParameter := function parameters first.
 	self assert: (self countOfReaders: functionParameter) = 1.
-	localVarVariable := self variableNamed: 'localVarVariable' in: function localVariables.
+	localVarVariable := self
+			variableNamed: 'localVarVariable'
+			in: function localVariables.
 	self assert: (self countOfWriters: localVarVariable) = 1.
 	self assert: (self countOfReaders: localVarVariable) = 1.
-	localLetVariable := self variableNamed: 'localLetVariable' in: function localVariables.
+	localLetVariable := self
+			variableNamed: 'localLetVariable'
+			in: function localVariables.
 	self assert: (self countOfWriters: localLetVariable) = 1.
 	self assert: (self countOfReaders: localLetVariable) = 1.
-	localConstVariable := self variableNamed: 'localConstVariable' in: function localVariables.
+	localConstVariable := self
+			variableNamed: 'localConstVariable'
+			in: function localVariables.
 	self assert: (self countOfWriters: localConstVariable) = 1.
 	self assert: (self countOfReaders: localConstVariable) = 1.
-	catchVariable := self variableNamed: 'catchVariable' in: function localVariables.
+	catchVariable := self
+			variableNamed: 'catchVariable'
+			in: function localVariables.
 	self assert: (self countOfWriters: catchVariable) = 1.
 	self assert: (self countOfReaders: catchVariable) = 1.
 	^ script
