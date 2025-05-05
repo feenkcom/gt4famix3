@@ -7,6 +7,7 @@ Class {
 { #category : #samples }
 GtImporterExamples >> exampleProject [
 	<gtExample>
+	<return: #FileReference>
 	| dir |
 	dir := FileSystem memory workingDirectory / 'project' / 'src'.
 	dir ensureCreateDirectory.
