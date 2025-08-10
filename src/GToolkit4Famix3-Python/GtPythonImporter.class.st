@@ -63,6 +63,16 @@ GtPythonImporter >> currentScope [
 ]
 
 { #category : #'as yet unclassified' }
+GtPythonImporter >> ensureAnnotationNamed: aString [
+	^ annotationTypes
+		at: aString
+		ifAbsentPut: [ FAMIXAnnotationType new
+				name: aString;
+				mooseModel: model;
+				yourself ]
+]
+
+{ #category : #'as yet unclassified' }
 GtPythonImporter >> ensureFileNamed: aFileReference [
 	| filename file encoding anchor |
 	filename := aFileReference pathString.
