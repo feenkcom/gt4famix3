@@ -1,7 +1,7 @@
 Class {
 	#name : #FAMIXPythonSourceLanguage,
 	#superclass : #FAMIXSourceLanguage,
-	#category : 'GToolkit4Famix3-Python'
+	#category : #'GToolkit4Famix3-Python'
 }
 
 { #category : #accessing }

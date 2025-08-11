@@ -263,7 +263,7 @@ GtPythonImporter >> gtInspectorTitleString [
 ]
 
 { #category : #'llm-generated' }
-GtPythonImporter >> gtModelForwardViewFor: aView [
+GtPythonImporter >> gtModelFor: aView [
 	<gtView>
 	^ aView forward
 		title: 'Model';
