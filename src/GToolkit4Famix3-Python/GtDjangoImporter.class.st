@@ -4,30 +4,52 @@ Class {
 	#instVars : [
 		'urlPatterns'
 	],
-	#category : #GToolkit4Famix3
+	#category : #'GToolkit4Famix3-Python'
 }
 
 { #category : #'llm-generated' }
-GtDjangoImporter >> djNameForCall: aCall [
-	| name |
-	name := self pythonFirstNameChildSourceOf: aCall.
-	^ name ifNotNil: [ name asString ]
+GtDjangoImporter >> gtSummaryViewFor: aView [
+	<gtView>
+	^ aView textEditor
+		title: 'Summary';
+		priority: 1;
+		text: [ String streamContents: [ :s |
+			s nextPutAll: 'Files: '; nextPutAll: self files size asString; cr.
+			s nextPutAll: 'URL patterns: '; nextPutAll: self urlPatterns size asString ] ]
 ]
 
 { #category : #'llm-generated' }
-GtDjangoImporter >> finishImport [
-	"Hook for Django-specific post-processing.
-	Currently, we only rely on the annotations produced in processCallExpressions.
-	You could, for example, link URL patterns to view functions/classes more explicitly here.
-	"
-	super finishImport.
-	^ self
+GtDjangoImporter >> gtUrlPatternsViewFor: aView [
+	<gtView>
+	^ aView columnedList
+		title: 'URL Patterns';
+		priority: 20;
+		items: [ self urlPatterns asOrderedCollection ];
+		column: 'Pattern' text: [ :each |
+			(each respondsTo: #pattern)
+				ifTrue: [ each pattern asString ]
+				ifFalse: [ each asString ] ];
+		column: 'Name' text: [ :each |
+			(each respondsTo: #name)
+				ifTrue: [ each name asString ]
+				ifFalse: [ '' ] ];
+		column: 'View' text: [ :each |
+			(each respondsTo: #view)
+				ifTrue: [ each view asString ]
+				ifFalse: [ '' ] ]
 ]
 
 { #category : #'llm-generated' }
 GtDjangoImporter >> initialize [
 	super initialize.
 	urlPatterns := OrderedCollection new
+]
+
+{ #category : #'llm-generated' }
+GtDjangoImporter >> nameForCall: aCall [
+	| name |
+	name := self pythonFirstNameChildSourceOf: aCall.
+	^ name ifNotNil: [ name asString ]
 ]
 
 { #category : #'llm-generated' }
@@ -55,7 +77,7 @@ GtDjangoImporter >> processCallExpressions [
 				ifNil: [ invocation receiver: (self modelObjectFrom: callee in: scope) ] ].
 
 		"Django-specific annotations"
-		name := self djNameForCall: call.
+		name := self nameForCall: call.
 		((name = 'path') or: [ name = 're_path' ]) ifTrue: [
 			invocation propertyNamed: #djangoUrl put: true.
 			args size >= 1 ifTrue: [ invocation propertyNamed: #djangoRoute put: (args first) ].
@@ -68,4 +90,9 @@ GtDjangoImporter >> processCallExpressions [
 		model add: invocation.
 		self storeAST: call into: invocation.
 		(self fileFor: scope) ifNotNil: [ :file | file addEntity: invocation ] ]
+]
+
+{ #category : #'llm-generated' }
+GtDjangoImporter >> urlPatterns [
+	^ urlPatterns ifNil: [ #() ]
 ]

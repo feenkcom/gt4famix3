@@ -1,5 +1,11 @@
 Extension { #name : #MooseModel }
 
+{ #category : #'*GToolkit4Famix3-Python' }
+MooseModel >> allDjangoRenderInvocations [
+	<navigation: 'All Django render invocations'>
+	^ self allInvocations select: [ :i | (i propertyNamed: #djangoRender) = true ]
+]
+
 { #category : #'*GToolkit4Famix3' }
 MooseModel >> allGtOpenApiPaths [
 	<navigation: 'All OpenApi Paths'>
