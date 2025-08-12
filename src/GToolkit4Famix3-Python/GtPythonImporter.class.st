@@ -99,14 +99,17 @@ GtPythonImporter >> ensureFileNamed: aFileReference [
 
 { #category : #'as yet unclassified' }
 GtPythonImporter >> ensureFolderNamed: aFileReference [
-	^ folders at: aFileReference pathString ifAbsentPut: [
-		| folder |
-		folder := FAMIXFolder new.
-		(aFileReference = model rootFolder)
-			ifTrue: [ folder name: '.' ]
-			ifFalse: [ folder name: aFileReference basename. (self ensureFolderNamed: aFileReference parent) ifNotNil: [ :outer | outer addChildFileSystemEntity: folder ] ].
-		model add: folder.
-		folder ]
+	^ folders
+		at: aFileReference pathString
+		ifAbsentPut: [ | folder |
+			folder := FAMIXFolder new.
+			aFileReference = model rootFolder asFileReference
+				ifTrue: [ folder name: '.' ]
+				ifFalse: [ folder name: aFileReference basename.
+					(self ensureFolderNamed: aFileReference parent)
+						ifNotNil: [ :outer | outer addChildFileSystemEntity: folder ] ].
+			model add: folder.
+			folder ]
 ]
 
 { #category : #'as yet unclassified' }
