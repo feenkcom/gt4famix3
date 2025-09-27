@@ -11,7 +11,7 @@ Class {
 		'incomingDependencies',
 		'entities'
 	],
-	#category : 'GToolkit4Famix3'
+	#category : #GToolkit4Famix3
 }
 
 { #category : #accessing }

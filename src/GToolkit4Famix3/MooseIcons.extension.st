@@ -469,7 +469,7 @@ MooseIcons class >> mooseIncoming [
 
 { #category : #'*GToolkit4Famix3' }
 MooseIcons class >> mooseInspect [
-	^ BrGlamorousIcons inspect
+	^ BrGlamorousVectorIcons inspect
 ]
 
 { #category : #'*GToolkit4Famix3' }
@@ -564,7 +564,7 @@ MooseIcons class >> mooseScatterplot [
 
 { #category : #'*GToolkit4Famix3' }
 MooseIcons class >> mooseSearch [
-	^ BrGlamorousIcons search
+	^ BrGlamorousVectorIcons search
 ]
 
 { #category : #'*GToolkit4Famix3' }

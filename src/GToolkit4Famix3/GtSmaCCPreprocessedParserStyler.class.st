@@ -5,7 +5,7 @@ Class {
 		'preprocessedSource',
 		'preprocessor'
 	],
-	#category : 'GToolkit4Famix3'
+	#category : #GToolkit4Famix3
 }
 
 { #category : #private }

@@ -6,7 +6,7 @@ Class {
 		'entitiesToComponents',
 		'dependencies'
 	],
-	#category : 'GToolkit4Famix3'
+	#category : #GToolkit4Famix3
 }
 
 { #category : #building }
