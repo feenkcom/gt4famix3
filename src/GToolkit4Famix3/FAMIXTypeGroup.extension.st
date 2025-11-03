@@ -58,6 +58,6 @@ FAMIXTypeGroup >> paintHierarchyWith: mondrian [
 	mondrian edges 
 		fromCenterBottom;
 		toCenterTop;
-		connectFrom: #superclass.
-	mondrian layout custom: (GtGraphTreeLayout new).
+		connectFromAll: #directSuperclasses.
+	mondrian layout dominanceTree
 ]

@@ -7,7 +7,7 @@ Class {
 		'attributesToElements',
 		'classesToElements'
 	],
-	#category : 'GToolkit4Famix3'
+	#category : #GToolkit4Famix3
 }
 
 { #category : #rendering }
@@ -134,7 +134,11 @@ FAMIXClassBlueprint >> createLayerForMethods: aCollection named: aString [
 			c vertical fitContent.
 			c horizontal fitContent.
 			c linear horizontal alignCenter ];
-		layout: (GtGraphHorizontalTreeLayout new layered horizontalGap: 30).
+		layout: (BlOnceLayout
+				on: (GtGradHorizontalTreeLayout new
+						treesDistance: 10;
+						levelDistance: 10;
+						nodeDistance: 5)).
 	layerLabel := BlTextElement new
 		text: (aString asRopedText
 				glamorousRegularFont;

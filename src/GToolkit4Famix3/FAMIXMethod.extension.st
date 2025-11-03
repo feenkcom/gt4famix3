@@ -1,6 +1,16 @@
 Extension { #name : #FAMIXMethod }
 
 { #category : #'*GToolkit4Famix3' }
+FAMIXMethod >> gtASTFor: aView [
+	<gtView>
+	self gtASTNode isNil ifTrue: [ ^ aView empty ].
+	^ aView forward
+		title: 'AST';
+		object: [ self gtASTNode ];
+		view: #gtExploreFor:
+]
+
+{ #category : #'*GToolkit4Famix3' }
 FAMIXMethod >> gtIcon [ 
 	^ MooseIcons famixMethod
 ]
