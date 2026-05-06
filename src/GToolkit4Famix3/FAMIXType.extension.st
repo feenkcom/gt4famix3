@@ -12,7 +12,7 @@ FAMIXType >> gtAttributesFor: aView [
 			width: 36;
 		column: 'Name' translated text: [ :each | each name ];
 		column: 'Declared type' translated
-			text: [ :each | each declaredType gtDisplayString ]
+			text: [ :each | each declaredType ifNil: [''] ifNotNil: #gtDisplayString ]
 ]
 
 { #category : #'*GToolkit4Famix3' }
@@ -35,7 +35,7 @@ FAMIXType >> gtMethodsFor: aView [
 			width: 36;
 		column: 'Name' translated text: [ :each | each signature ];
 		column: 'Declared type' translated
-			text: [ :each | each declaredType gtDisplayString ]
+			text: [ :each | each declaredType ifNil: [''] ifNotNil: #gtDisplayString ]
 ]
 
 { #category : #'*GToolkit4Famix3' }
