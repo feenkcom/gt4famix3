@@ -47,17 +47,19 @@ FAMIXTypeGroup >> gtWithinNestingMapFor: aView [
 
 { #category : #'*GToolkit4Famix3' }
 FAMIXTypeGroup >> paintHierarchyWith: mondrian [
-	mondrian nodes 
+	mondrian nodes
 		stencil: [ :c | 
-			BlElement new 
+			BlElement new
 				zIndex: 10;
-				border: (BlBorder paint: (Color black alpha: 0.5) width: 2);
+				border: Color darkGray;
+				background: Color veryLightGray;
 				width: (c numberOfAttributes max: 5);
-				height: (c numberOfMethods max: 5)];
+				height: (c numberOfMethods max: 5) ];
 		with: self.
-	mondrian edges 
+	mondrian edges
 		fromCenterBottom;
 		toCenterTop;
+		stencil: [ :c | BlLineElement new border: Color veryVeryLightGray ];
 		connectFromAll: #directSuperclasses.
-	mondrian layout dominanceTree
+	mondrian layout dominanceTree levelDistance: 30
 ]
