@@ -28,7 +28,7 @@ FAMIXType >> gtMethodsFor: aView [
 	<gtView>
 	^ aView columnedList
 		title: 'Methods';
-		priority: 10;
+		priority: 14;
 		items: [ self methods sorted: [ :a :b | a signature < b signature ] ];
 		column: 'Icon'
 			iconName: [ :each | each gtIconName ]
