@@ -14,7 +14,7 @@ Class {
 		'attributePaleColor',
 		'types'
 	],
-	#category : 'GToolkit4Famix3'
+	#category : #GToolkit4Famix3
 }
 
 { #category : #'api - instantiation' }

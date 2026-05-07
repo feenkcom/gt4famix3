@@ -5,7 +5,7 @@ Class {
 		'preprocessedSource',
 		'text'
 	],
-	#category : 'GToolkit4Famix3'
+	#category : #GToolkit4Famix3
 }
 
 { #category : #converting }

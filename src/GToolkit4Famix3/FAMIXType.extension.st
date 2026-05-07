@@ -12,7 +12,7 @@ FAMIXType >> gtAttributesFor: aView [
 			width: 36;
 		column: 'Name' translated text: [ :each | each name ];
 		column: 'Declared type' translated
-			text: [ :each | each declaredType gtDisplayString ]
+			text: [ :each | each declaredType ifNil: [''] ifNotNil: #gtDisplayString ]
 ]
 
 { #category : #'*GToolkit4Famix3' }
@@ -28,14 +28,14 @@ FAMIXType >> gtMethodsFor: aView [
 	<gtView>
 	^ aView columnedList
 		title: 'Methods';
-		priority: 10;
+		priority: 14;
 		items: [ self methods sorted: [ :a :b | a signature < b signature ] ];
 		column: 'Icon'
 			iconName: [ :each | each gtIconName ]
 			width: 36;
 		column: 'Name' translated text: [ :each | each signature ];
 		column: 'Declared type' translated
-			text: [ :each | each declaredType gtDisplayString ]
+			text: [ :each | each declaredType ifNil: [''] ifNotNil: #gtDisplayString ]
 ]
 
 { #category : #'*GToolkit4Famix3' }
