@@ -9,33 +9,33 @@ FAMIXSourceLanguage >> addExpanderFor: association in: text [
 	(to isNil or: [ association sourceAnchor isNil ]) ifTrue: [ ^ self ].
 	pos := association gtInspectButtonPosition.
 	(text from: pos to: pos)
-		attribute: (BrGlamorousTriangleExpanderTextAttributeV2 new
-				stencil: [ | pane view |
-							pane := BrVerticalPane new
-									height: 300;
-									aptitude: BrShadowAptitude
-											+ (BrGlamorousWithVerticalResizerAptitude new
-													beBottom;
-													yourself);
-									background: Color white;
-									margin: (BlInsets all: 10);
-									constraintsDo: [ :c | 
-										c textFlow pushLine.
-										c horizontal matchParent ].
-							view := to gtFamixExpanderView.
-							((to isKindOf: FAMIXSourcedEntity) and: [ to containerFiles notEmpty ])
-								ifTrue: [ pane
-										addChild: (BrButton new
-												aptitude: BrGlamorousButtonRectangularAptitude
-														+ (BrGlamorousButtonLabelAptitude new selectedColor: Color black);
-												action: [ pane phlow spawnObject: to containerFiles first ];
-												alignCenterLeft;
-												label: to containerFiles first fullName) ].
-							pane
-								addChild: (view asElement
-										constraintsDo: [ :c | 
-											c horizontal matchParent.
-											c vertical matchParent ]) ])
+		expanded: false
+		adornment: [ | pane view |
+			pane := BrVerticalPane new
+					height: 300;
+					aptitude: BrShadowAptitude
+							+ (BrGlamorousWithVerticalResizerAptitude new
+									beBottom;
+									yourself);
+					background: Color white;
+					margin: (BlInsets all: 10);
+					constraintsDo: [ :c | 
+						c textFlow pushLine.
+						c horizontal matchParent ].
+			view := to gtFamixExpanderView.
+			((to isKindOf: FAMIXSourcedEntity) and: [ to containerFiles notEmpty ])
+				ifTrue: [ pane
+						addChild: (BrButton new
+								aptitude: BrGlamorousButtonRectangularAptitude
+										+ (BrGlamorousButtonLabelAptitude new selectedColor: Color black);
+								action: [ pane phlow spawnObject: to containerFiles first ];
+								alignCenterLeft;
+								label: to containerFiles first fullName) ].
+			pane
+				addChild: (view asElement
+						constraintsDo: [ :c | 
+							c horizontal matchParent.
+							c vertical matchParent ]) ]
 ]
 
 { #category : #'*GToolkit4Famix3' }
