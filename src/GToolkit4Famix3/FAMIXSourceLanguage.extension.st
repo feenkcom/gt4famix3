@@ -9,10 +9,8 @@ FAMIXSourceLanguage >> addExpanderFor: association in: text [
 	(to isNil or: [ association sourceAnchor isNil ]) ifTrue: [ ^ self ].
 	pos := association gtInspectButtonPosition.
 	(text from: pos to: pos)
-		attribute: (BrGlamorousTriangleExpanderTextAttribute new
-				attributesCreatingBlock: [ BrTextAdornmentDynamicAttribute new
-						beAppend;
-						stencil: [ | pane view |
+		attribute: (BrGlamorousTriangleExpanderTextAttributeV2 new
+				stencil: [ | pane view |
 							pane := BrVerticalPane new
 									height: 300;
 									aptitude: BrShadowAptitude
@@ -37,7 +35,7 @@ FAMIXSourceLanguage >> addExpanderFor: association in: text [
 								addChild: (view asElement
 										constraintsDo: [ :c | 
 											c horizontal matchParent.
-											c vertical matchParent ]) ] ])
+											c vertical matchParent ]) ])
 ]
 
 { #category : #'*GToolkit4Famix3' }
