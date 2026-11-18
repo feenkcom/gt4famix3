@@ -52,7 +52,7 @@ GtJSSwaggerCall >> from: anObject [
 { #category : #accessing }
 GtJSSwaggerCall >> fromProject [
 	<navigation: 'From project'>
-	^ self from ifNotNil: #parentPackage
+	^ self from ifNotNil: [ :v | v parentPackage ]
 ]
 
 { #category : #accessing }

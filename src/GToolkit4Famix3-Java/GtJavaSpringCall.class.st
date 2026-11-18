@@ -74,7 +74,7 @@ GtJavaSpringCall >> from: anObject [
 { #category : #accessing }
 GtJavaSpringCall >> fromProject [
 	<navigation: 'From project'>
-	^ self from ifNotNil: #parentPackage
+	^ self from ifNotNil: [ :v | v parentPackage ]
 ]
 
 { #category : #accessing }
